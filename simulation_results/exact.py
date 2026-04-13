@@ -1,0 +1,168 @@
+"""exact.py
+
+Sparse Ising-model exact evolution (Taylor step) ported from `exact.ipynb`.
+
+Usage examples:
+  python exact.py --n 30 --r 100 --out results_exact.json
+
+This script constructs the sparse Ising Hamiltonian, evolves the initial
+all-up state by applying the first-order Taylor step `Taylor_1 = I - 1j H (t/r)`
+`r` times, and computes the expectation value of total Z magnetization.
+"""
+
+import argparse
+import json
+import os
+import tempfile
+from pathlib import Path
+from tqdm import tqdm
+
+
+import numpy as np
+from scipy.sparse import csr_matrix, eye, kron
+from scipy.sparse.linalg import norm as sparse_norm
+
+
+def ising_hamiltonian_sparse(num_bits, J=0.5, h=1.0):
+    """Construct the sparse Ising Hamiltonian used throughout the notebook workflow.
+
+    The Hamiltonian is split into three parts so the Trotter structure is explicit:
+
+    - H1: transverse-field terms, sum_i (-h X_i)
+    - H2: odd-bond ZZ interactions,   sum_i (-J Z_{2i+1} Z_{2i+2})
+    - H3: even-bond ZZ interactions,  sum_i (-J Z_{2i}   Z_{2i+1})
+
+    The full Hamiltonian is H = H1 + H2 + H3.
+
+    Returns:
+        tuple[csr_matrix, csr_matrix, csr_matrix, csr_matrix]:
+            H1, H2, H3, H
+    """
+    dim = 2 ** num_bits
+    H1 = csr_matrix((dim, dim), dtype=complex)
+    H2 = csr_matrix((dim, dim), dtype=complex)
+    H3 = csr_matrix((dim, dim), dtype=complex)
+
+    # Single-qubit Pauli operators in sparse form so the final Hamiltonian
+    # assembly stays memory-friendly for the system sizes used here.
+    X = csr_matrix(np.array([[0, 1], [1, 0]]))
+    Z = csr_matrix(np.array([[1, 0], [0, -1]]))
+
+    # Even-bond ZZ interactions: (0, 1), (2, 3), ...
+    # Each term is embedded into the full Hilbert space via Kronecker products
+    # of identities on the left and right.
+    for i in range(0, num_bits - 1, 2):
+        left_I = eye(2 ** i)
+        center_ZZ = kron(Z, Z)
+        right_I = eye(2 ** (num_bits - i - 2))
+        interaction_term = kron(left_I, kron(center_ZZ, right_I))
+        H3 = H3 + (-J) * interaction_term
+
+    # Odd-bond ZZ interactions: (1, 2), (3, 4), ...
+    for i in range(1, num_bits - 1, 2):
+        left_I = eye(2 ** i)
+        center_ZZ = kron(Z, Z)
+        right_I = eye(2 ** (num_bits - i - 2))
+        interaction_term = kron(left_I, kron(center_ZZ, right_I))
+        H2 = H2 + (-J) * interaction_term
+
+    # Transverse-field terms acting on every site.
+    for i in range(num_bits):
+        left_I = eye(2 ** i)
+        center_X = X
+        right_I = eye(2 ** (num_bits - i - 1))
+        field_term = kron(left_I, kron(center_X, right_I))
+        H1 = H1 + (-h) * field_term
+
+    return H1, H2, H3, H1 + H2 + H3
+
+
+def total_Z_magnetization_sparse(num_bits):
+    dim = 2 ** num_bits
+    O = csr_matrix((dim, dim), dtype=complex)
+    Z = csr_matrix(np.array([[1, 0], [0, -1]]))
+    for i in range(num_bits):
+        left_I = eye(2 ** i)
+        right_I = eye(2 ** (num_bits - i - 1))
+        Z_i = kron(left_I, kron(Z, right_I))
+        O = O + Z_i
+    return O
+
+
+def write_json_atomic(dest: Path, data: dict):
+    dest = Path(dest)
+    dest.parent.mkdir(parents=True, exist_ok=True)
+    fd, tmp_path = tempfile.mkstemp(dir=str(dest.parent))
+    try:
+        with os.fdopen(fd, "w", encoding="utf-8") as f:
+            json.dump(data, f, ensure_ascii=False, indent=2)
+        os.replace(tmp_path, str(dest))
+    finally:
+        if os.path.exists(tmp_path):
+            try:
+                os.remove(tmp_path)
+            except OSError:
+                pass
+
+
+def run_evolution(n: int, J: float, h: float, t: float, r: int):
+    """Run the Taylor-step evolution and return expectation value and final state norm.
+
+    Returns: expectation_value (complex), final_norm (float)
+    """
+    H1, H2, H3, H = ising_hamiltonian_sparse(n, J, h)
+    I_sparse = eye(2 ** n, dtype=complex)
+
+    # first-order Taylor step
+    Taylor_1 = I_sparse - 1j * (H * (t / r))
+
+    # initial state: all-up basis state |0...0> as a sparse column vector
+    data = [1.0]
+    row_ind = [0]
+    col_ind = [0]
+    initial_state_sparse = csr_matrix((data, (row_ind, col_ind)), shape=(2 ** n, 1), dtype=complex)
+
+    state = initial_state_sparse
+    for i in tqdm(range(r)):
+        state = Taylor_1 @ state
+        # normalize
+        state = state / sparse_norm(state)
+
+    O_sparse = total_Z_magnetization_sparse(n)
+    # expectation as scalar
+    expectation_value = (state.getH().dot(O_sparse).dot(state)).toarray()[0, 0]
+    final_norm = float(sparse_norm(state))
+    return expectation_value, final_norm
+
+
+def parse_args():
+    p = argparse.ArgumentParser(description="Exact sparse Ising evolution (Taylor steps)")
+    p.add_argument("--n", type=int, default=20, help="number of spins (n)")
+    p.add_argument("--J", type=float, default=0.5, help="coupling J")
+    p.add_argument("--h", type=float, default=1.0, help="transverse field h")
+    p.add_argument("--t", type=float, default=1.0, help="evolution time t")
+    p.add_argument("--r", type=int, default=100, help="number of Taylor steps r")
+    p.add_argument("--out", type=str, default="exact_result.json", help="output JSON path")
+    return p.parse_args()
+
+
+def main():
+    args = parse_args()
+    expectation_value, final_norm = run_evolution(args.n, args.J, args.h, args.t, args.r)
+    out = {
+        "n": args.n,
+        "J": args.J,
+        "h": args.h,
+        "t": args.t,
+        "r": args.r,
+        "expectation_real": float(np.real(expectation_value)),
+        "expectation_imag": float(np.imag(expectation_value)),
+        "final_norm": final_norm,
+    }
+    write_json_atomic(Path(args.out), out)
+    print(f"Expectation value (real, imag): ({out['expectation_real']}, {out['expectation_imag']})")
+    print(f"Result written to: {args.out}")
+
+
+if __name__ == "__main__":
+    main()

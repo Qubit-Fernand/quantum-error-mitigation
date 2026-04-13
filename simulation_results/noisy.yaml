@@ -1,0 +1,110 @@
+# Batch sampling jobs for the r_list = [1, 2, 3, 7] setup used in plot.ipynb
+# Any field omitted here will fall back to noisy.py command-line defaults.
+
+# r = 1
+- N: 20
+  r: 1
+  noise: 0
+  seed: 43
+  samples: 10000
+- N: 20
+  r: 1
+  noise: 1
+  seed: 43
+  samples: 10000
+- N: 20
+  r: 1
+  noise: 4
+  seed: 43
+  samples: 10000
+- N: 20
+  r: 1
+  noise: 9
+  seed: 43
+  samples: 10000
+- N: 20
+  r: 1
+  noise: 49
+  seed: 43
+  samples: 10000
+
+# r = 2
+- N: 20
+  r: 2
+  noise: 0
+  seed: 43
+  samples: 10000
+- N: 20
+  r: 2
+  noise: 1
+  seed: 43
+  samples: 10000
+- N: 20
+  r: 2
+  noise: 4
+  seed: 43
+  samples: 10000
+- N: 20
+  r: 2
+  noise: 9
+  seed: 43
+  samples: 10000
+- N: 20
+  r: 2
+  noise: 49
+  seed: 43
+  samples: 10000
+
+# r = 3
+- N: 20
+  r: 3
+  noise: 0
+  seed: 43
+  samples: 10000
+- N: 20
+  r: 3
+  noise: 1
+  seed: 43
+  samples: 10000
+- N: 20
+  r: 3
+  noise: 4
+  seed: 43
+  samples: 10000
+- N: 20
+  r: 3
+  noise: 9
+  seed: 43
+  samples: 10000
+- N: 20
+  r: 3
+  noise: 49
+  seed: 43
+  samples: 10000
+
+# r = 7
+- N: 20
+  r: 7
+  noise: 0
+  seed: 43
+  samples: 10000
+- N: 20
+  r: 7
+  noise: 1
+  seed: 43
+  samples: 10000
+- N: 20
+  r: 7
+  noise: 4
+  seed: 43
+  samples: 10000
+- N: 20
+  r: 7
+  noise: 9
+  seed: 43
+  samples: 10000
+- N: 20
+  r: 7
+  noise: 49
+  seed: 43
+  samples: 10000

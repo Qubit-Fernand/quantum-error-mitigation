@@ -1,0 +1,54 @@
+from qiskit import QuantumCircuit
+from qiskit.quantum_info import Statevector
+from qiskit.circuit.library import PauliEvolutionGate
+from qiskit.quantum_info import SparsePauliOp
+from qiskit.synthesis import LieTrotter
+import numpy as np
+
+# 参数
+n = 5       # 自旋数
+J = 0.5     # 相互作用强度
+h = 1.0     # 横场强度
+t = 0.01     # 演化时间
+r = 2  # Trotter 步数
+
+# 构建 Ising 哈密顿量：H = -J ∑ Z_i Z_{i+1} - h ∑ X_i
+pauli_terms = []
+coeffs = []
+
+# 最近邻 Z_i Z_{i+1}
+for i in range(n - 1):
+    z_string = ['I'] * n
+    z_string[i] = 'Z'
+    z_string[i + 1] = 'Z'
+    pauli_terms.append(''.join(reversed(z_string)))  # Qiskit 的顺序是从最后一个量子比特向第一个
+    coeffs.append(-J)
+
+# 横向场 X_i
+for i in range(n):
+    x_string = ['I'] * n
+    x_string[i] = 'X'
+    pauli_terms.append(''.join(reversed(x_string)))
+    coeffs.append(-h)
+
+# 构造 SparsePauliOp 哈密顿量
+hamiltonian = SparsePauliOp(pauli_terms, coeffs=np.array(coeffs))
+
+# 创建 Trotter 展开器
+trotter = LieTrotter(reps=r)
+
+# 构建演化门：exp(-i H t)
+evolution_gate = PauliEvolutionGate(hamiltonian, time=t, synthesis=trotter)
+
+# 生成量子电路
+qc = QuantumCircuit(n)
+qc.append(evolution_gate, range(n))
+
+# # 创建一个初始态，这里以 |0...0⟩ 初始态为例
+# initial_state = Statevector.from_label('0' * qc.num_qubits)
+# final_state = initial_state.evolve(qc)
+
+# 查看电路图
+qc_decomposed = qc.decompose(reps=2)
+# final_state_decomposed = initial_state.evolve(qc_decomposed)
+qc_decomposed.draw('mpl')

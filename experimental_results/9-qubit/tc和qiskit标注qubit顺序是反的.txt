@@ -1,0 +1,2 @@
+# qiskit 所有的 tensor product 都是用 q_0 结尾的，然后输入的 label 的最后一位也是分配给 q_0
+# 所以注意在使用矩阵表示算符的时候，q_1 是 tensor product 的倒数第二位
