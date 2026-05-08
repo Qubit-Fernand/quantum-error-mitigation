@@ -273,6 +273,18 @@ def iter_batch_jobs(batch_path: Path):
     return jobs
 
 
+def resolve_batch_path(batch_arg: str):
+    batch_path = Path(batch_arg)
+    if batch_path.exists() or batch_path.is_absolute():
+        return batch_path
+
+    config_path = SIMULATION_ROOT / "configs" / batch_arg
+    if config_path.exists():
+        return config_path
+
+    return batch_path
+
+
 def merge_job_args(base_args, overrides):
     if not isinstance(overrides, dict):
         raise ValueError(f"Each batch entry must be a JSON object, got: {type(overrides).__name__}")
@@ -286,7 +298,7 @@ def merge_job_args(base_args, overrides):
 def main():
     args = parse_args()
     if args.batch:
-        batch_path = Path(args.batch)
+        batch_path = resolve_batch_path(args.batch)
         jobs = iter_batch_jobs(batch_path)
         print(f"Loaded {len(jobs)} batch job(s) from {batch_path}")
         for idx, job in enumerate(jobs, start=1):
