@@ -2,7 +2,7 @@
 """Run noisy circuit and save samples + observable.
 
 Ported from the first three cells of `simulation_results/noisy.ipynb`.
-Usage: python simulation_results/noisy.py --help
+Usage: python simulation_results/scripts/noisy.py --help
 """
 from pathlib import Path
 import argparse
@@ -14,6 +14,9 @@ from types import SimpleNamespace
 import numpy as np
 import quimb as qu
 import quimb.tensor as qtn
+
+
+SIMULATION_ROOT = Path(__file__).resolve().parents[1]
 
 
 def build_circuit(N, J, h, t, r, noise_level, rng):
@@ -110,6 +113,15 @@ def write_json_atomic(dest: Path, data):
     return dest
 
 
+def format_float_for_filename(value):
+    text = f"{value:g}"
+    return text.replace("-", "m").replace(".", "p")
+
+
+def result_stem(r, t, noise, seed):
+    return f"r_{r}_T_{format_float_for_filename(t)}_noise_{int(noise)}_seed_{seed}"
+
+
 def sum_Z(bitstring):
     return sum((1 - 2 * int(b)) for b in bitstring)
 
@@ -124,7 +136,7 @@ def parse_args():
     p.add_argument("--noise", type=float, default=0)
     p.add_argument("--seed", type=int, default=43)
     p.add_argument("--samples", type=int, default=10000)
-    p.add_argument("--outdir", type=str, default="sample_results_N_{N}")
+    p.add_argument("--outdir", type=str, default=str(SIMULATION_ROOT / "data_N{N}" / "sample_results"))
     p.add_argument(
         "--batch",
         type=str,
@@ -143,7 +155,8 @@ def run_job(args):
     samples = list(circ.sample(args.samples, seed=int(args.seed)))
 
     outdir = Path(args.outdir.format(N=args.N))
-    out_path = outdir / f"r_{args.r}_noise_{int(args.noise)}_seed_{args.seed}.json"
+    stem = result_stem(args.r, args.t, args.noise, args.seed)
+    out_path = outdir / f"{stem}.json"
     saved = write_json_atomic(out_path, samples)
     print(f"Saved {len(samples)} samples to {saved}")
 
@@ -153,7 +166,7 @@ def run_job(args):
         observable += sum_Z(s) / len(samples)
     print("Estimated <sum Z> =", observable)
 
-    obs_path = outdir / f"r_{args.r}_noise_{int(args.noise)}_seed_{args.seed}.txt"
+    obs_path = outdir / f"{stem}.txt"
     obs_path.parent.mkdir(parents=True, exist_ok=True)
     with tempfile.NamedTemporaryFile("w", delete=False, dir=str(obs_path.parent), encoding="utf-8") as tf:
         tf.write(f"Estimated <sum Z> = {observable}\n")
@@ -280,7 +293,7 @@ def main():
             job_args = merge_job_args(args, job)
             print(
                 f"[{idx}/{len(jobs)}] "
-                f"N={job_args.N} r={job_args.r} noise={job_args.noise} "
+                f"N={job_args.N} r={job_args.r} t={job_args.t} noise={job_args.noise} "
                 f"seed={job_args.seed} samples={job_args.samples}"
             )
             run_job(job_args)

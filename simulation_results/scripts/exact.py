@@ -3,7 +3,8 @@
 Sparse Ising-model exact evolution (Taylor step) ported from `exact.ipynb`.
 
 Usage examples:
-  python exact.py --n 30 --r 100 --out results_exact.json
+  python simulation_results/scripts/exact.py --n 20 --r 100
+  python simulation_results/scripts/exact.py --n 20 --r 100 --out results_exact.json
 
 This script constructs the sparse Ising Hamiltonian, evolves the initial
 all-up state by applying the first-order Taylor step `Taylor_1 = I - 1j H (t/r)`
@@ -14,6 +15,7 @@ import argparse
 import json
 import os
 import tempfile
+from datetime import datetime
 from pathlib import Path
 from tqdm import tqdm
 
@@ -21,6 +23,9 @@ from tqdm import tqdm
 import numpy as np
 from scipy.sparse import csr_matrix, eye, kron
 from scipy.sparse.linalg import norm as sparse_norm
+
+
+SIMULATION_ROOT = Path(__file__).resolve().parents[1]
 
 
 def ising_hamiltonian_sparse(num_bits, J=0.5, h=1.0):
@@ -92,6 +97,9 @@ def total_Z_magnetization_sparse(num_bits):
 def write_json_atomic(dest: Path, data: dict):
     dest = Path(dest)
     dest.parent.mkdir(parents=True, exist_ok=True)
+    if dest.exists():
+        ts = datetime.now().strftime("%Y%m%d_%H%M%S")
+        dest = dest.with_name(dest.stem + f"_{ts}" + dest.suffix)
     fd, tmp_path = tempfile.mkstemp(dir=str(dest.parent))
     try:
         with os.fdopen(fd, "w", encoding="utf-8") as f:
@@ -103,6 +111,23 @@ def write_json_atomic(dest: Path, data: dict):
                 os.remove(tmp_path)
             except OSError:
                 pass
+    return dest
+
+
+def format_float_for_filename(value):
+    text = f"{value:g}"
+    return text.replace("-", "m").replace(".", "p")
+
+
+def default_output_path(args):
+    stem = (
+        f"exact_N_{args.n}"
+        f"_J_{format_float_for_filename(args.J)}"
+        f"_h_{format_float_for_filename(args.h)}"
+        f"_T_{format_float_for_filename(args.t)}"
+        f"_r_{args.r}"
+    )
+    return SIMULATION_ROOT / f"data_N{args.n}" / "exact_results" / f"{stem}.json"
 
 
 def run_evolution(n: int, J: float, h: float, t: float, r: int):
@@ -142,7 +167,12 @@ def parse_args():
     p.add_argument("--h", type=float, default=1.0, help="transverse field h")
     p.add_argument("--t", type=float, default=1.0, help="evolution time t")
     p.add_argument("--r", type=int, default=100, help="number of Taylor steps r")
-    p.add_argument("--out", type=str, default="exact_result.json", help="output JSON path")
+    p.add_argument(
+        "--out",
+        type=str,
+        default=None,
+        help="output JSON path. Defaults to data_N<n>/exact_results/exact_N_..._J_..._h_..._T_..._r_....json",
+    )
     return p.parse_args()
 
 
@@ -159,9 +189,10 @@ def main():
         "expectation_imag": float(np.imag(expectation_value)),
         "final_norm": final_norm,
     }
-    write_json_atomic(Path(args.out), out)
+    out_path = Path(args.out) if args.out is not None else default_output_path(args)
+    saved = write_json_atomic(out_path, out)
     print(f"Expectation value (real, imag): ({out['expectation_real']}, {out['expectation_imag']})")
-    print(f"Result written to: {args.out}")
+    print(f"Result written to: {saved}")
 
 
 if __name__ == "__main__":
