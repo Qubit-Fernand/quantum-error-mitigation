@@ -4,6 +4,7 @@
 Ported from the first three cells of `simulation_results/noisy.ipynb`.
 Usage: python simulation_results/scripts/noisy.py --help
 """
+
 from pathlib import Path
 import argparse
 import json
@@ -15,8 +16,21 @@ import numpy as np
 import quimb as qu
 import quimb.tensor as qtn
 
-
 SIMULATION_ROOT = Path(__file__).resolve().parents[1]
+
+"""Construct the sparse Ising Hamiltonian used throughout the notebook workflow.
+
+    The sign convention matches `noisy.py`: the model is
+    H = -J sum_i Z_i Z_{i+1} - h sum_i X_i.
+
+    The Hamiltonian is split into three parts so the Trotter structure is explicit:
+
+    - H1: transverse-field terms, sum_i (-h X_i)
+    - H2: odd-bond ZZ interactions,   sum_i (-J Z_{2i+1} Z_{2i+2})
+    - H3: even-bond ZZ interactions,  sum_i (-J Z_{2i}   Z_{2i+1})
+
+    The full Hamiltonian is H = H1 + H2 + H3.
+    """
 
 
 def build_circuit(N, J, h, t, r, noise_level, rng):
@@ -303,11 +317,7 @@ def main():
         print(f"Loaded {len(jobs)} batch job(s) from {batch_path}")
         for idx, job in enumerate(jobs, start=1):
             job_args = merge_job_args(args, job)
-            print(
-                f"[{idx}/{len(jobs)}] "
-                f"N={job_args.N} r={job_args.r} t={job_args.t} noise={job_args.noise} "
-                f"seed={job_args.seed} samples={job_args.samples}"
-            )
+            print(f"[{idx}/{len(jobs)}] " f"N={job_args.N} r={job_args.r} t={job_args.t} noise={job_args.noise} " f"seed={job_args.seed} samples={job_args.samples}")
             run_job(job_args)
     else:
         run_job(args)

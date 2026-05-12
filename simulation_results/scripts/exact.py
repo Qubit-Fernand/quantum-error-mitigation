@@ -31,6 +31,9 @@ SIMULATION_ROOT = Path(__file__).resolve().parents[1]
 def ising_hamiltonian_sparse(num_bits, J=0.5, h=1.0):
     """Construct the sparse Ising Hamiltonian used throughout the notebook workflow.
 
+    The sign convention matches `noisy.py`: the model is
+    H = -J sum_i Z_i Z_{i+1} - h sum_i X_i.
+
     The Hamiltonian is split into three parts so the Trotter structure is explicit:
 
     - H1: transverse-field terms, sum_i (-h X_i)
@@ -138,7 +141,9 @@ def run_evolution(n: int, J: float, h: float, t: float, r: int):
     H1, H2, H3, H = ising_hamiltonian_sparse(n, J, h)
     I_sparse = eye(2 ** n, dtype=complex)
 
-    # first-order Taylor step
+    # First-order Taylor approximation to one exact evolution slice:
+    # exp(-i H t/r) ~= I - i H t/r, with
+    # H = -J sum_i Z_i Z_{i+1} - h sum_i X_i.
     Taylor_1 = I_sparse - 1j * (H * (t / r))
 
     # initial state: all-up basis state |0...0> as a sparse column vector

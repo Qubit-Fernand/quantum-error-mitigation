@@ -1,0 +1,49 @@
+[
+  { "N": 20, "r": 1, "t": 0.4, "noise": 0, "seed": 43, "samples": 10000 },
+  { "N": 20, "r": 1, "t": 0.4, "noise": 1, "seed": 43, "samples": 10000 },
+  { "N": 20, "r": 1, "t": 0.4, "noise": 4, "seed": 43, "samples": 10000 },
+  { "N": 20, "r": 1, "t": 0.4, "noise": 9, "seed": 43, "samples": 10000 },
+  { "N": 20, "r": 1, "t": 0.4, "noise": 49, "seed": 43, "samples": 10000 },
+
+  { "N": 20, "r": 2, "t": 0.4, "noise": 0, "seed": 43, "samples": 10000 },
+  { "N": 20, "r": 2, "t": 0.4, "noise": 1, "seed": 43, "samples": 10000 },
+  { "N": 20, "r": 2, "t": 0.4, "noise": 4, "seed": 43, "samples": 10000 },
+  { "N": 20, "r": 2, "t": 0.4, "noise": 9, "seed": 43, "samples": 10000 },
+  { "N": 20, "r": 2, "t": 0.4, "noise": 49, "seed": 43, "samples": 10000 },
+
+  { "N": 20, "r": 3, "t": 0.4, "noise": 0, "seed": 43, "samples": 10000 },
+  { "N": 20, "r": 3, "t": 0.4, "noise": 1, "seed": 43, "samples": 10000 },
+  { "N": 20, "r": 3, "t": 0.4, "noise": 4, "seed": 43, "samples": 10000 },
+  { "N": 20, "r": 3, "t": 0.4, "noise": 9, "seed": 43, "samples": 10000 },
+  { "N": 20, "r": 3, "t": 0.4, "noise": 49, "seed": 43, "samples": 10000 },
+
+  { "N": 20, "r": 7, "t": 0.4, "noise": 0, "seed": 43, "samples": 10000 },
+  { "N": 20, "r": 7, "t": 0.4, "noise": 1, "seed": 43, "samples": 10000 },
+  { "N": 20, "r": 7, "t": 0.4, "noise": 4, "seed": 43, "samples": 10000 },
+  { "N": 20, "r": 7, "t": 0.4, "noise": 9, "seed": 43, "samples": 10000 },
+  { "N": 20, "r": 7, "t": 0.4, "noise": 49, "seed": 43, "samples": 10000 },
+
+  { "N": 20, "r": 1, "t": 0.8, "noise": 0, "seed": 43, "samples": 10000 },
+  { "N": 20, "r": 1, "t": 0.8, "noise": 1, "seed": 43, "samples": 10000 },
+  { "N": 20, "r": 1, "t": 0.8, "noise": 4, "seed": 43, "samples": 10000 },
+  { "N": 20, "r": 1, "t": 0.8, "noise": 9, "seed": 43, "samples": 10000 },
+  { "N": 20, "r": 1, "t": 0.8, "noise": 49, "seed": 43, "samples": 10000 },
+
+  { "N": 20, "r": 2, "t": 0.8, "noise": 0, "seed": 43, "samples": 10000 },
+  { "N": 20, "r": 2, "t": 0.8, "noise": 1, "seed": 43, "samples": 10000 },
+  { "N": 20, "r": 2, "t": 0.8, "noise": 4, "seed": 43, "samples": 10000 },
+  { "N": 20, "r": 2, "t": 0.8, "noise": 9, "seed": 43, "samples": 10000 },
+  { "N": 20, "r": 2, "t": 0.8, "noise": 49, "seed": 43, "samples": 10000 },
+
+  { "N": 20, "r": 3, "t": 0.8, "noise": 0, "seed": 43, "samples": 10000 },
+  { "N": 20, "r": 3, "t": 0.8, "noise": 1, "seed": 43, "samples": 10000 },
+  { "N": 20, "r": 3, "t": 0.8, "noise": 4, "seed": 43, "samples": 10000 },
+  { "N": 20, "r": 3, "t": 0.8, "noise": 9, "seed": 43, "samples": 10000 },
+  { "N": 20, "r": 3, "t": 0.8, "noise": 49, "seed": 43, "samples": 10000 },
+
+  { "N": 20, "r": 7, "t": 0.8, "noise": 0, "seed": 43, "samples": 10000 },
+  { "N": 20, "r": 7, "t": 0.8, "noise": 1, "seed": 43, "samples": 10000 },
+  { "N": 20, "r": 7, "t": 0.8, "noise": 4, "seed": 43, "samples": 10000 },
+  { "N": 20, "r": 7, "t": 0.8, "noise": 9, "seed": 43, "samples": 10000 },
+  { "N": 20, "r": 7, "t": 0.8, "noise": 49, "seed": 43, "samples": 10000 }
+]
