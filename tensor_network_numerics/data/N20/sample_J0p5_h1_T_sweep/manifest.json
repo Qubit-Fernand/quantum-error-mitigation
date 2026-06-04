@@ -1,0 +1,17 @@
+{
+  "dataset": "sample_J0p5_h1_T_sweep",
+  "description": "Historical noisy sample sweep for N=20 with J=0.5 and h=1.0.",
+  "N": 20,
+  "J": 0.5,
+  "h": 1.0,
+  "T_values": [0.2, 0.4, 0.8, 1.0, 2.0],
+  "r_values": [1, 2, 3, 4, 6, 7, 8],
+  "noise_values": [0, 1, 4, 8, 9, 16, 36, 49, 64],
+  "seed": 43,
+  "observable": "sum_i Z_i, stored as total magnetization in .txt files",
+  "source_script": "tensor_network_numerics/scripts/noisy.py",
+  "notes": [
+    "This directory was formerly simulation_results/data_N20/sample_results.",
+    "Active plotting notebooks read this directory for the existing J=0.5, h=1.0 T sweep."
+  ]
+}

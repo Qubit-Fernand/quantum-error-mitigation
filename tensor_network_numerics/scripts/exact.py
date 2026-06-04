@@ -3,8 +3,8 @@
 Sparse Ising-model exact evolution (Taylor step) ported from `exact.ipynb`.
 
 Usage examples:
-  python simulation_results/scripts/exact.py --n 20 --r 100
-  python simulation_results/scripts/exact.py --n 20 --r 100 --out results_exact.json
+  python tensor_network_numerics/scripts/exact.py --n 20 --r 100
+  python tensor_network_numerics/scripts/exact.py --n 20 --r 100 --out results_exact.json
 
 This script constructs the sparse Ising Hamiltonian, evolves the initial
 all-up state by applying the first-order Taylor step `Taylor_1 = I - 1j H (t/r)`
@@ -130,7 +130,7 @@ def default_output_path(args):
         f"_T_{format_float_for_filename(args.t)}"
         f"_r_{args.r}"
     )
-    return SIMULATION_ROOT / f"data_N{args.n}" / "exact_results" / f"{stem}.json"
+    return SIMULATION_ROOT / "data" / f"N{args.n}" / "exact_results" / f"{stem}.json"
 
 
 def run_evolution(n: int, J: float, h: float, t: float, r: int):
@@ -171,24 +171,51 @@ def parse_args():
     p.add_argument("--J", type=float, default=0.5, help="coupling J")
     p.add_argument("--h", type=float, default=1.0, help="transverse field h")
     p.add_argument("--t", type=float, default=1.0, help="evolution time t")
+    p.add_argument(
+        "--rxT",
+        type=float,
+        default=None,
+        help="Optional paper-style transverse rotation product rx*T. Uses rx=-h, so h=-rxT/t.",
+    )
+    p.add_argument(
+        "--rzzT",
+        type=float,
+        default=None,
+        help="Optional paper-style Ising rotation product rzz*T. Uses rzz=-J, so J=-rzzT/t.",
+    )
     p.add_argument("--r", type=int, default=100, help="number of Taylor steps r")
     p.add_argument(
         "--out",
         type=str,
         default=None,
-        help="output JSON path. Defaults to data_N<n>/exact_results/exact_N_..._J_..._h_..._T_..._r_....json",
+        help="output JSON path. Defaults to data/N<n>/exact_results/exact_N_..._J_..._h_..._T_..._r_....json",
     )
     return p.parse_args()
 
 
+def apply_rotation_rate_overrides(args):
+    """Translate paper notation rx*T and rzz*T into the script's h and J."""
+    if args.rxT is None and args.rzzT is None:
+        return args
+    if args.t == 0:
+        raise ValueError("Cannot derive h/J from rxT/rzzT when t is zero.")
+    if args.rxT is not None:
+        args.h = -args.rxT / args.t
+    if args.rzzT is not None:
+        args.J = -args.rzzT / args.t
+    return args
+
+
 def main():
-    args = parse_args()
+    args = apply_rotation_rate_overrides(parse_args())
     expectation_value, final_norm = run_evolution(args.n, args.J, args.h, args.t, args.r)
     out = {
         "n": args.n,
         "J": args.J,
         "h": args.h,
         "t": args.t,
+        "rxT": -args.h * args.t,
+        "rzzT": -args.J * args.t,
         "r": args.r,
         "expectation_real": float(np.real(expectation_value)),
         "expectation_imag": float(np.imag(expectation_value)),

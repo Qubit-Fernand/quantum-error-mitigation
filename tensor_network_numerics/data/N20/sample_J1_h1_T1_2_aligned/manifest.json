@@ -1,0 +1,20 @@
+{
+  "dataset": "sample_J1_h1_T1_2_aligned",
+  "description": "Default destination for paper-convention aligned runs with J = h = 1 and T in {1, 2}.",
+  "N": 20,
+  "J": 1.0,
+  "h": 1.0,
+  "rxT_values": [-1.0, -2.0],
+  "rzzT_values": [-1.0, -2.0],
+  "T_values": [1.0, 2.0],
+  "r_values": [1, 2, 3, 7],
+  "noise_values": [0, 1, 4, 9, 49],
+  "seed": 43,
+  "config": "tensor_network_numerics/scripts/configs/noisy_J1_h1_T1_2_aligned.jsonl",
+  "source_script": "tensor_network_numerics/scripts/noisy.py",
+  "sign_convention": "Paper convention: rx = -h and rzz = -J, so rxT = -h*T and rzzT = -J*T.",
+  "notes": [
+    "This directory is prepared for new aligned tensor-network runs.",
+    "The batch config maps rxT/rzzT into h/J at runtime using h = -rxT/T and J = -rzzT/T."
+  ]
+}

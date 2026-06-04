@@ -1,0 +1,20 @@
+{
+  "dataset": "sample_J1_h1_T1_r2_5_noise_scan",
+  "description": "Noisy 20-qubit scan with J = h = 1, T = 1, and r in {2, 3, 4, 5}.",
+  "source_script": "tensor_network_numerics/scripts/noisy.py",
+  "config": "tensor_network_numerics/scripts/configs/noisy_J1_h1_T1_r2_5_noise_scan.jsonl",
+  "N": 20,
+  "t": 1.0,
+  "rxT": -1.0,
+  "rzzT": -1.0,
+  "derived_parameters": {
+    "h": 1.0,
+    "J": 1.0
+  },
+  "r_values": [2, 3, 4, 5],
+  "noise_values": [1.0, 3.375, 8.0, 15.625],
+  "noise_value_formulas": ["2^3/2^3", "3^3/2^3", "4^3/2^3", "5^3/2^3"],
+  "seed": 43,
+  "samples": 10000,
+  "sign_convention": "Paper convention: rx = -h and rzz = -J, so rxT = -h*T and rzzT = -J*T. The Hamiltonian is H = -J sum ZZ - h sum X, and the minus signs are carried by the rotation angles."
+}

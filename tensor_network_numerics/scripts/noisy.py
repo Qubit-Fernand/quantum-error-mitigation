@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """Run noisy circuit and save samples + observable.
 
-Ported from the first three cells of `simulation_results/noisy.ipynb`.
-Usage: python simulation_results/scripts/noisy.py --help
+Ported from the first three cells of `notebooks/scratch/noisy.ipynb`.
+Usage: python tensor_network_numerics/scripts/noisy.py --help
 """
 
 from pathlib import Path
@@ -133,7 +133,7 @@ def format_float_for_filename(value):
 
 
 def result_stem(r, t, noise, seed):
-    return f"r_{r}_T_{format_float_for_filename(t)}_noise_{int(noise)}_seed_{seed}"
+    return f"r_{r}_T_{format_float_for_filename(t)}_noise_{format_float_for_filename(noise)}_seed_{seed}"
 
 
 def sum_Z(bitstring):
@@ -146,11 +146,27 @@ def parse_args():
     p.add_argument("--J", type=float, default=0.5)
     p.add_argument("--h", type=float, default=1.0)
     p.add_argument("--t", type=float, default=1.0)
+    p.add_argument(
+        "--rxT",
+        type=float,
+        default=None,
+        help="Optional paper-style transverse rotation product rx*T. Uses rx=-h, so h=-rxT/t.",
+    )
+    p.add_argument(
+        "--rzzT",
+        type=float,
+        default=None,
+        help="Optional paper-style Ising rotation product rzz*T. Uses rzz=-J, so J=-rzzT/t.",
+    )
     p.add_argument("--r", type=int, default=1)
     p.add_argument("--noise", type=float, default=0)
     p.add_argument("--seed", type=int, default=43)
     p.add_argument("--samples", type=int, default=10000)
-    p.add_argument("--outdir", type=str, default=str(SIMULATION_ROOT / "data_N{N}" / "sample_results"))
+    p.add_argument(
+        "--outdir",
+        type=str,
+        default=str(SIMULATION_ROOT / "data" / "N{N}" / "sample_results"),
+    )
     p.add_argument(
         "--batch",
         type=str,
@@ -159,7 +175,21 @@ def parse_args():
     return p.parse_args()
 
 
+def apply_rotation_rate_overrides(args):
+    """Translate paper notation rx*T and rzz*T into the script's h and J."""
+    if getattr(args, "rxT", None) is None and getattr(args, "rzzT", None) is None:
+        return args
+    if args.t == 0:
+        raise ValueError("Cannot derive h/J from rxT/rzzT when t is zero.")
+    if getattr(args, "rxT", None) is not None:
+        args.h = -args.rxT / args.t
+    if getattr(args, "rzzT", None) is not None:
+        args.J = -args.rzzT / args.t
+    return args
+
+
 def run_job(args):
+    args = apply_rotation_rate_overrides(args)
     # random number generator for reproducibility
     rng = np.random.default_rng(args.seed)
 
@@ -192,6 +222,8 @@ def run_job(args):
         "J": args.J,
         "h": args.h,
         "t": args.t,
+        "rxT": -args.h * args.t,
+        "rzzT": -args.J * args.t,
         "r": args.r,
         "noise": args.noise,
         "seed": args.seed,
@@ -317,7 +349,14 @@ def main():
         print(f"Loaded {len(jobs)} batch job(s) from {batch_path}")
         for idx, job in enumerate(jobs, start=1):
             job_args = merge_job_args(args, job)
-            print(f"[{idx}/{len(jobs)}] " f"N={job_args.N} r={job_args.r} t={job_args.t} noise={job_args.noise} " f"seed={job_args.seed} samples={job_args.samples}")
+            job_args = apply_rotation_rate_overrides(job_args)
+            print(
+                f"[{idx}/{len(jobs)}] "
+                f"N={job_args.N} J={job_args.J:g} h={job_args.h:g} "
+                f"rxT={-job_args.h * job_args.t:g} rzzT={-job_args.J * job_args.t:g} "
+                f"r={job_args.r} t={job_args.t} noise={job_args.noise} "
+                f"seed={job_args.seed} samples={job_args.samples}"
+            )
             run_job(job_args)
     else:
         run_job(args)

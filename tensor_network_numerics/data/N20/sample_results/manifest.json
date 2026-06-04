@@ -1,0 +1,10 @@
+{
+  "dataset": "sample_results",
+  "description": "Default output directory for new noisy simulation runs.",
+  "N": 20,
+  "source_script": "tensor_network_numerics/scripts/noisy.py",
+  "notes": [
+    "This directory is intentionally separate from historical parameter-specific sweeps.",
+    "Use explicit dataset names for completed sweeps that should be reused by plots."
+  ]
+}
