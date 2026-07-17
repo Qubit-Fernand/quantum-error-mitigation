@@ -1,0 +1,24 @@
+{
+  "dataset": "sample_J1_h1_T1_2_square",
+  "description": "Paper-convention aligned runs with J = h = 1, T in {1, 2}, r in {1, 2, 3, 7}, and square noise scaling.",
+  "N": 20,
+  "J": 1.0,
+  "h": 1.0,
+  "rxT_values": [-1.0, -2.0],
+  "rzzT_values": [-1.0, -2.0],
+  "T_values": [1.0, 2.0],
+  "r_values": [1, 2, 3, 7],
+  "noise_values": [0.0, 1.0, 4.0, 9.0, 49.0],
+  "noise_value_formulas": ["0", "1^2", "2^2", "3^2", "7^2"],
+  "noise_rule": "square_plus_zero",
+  "seed": 43,
+  "samples": 10000,
+  "config": "tensor_network_numerics/scripts/configs/noisy_J1_h1_T1_2_square.jsonl",
+  "source_script": "tensor_network_numerics/scripts/noisy.py",
+  "sign_convention": "Paper convention: rx = -h and rzz = -J, so rxT = -h*T and rzzT = -J*T.",
+  "notes": [
+    "This directory stores the J = h = 1 counterpart of the historical r = [1, 2, 3, 7] square-noise scan.",
+    "Noise values use the r = [1, 2, 3, 7] square scale plus zero; the joint path should use the reversed nonzero sequence [49, 9, 4, 1].",
+    "The batch config maps rxT/rzzT into h/J at runtime using h = -rxT/T and J = -rzzT/T."
+  ]
+}

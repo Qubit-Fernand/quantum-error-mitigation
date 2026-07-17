@@ -5,3 +5,5 @@ __pycache__/
 *.py[cod]
 .ipynb_checkpoints/
 文档/腾讯量子与李彤阳老师合作所需基础信息.docx
+/overleaf
+codex_memory.md

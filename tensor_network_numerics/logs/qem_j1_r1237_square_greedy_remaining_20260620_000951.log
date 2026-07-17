@@ -1,0 +1,143 @@
+[2026-06-20 00:09:51] start J1 square r1237 remaining batch optimize=greedy
+Loaded 35 batch job(s) from /private/tmp/noisy_J1_h1_T1_2_square_remaining.jsonl
+[1/35] N=20 J=1 h=1 rxT=-1 rzzT=-1 r=2 t=1.0 noise=0.0 seed=43 samples=10000
+Saved 10000 samples to /Users/AntiEntropy/Documents/Research/Quantum Error Mitigation/tensor_network_numerics/data/N20/sample_J1_h1_T1_2_square/r_2_T_1_noise_0_seed_43.json
+Estimated <sum Z> = 9.93200000000032
+Wrote observable to /Users/AntiEntropy/Documents/Research/Quantum Error Mitigation/tensor_network_numerics/data/N20/sample_J1_h1_T1_2_square/r_2_T_1_noise_0_seed_43.txt
+[2/35] N=20 J=1 h=1 rxT=-1 rzzT=-1 r=2 t=1.0 noise=1.0 seed=43 samples=10000
+Saved 10000 samples to /Users/AntiEntropy/Documents/Research/Quantum Error Mitigation/tensor_network_numerics/data/N20/sample_J1_h1_T1_2_square/r_2_T_1_noise_1_seed_43.json
+Estimated <sum Z> = 9.93200000000032
+Wrote observable to /Users/AntiEntropy/Documents/Research/Quantum Error Mitigation/tensor_network_numerics/data/N20/sample_J1_h1_T1_2_square/r_2_T_1_noise_1_seed_43.txt
+[3/35] N=20 J=1 h=1 rxT=-1 rzzT=-1 r=2 t=1.0 noise=4.0 seed=43 samples=10000
+Saved 10000 samples to /Users/AntiEntropy/Documents/Research/Quantum Error Mitigation/tensor_network_numerics/data/N20/sample_J1_h1_T1_2_square/r_2_T_1_noise_4_seed_43.json
+Estimated <sum Z> = 5.840800000000088
+Wrote observable to /Users/AntiEntropy/Documents/Research/Quantum Error Mitigation/tensor_network_numerics/data/N20/sample_J1_h1_T1_2_square/r_2_T_1_noise_4_seed_43.txt
+[4/35] N=20 J=1 h=1 rxT=-1 rzzT=-1 r=2 t=1.0 noise=9.0 seed=43 samples=10000
+Saved 10000 samples to /Users/AntiEntropy/Documents/Research/Quantum Error Mitigation/tensor_network_numerics/data/N20/sample_J1_h1_T1_2_square/r_2_T_1_noise_9_seed_43.json
+Estimated <sum Z> = 5.840800000000088
+Wrote observable to /Users/AntiEntropy/Documents/Research/Quantum Error Mitigation/tensor_network_numerics/data/N20/sample_J1_h1_T1_2_square/r_2_T_1_noise_9_seed_43.txt
+[5/35] N=20 J=1 h=1 rxT=-1 rzzT=-1 r=2 t=1.0 noise=49.0 seed=43 samples=10000
+Saved 10000 samples to /Users/AntiEntropy/Documents/Research/Quantum Error Mitigation/tensor_network_numerics/data/N20/sample_J1_h1_T1_2_square/r_2_T_1_noise_49_seed_43.json
+Estimated <sum Z> = -2.5539999999998457
+Wrote observable to /Users/AntiEntropy/Documents/Research/Quantum Error Mitigation/tensor_network_numerics/data/N20/sample_J1_h1_T1_2_square/r_2_T_1_noise_49_seed_43.txt
+[6/35] N=20 J=1 h=1 rxT=-1 rzzT=-1 r=3 t=1.0 noise=0.0 seed=43 samples=10000
+Saved 10000 samples to /Users/AntiEntropy/Documents/Research/Quantum Error Mitigation/tensor_network_numerics/data/N20/sample_J1_h1_T1_2_square/r_3_T_1_noise_0_seed_43.json
+Estimated <sum Z> = 7.642600000000251
+Wrote observable to /Users/AntiEntropy/Documents/Research/Quantum Error Mitigation/tensor_network_numerics/data/N20/sample_J1_h1_T1_2_square/r_3_T_1_noise_0_seed_43.txt
+[7/35] N=20 J=1 h=1 rxT=-1 rzzT=-1 r=3 t=1.0 noise=1.0 seed=43 samples=10000
+Saved 10000 samples to /Users/AntiEntropy/Documents/Research/Quantum Error Mitigation/tensor_network_numerics/data/N20/sample_J1_h1_T1_2_square/r_3_T_1_noise_1_seed_43.json
+Estimated <sum Z> = 7.642600000000251
+Wrote observable to /Users/AntiEntropy/Documents/Research/Quantum Error Mitigation/tensor_network_numerics/data/N20/sample_J1_h1_T1_2_square/r_3_T_1_noise_1_seed_43.txt
+[8/35] N=20 J=1 h=1 rxT=-1 rzzT=-1 r=3 t=1.0 noise=4.0 seed=43 samples=10000
+Saved 10000 samples to /Users/AntiEntropy/Documents/Research/Quantum Error Mitigation/tensor_network_numerics/data/N20/sample_J1_h1_T1_2_square/r_3_T_1_noise_4_seed_43.json
+Estimated <sum Z> = 4.52019999999982
+Wrote observable to /Users/AntiEntropy/Documents/Research/Quantum Error Mitigation/tensor_network_numerics/data/N20/sample_J1_h1_T1_2_square/r_3_T_1_noise_4_seed_43.txt
+[9/35] N=20 J=1 h=1 rxT=-1 rzzT=-1 r=3 t=1.0 noise=9.0 seed=43 samples=10000
+Saved 10000 samples to /Users/AntiEntropy/Documents/Research/Quantum Error Mitigation/tensor_network_numerics/data/N20/sample_J1_h1_T1_2_square/r_3_T_1_noise_9_seed_43.json
+Estimated <sum Z> = 4.52019999999982
+Wrote observable to /Users/AntiEntropy/Documents/Research/Quantum Error Mitigation/tensor_network_numerics/data/N20/sample_J1_h1_T1_2_square/r_3_T_1_noise_9_seed_43.txt
+[10/35] N=20 J=1 h=1 rxT=-1 rzzT=-1 r=3 t=1.0 noise=49.0 seed=43 samples=10000
+Saved 10000 samples to /Users/AntiEntropy/Documents/Research/Quantum Error Mitigation/tensor_network_numerics/data/N20/sample_J1_h1_T1_2_square/r_3_T_1_noise_49_seed_43.json
+Estimated <sum Z> = -0.9061999999999951
+Wrote observable to /Users/AntiEntropy/Documents/Research/Quantum Error Mitigation/tensor_network_numerics/data/N20/sample_J1_h1_T1_2_square/r_3_T_1_noise_49_seed_43.txt
+[11/35] N=20 J=1 h=1 rxT=-1 rzzT=-1 r=7 t=1.0 noise=0.0 seed=43 samples=10000
+Saved 10000 samples to /Users/AntiEntropy/Documents/Research/Quantum Error Mitigation/tensor_network_numerics/data/N20/sample_J1_h1_T1_2_square/r_7_T_1_noise_0_seed_43.json
+Estimated <sum Z> = 6.362800000000083
+Wrote observable to /Users/AntiEntropy/Documents/Research/Quantum Error Mitigation/tensor_network_numerics/data/N20/sample_J1_h1_T1_2_square/r_7_T_1_noise_0_seed_43.txt
+[12/35] N=20 J=1 h=1 rxT=-1 rzzT=-1 r=7 t=1.0 noise=1.0 seed=43 samples=10000
+Saved 10000 samples to /Users/AntiEntropy/Documents/Research/Quantum Error Mitigation/tensor_network_numerics/data/N20/sample_J1_h1_T1_2_square/r_7_T_1_noise_1_seed_43.json
+Estimated <sum Z> = 6.362800000000083
+Wrote observable to /Users/AntiEntropy/Documents/Research/Quantum Error Mitigation/tensor_network_numerics/data/N20/sample_J1_h1_T1_2_square/r_7_T_1_noise_1_seed_43.txt
+[13/35] N=20 J=1 h=1 rxT=-1 rzzT=-1 r=7 t=1.0 noise=4.0 seed=43 samples=10000
+Saved 10000 samples to /Users/AntiEntropy/Documents/Research/Quantum Error Mitigation/tensor_network_numerics/data/N20/sample_J1_h1_T1_2_square/r_7_T_1_noise_4_seed_43.json
+Estimated <sum Z> = 3.278799999999796
+Wrote observable to /Users/AntiEntropy/Documents/Research/Quantum Error Mitigation/tensor_network_numerics/data/N20/sample_J1_h1_T1_2_square/r_7_T_1_noise_4_seed_43.txt
+[14/35] N=20 J=1 h=1 rxT=-1 rzzT=-1 r=7 t=1.0 noise=9.0 seed=43 samples=10000
+Saved 10000 samples to /Users/AntiEntropy/Documents/Research/Quantum Error Mitigation/tensor_network_numerics/data/N20/sample_J1_h1_T1_2_square/r_7_T_1_noise_9_seed_43.json
+Estimated <sum Z> = 3.6541999999997543
+Wrote observable to /Users/AntiEntropy/Documents/Research/Quantum Error Mitigation/tensor_network_numerics/data/N20/sample_J1_h1_T1_2_square/r_7_T_1_noise_9_seed_43.txt
+[15/35] N=20 J=1 h=1 rxT=-1 rzzT=-1 r=7 t=1.0 noise=49.0 seed=43 samples=10000
+Saved 10000 samples to /Users/AntiEntropy/Documents/Research/Quantum Error Mitigation/tensor_network_numerics/data/N20/sample_J1_h1_T1_2_square/r_7_T_1_noise_49_seed_43.json
+Estimated <sum Z> = 2.1829999999998626
+Wrote observable to /Users/AntiEntropy/Documents/Research/Quantum Error Mitigation/tensor_network_numerics/data/N20/sample_J1_h1_T1_2_square/r_7_T_1_noise_49_seed_43.txt
+[16/35] N=20 J=1 h=1 rxT=-2 rzzT=-2 r=1 t=2.0 noise=0.0 seed=43 samples=10000
+Saved 10000 samples to /Users/AntiEntropy/Documents/Research/Quantum Error Mitigation/tensor_network_numerics/data/N20/sample_J1_h1_T1_2_square/r_1_T_2_noise_0_seed_43.json
+Estimated <sum Z> = -0.3250000000000008
+Wrote observable to /Users/AntiEntropy/Documents/Research/Quantum Error Mitigation/tensor_network_numerics/data/N20/sample_J1_h1_T1_2_square/r_1_T_2_noise_0_seed_43.txt
+[17/35] N=20 J=1 h=1 rxT=-2 rzzT=-2 r=1 t=2.0 noise=1.0 seed=43 samples=10000
+Saved 10000 samples to /Users/AntiEntropy/Documents/Research/Quantum Error Mitigation/tensor_network_numerics/data/N20/sample_J1_h1_T1_2_square/r_1_T_2_noise_1_seed_43.json
+Estimated <sum Z> = -0.3250000000000008
+Wrote observable to /Users/AntiEntropy/Documents/Research/Quantum Error Mitigation/tensor_network_numerics/data/N20/sample_J1_h1_T1_2_square/r_1_T_2_noise_1_seed_43.txt
+[18/35] N=20 J=1 h=1 rxT=-2 rzzT=-2 r=1 t=2.0 noise=4.0 seed=43 samples=10000
+Saved 10000 samples to /Users/AntiEntropy/Documents/Research/Quantum Error Mitigation/tensor_network_numerics/data/N20/sample_J1_h1_T1_2_square/r_1_T_2_noise_4_seed_43.json
+Estimated <sum Z> = -0.44280000000000086
+Wrote observable to /Users/AntiEntropy/Documents/Research/Quantum Error Mitigation/tensor_network_numerics/data/N20/sample_J1_h1_T1_2_square/r_1_T_2_noise_4_seed_43.txt
+[19/35] N=20 J=1 h=1 rxT=-2 rzzT=-2 r=1 t=2.0 noise=9.0 seed=43 samples=10000
+Saved 10000 samples to /Users/AntiEntropy/Documents/Research/Quantum Error Mitigation/tensor_network_numerics/data/N20/sample_J1_h1_T1_2_square/r_1_T_2_noise_9_seed_43.json
+Estimated <sum Z> = -0.44280000000000086
+Wrote observable to /Users/AntiEntropy/Documents/Research/Quantum Error Mitigation/tensor_network_numerics/data/N20/sample_J1_h1_T1_2_square/r_1_T_2_noise_9_seed_43.txt
+[20/35] N=20 J=1 h=1 rxT=-2 rzzT=-2 r=1 t=2.0 noise=49.0 seed=43 samples=10000
+Saved 10000 samples to /Users/AntiEntropy/Documents/Research/Quantum Error Mitigation/tensor_network_numerics/data/N20/sample_J1_h1_T1_2_square/r_1_T_2_noise_49_seed_43.json
+Estimated <sum Z> = 2.814999999999808
+Wrote observable to /Users/AntiEntropy/Documents/Research/Quantum Error Mitigation/tensor_network_numerics/data/N20/sample_J1_h1_T1_2_square/r_1_T_2_noise_49_seed_43.txt
+[21/35] N=20 J=1 h=1 rxT=-2 rzzT=-2 r=2 t=2.0 noise=0.0 seed=43 samples=10000
+Saved 10000 samples to /Users/AntiEntropy/Documents/Research/Quantum Error Mitigation/tensor_network_numerics/data/N20/sample_J1_h1_T1_2_square/r_2_T_2_noise_0_seed_43.json
+Estimated <sum Z> = -7.1492000000000955
+Wrote observable to /Users/AntiEntropy/Documents/Research/Quantum Error Mitigation/tensor_network_numerics/data/N20/sample_J1_h1_T1_2_square/r_2_T_2_noise_0_seed_43.txt
+[22/35] N=20 J=1 h=1 rxT=-2 rzzT=-2 r=2 t=2.0 noise=1.0 seed=43 samples=10000
+Saved 10000 samples to /Users/AntiEntropy/Documents/Research/Quantum Error Mitigation/tensor_network_numerics/data/N20/sample_J1_h1_T1_2_square/r_2_T_2_noise_1_seed_43.json
+Estimated <sum Z> = -7.1492000000000955
+Wrote observable to /Users/AntiEntropy/Documents/Research/Quantum Error Mitigation/tensor_network_numerics/data/N20/sample_J1_h1_T1_2_square/r_2_T_2_noise_1_seed_43.txt
+[23/35] N=20 J=1 h=1 rxT=-2 rzzT=-2 r=2 t=2.0 noise=4.0 seed=43 samples=10000
+Saved 10000 samples to /Users/AntiEntropy/Documents/Research/Quantum Error Mitigation/tensor_network_numerics/data/N20/sample_J1_h1_T1_2_square/r_2_T_2_noise_4_seed_43.json
+Estimated <sum Z> = -5.308199999999939
+Wrote observable to /Users/AntiEntropy/Documents/Research/Quantum Error Mitigation/tensor_network_numerics/data/N20/sample_J1_h1_T1_2_square/r_2_T_2_noise_4_seed_43.txt
+[24/35] N=20 J=1 h=1 rxT=-2 rzzT=-2 r=2 t=2.0 noise=9.0 seed=43 samples=10000
+Saved 10000 samples to /Users/AntiEntropy/Documents/Research/Quantum Error Mitigation/tensor_network_numerics/data/N20/sample_J1_h1_T1_2_square/r_2_T_2_noise_9_seed_43.json
+Estimated <sum Z> = -5.308199999999939
+Wrote observable to /Users/AntiEntropy/Documents/Research/Quantum Error Mitigation/tensor_network_numerics/data/N20/sample_J1_h1_T1_2_square/r_2_T_2_noise_9_seed_43.txt
+[25/35] N=20 J=1 h=1 rxT=-2 rzzT=-2 r=2 t=2.0 noise=49.0 seed=43 samples=10000
+Saved 10000 samples to /Users/AntiEntropy/Documents/Research/Quantum Error Mitigation/tensor_network_numerics/data/N20/sample_J1_h1_T1_2_square/r_2_T_2_noise_49_seed_43.json
+Estimated <sum Z> = 1.7699999999999267
+Wrote observable to /Users/AntiEntropy/Documents/Research/Quantum Error Mitigation/tensor_network_numerics/data/N20/sample_J1_h1_T1_2_square/r_2_T_2_noise_49_seed_43.txt
+[26/35] N=20 J=1 h=1 rxT=-2 rzzT=-2 r=3 t=2.0 noise=0.0 seed=43 samples=10000
+Saved 10000 samples to /Users/AntiEntropy/Documents/Research/Quantum Error Mitigation/tensor_network_numerics/data/N20/sample_J1_h1_T1_2_square/r_3_T_2_noise_0_seed_43.json
+Estimated <sum Z> = 5.7079999999998945
+Wrote observable to /Users/AntiEntropy/Documents/Research/Quantum Error Mitigation/tensor_network_numerics/data/N20/sample_J1_h1_T1_2_square/r_3_T_2_noise_0_seed_43.txt
+[27/35] N=20 J=1 h=1 rxT=-2 rzzT=-2 r=3 t=2.0 noise=1.0 seed=43 samples=10000
+Saved 10000 samples to /Users/AntiEntropy/Documents/Research/Quantum Error Mitigation/tensor_network_numerics/data/N20/sample_J1_h1_T1_2_square/r_3_T_2_noise_1_seed_43.json
+Estimated <sum Z> = 5.7079999999998945
+Wrote observable to /Users/AntiEntropy/Documents/Research/Quantum Error Mitigation/tensor_network_numerics/data/N20/sample_J1_h1_T1_2_square/r_3_T_2_noise_1_seed_43.txt
+[28/35] N=20 J=1 h=1 rxT=-2 rzzT=-2 r=3 t=2.0 noise=4.0 seed=43 samples=10000
+Saved 10000 samples to /Users/AntiEntropy/Documents/Research/Quantum Error Mitigation/tensor_network_numerics/data/N20/sample_J1_h1_T1_2_square/r_3_T_2_noise_4_seed_43.json
+Estimated <sum Z> = 1.3899999999999728
+Wrote observable to /Users/AntiEntropy/Documents/Research/Quantum Error Mitigation/tensor_network_numerics/data/N20/sample_J1_h1_T1_2_square/r_3_T_2_noise_4_seed_43.txt
+[29/35] N=20 J=1 h=1 rxT=-2 rzzT=-2 r=3 t=2.0 noise=9.0 seed=43 samples=10000
+Saved 10000 samples to /Users/AntiEntropy/Documents/Research/Quantum Error Mitigation/tensor_network_numerics/data/N20/sample_J1_h1_T1_2_square/r_3_T_2_noise_9_seed_43.json
+Estimated <sum Z> = 1.3899999999999728
+Wrote observable to /Users/AntiEntropy/Documents/Research/Quantum Error Mitigation/tensor_network_numerics/data/N20/sample_J1_h1_T1_2_square/r_3_T_2_noise_9_seed_43.txt
+[30/35] N=20 J=1 h=1 rxT=-2 rzzT=-2 r=3 t=2.0 noise=49.0 seed=43 samples=10000
+Saved 10000 samples to /Users/AntiEntropy/Documents/Research/Quantum Error Mitigation/tensor_network_numerics/data/N20/sample_J1_h1_T1_2_square/r_3_T_2_noise_49_seed_43.json
+Estimated <sum Z> = 0.5850000000000017
+Wrote observable to /Users/AntiEntropy/Documents/Research/Quantum Error Mitigation/tensor_network_numerics/data/N20/sample_J1_h1_T1_2_square/r_3_T_2_noise_49_seed_43.txt
+[31/35] N=20 J=1 h=1 rxT=-2 rzzT=-2 r=7 t=2.0 noise=0.0 seed=43 samples=10000
+Saved 10000 samples to /Users/AntiEntropy/Documents/Research/Quantum Error Mitigation/tensor_network_numerics/data/N20/sample_J1_h1_T1_2_square/r_7_T_2_noise_0_seed_43.json
+Estimated <sum Z> = 1.9667999999999732
+Wrote observable to /Users/AntiEntropy/Documents/Research/Quantum Error Mitigation/tensor_network_numerics/data/N20/sample_J1_h1_T1_2_square/r_7_T_2_noise_0_seed_43.txt
+[32/35] N=20 J=1 h=1 rxT=-2 rzzT=-2 r=7 t=2.0 noise=1.0 seed=43 samples=10000
+Saved 10000 samples to /Users/AntiEntropy/Documents/Research/Quantum Error Mitigation/tensor_network_numerics/data/N20/sample_J1_h1_T1_2_square/r_7_T_2_noise_1_seed_43.json
+Estimated <sum Z> = 1.9667999999999732
+Wrote observable to /Users/AntiEntropy/Documents/Research/Quantum Error Mitigation/tensor_network_numerics/data/N20/sample_J1_h1_T1_2_square/r_7_T_2_noise_1_seed_43.txt
+[33/35] N=20 J=1 h=1 rxT=-2 rzzT=-2 r=7 t=2.0 noise=4.0 seed=43 samples=10000
+Saved 10000 samples to /Users/AntiEntropy/Documents/Research/Quantum Error Mitigation/tensor_network_numerics/data/N20/sample_J1_h1_T1_2_square/r_7_T_2_noise_4_seed_43.json
+Estimated <sum Z> = 1.2677999999999852
+Wrote observable to /Users/AntiEntropy/Documents/Research/Quantum Error Mitigation/tensor_network_numerics/data/N20/sample_J1_h1_T1_2_square/r_7_T_2_noise_4_seed_43.txt
+[34/35] N=20 J=1 h=1 rxT=-2 rzzT=-2 r=7 t=2.0 noise=9.0 seed=43 samples=10000
+Saved 10000 samples to /Users/AntiEntropy/Documents/Research/Quantum Error Mitigation/tensor_network_numerics/data/N20/sample_J1_h1_T1_2_square/r_7_T_2_noise_9_seed_43.json
+Estimated <sum Z> = 1.279799999999984
+Wrote observable to /Users/AntiEntropy/Documents/Research/Quantum Error Mitigation/tensor_network_numerics/data/N20/sample_J1_h1_T1_2_square/r_7_T_2_noise_9_seed_43.txt
+[35/35] N=20 J=1 h=1 rxT=-2 rzzT=-2 r=7 t=2.0 noise=49.0 seed=43 samples=10000
+Saved 10000 samples to /Users/AntiEntropy/Documents/Research/Quantum Error Mitigation/tensor_network_numerics/data/N20/sample_J1_h1_T1_2_square/r_7_T_2_noise_49_seed_43.json
+Estimated <sum Z> = -0.43999999999999906
+Wrote observable to /Users/AntiEntropy/Documents/Research/Quantum Error Mitigation/tensor_network_numerics/data/N20/sample_J1_h1_T1_2_square/r_7_T_2_noise_49_seed_43.txt
+[2026-06-20 00:14:18] completed: 35/35 remaining jobs finished; verified full 40-job grid

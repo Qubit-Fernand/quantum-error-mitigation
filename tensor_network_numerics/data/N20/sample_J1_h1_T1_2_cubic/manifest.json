@@ -1,0 +1,23 @@
+{
+  "dataset": "sample_J1_h1_T1_2_cubic",
+  "description": "Paper-convention runs with J = h = 1, T in {1, 2}, r in {1, 2, 3, 7}, and cubic noise scaling.",
+  "N": 20,
+  "J": 1.0,
+  "h": 1.0,
+  "rxT_values": [-1.0, -2.0],
+  "rzzT_values": [-1.0, -2.0],
+  "T_values": [1.0, 2.0],
+  "r_values": [1, 2, 3, 7],
+  "noise_values": [0.0, 1.0, 8.0, 27.0, 343.0],
+  "noise_value_formulas": ["0", "1^3/1^3", "2^3/1^3", "3^3/1^3", "7^3/1^3"],
+  "noise_rule": "cube_normalized_to_min_r_plus_zero",
+  "seed": 43,
+  "config": "tensor_network_numerics/scripts/configs/noisy_J1_h1_T1_2_cubic.jsonl",
+  "source_script": "tensor_network_numerics/scripts/noisy.py",
+  "sign_convention": "Paper convention: rx = -h and rzz = -J, so rxT = -h*T and rzzT = -J*T.",
+  "notes": [
+    "This directory stores the cubic-noise tensor-network runs.",
+    "Noise values use the r = [1, 2, 3, 7] cubic scale plus zero; the joint path should use the reversed nonzero sequence [343, 27, 8, 1].",
+    "The batch config maps rxT/rzzT into h/J at runtime using h = -rxT/T and J = -rzzT/T."
+  ]
+}

@@ -163,6 +163,12 @@ def parse_args():
     p.add_argument("--seed", type=int, default=43)
     p.add_argument("--samples", type=int, default=10000)
     p.add_argument(
+        "--optimize",
+        type=str,
+        default="auto-hq",
+        help="Contraction path optimizer passed to quimb Circuit.sample.",
+    )
+    p.add_argument(
         "--outdir",
         type=str,
         default=str(SIMULATION_ROOT / "data" / "N{N}" / "sample_results"),
@@ -196,7 +202,13 @@ def run_job(args):
     circ = build_circuit(args.N, args.J, args.h, args.t, args.r, args.noise, rng=rng)
 
     # sampling: use circ.sample which accepts seed for quimb, use args.seed for reproducibility
-    samples = list(circ.sample(args.samples, seed=int(args.seed)))
+    samples = list(
+        circ.sample(
+            args.samples,
+            seed=int(args.seed),
+            optimize=getattr(args, "optimize", "auto-hq"),
+        )
+    )
 
     outdir = Path(args.outdir.format(N=args.N))
     stem = result_stem(args.r, args.t, args.noise, args.seed)

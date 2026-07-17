@@ -1,0 +1,100 @@
+[2026-06-20 00:06:27] start J1 square r1237 batch
+/opt/miniconda3/envs/Qubit/lib/python3.11/site-packages/cotengra/hyperoptimizers/hyper.py:36: UserWarning: Couldn't import `kahypar` - skipping from default hyper optimizer and using basic `labels` method instead. `kahypar` is highly recommended for the best quality contraction paths.
+  warnings.warn(
+Loaded 40 batch job(s) from tensor_network_numerics/scripts/configs/noisy_J1_h1_T1_2_square.jsonl
+[1/40] N=20 J=1 h=1 rxT=-1 rzzT=-1 r=1 t=1.0 noise=0.0 seed=43 samples=10000
+Saved 10000 samples to /Users/AntiEntropy/Documents/Research/Quantum Error Mitigation/tensor_network_numerics/data/N20/sample_J1_h1_T1_2_square/r_1_T_1_noise_0_seed_43.json
+Estimated <sum Z> = 7.359000000000236
+Wrote observable to /Users/AntiEntropy/Documents/Research/Quantum Error Mitigation/tensor_network_numerics/data/N20/sample_J1_h1_T1_2_square/r_1_T_1_noise_0_seed_43.txt
+[2/40] N=20 J=1 h=1 rxT=-1 rzzT=-1 r=1 t=1.0 noise=1.0 seed=43 samples=10000
+Saved 10000 samples to /Users/AntiEntropy/Documents/Research/Quantum Error Mitigation/tensor_network_numerics/data/N20/sample_J1_h1_T1_2_square/r_1_T_1_noise_1_seed_43.json
+Estimated <sum Z> = 7.359000000000236
+Wrote observable to /Users/AntiEntropy/Documents/Research/Quantum Error Mitigation/tensor_network_numerics/data/N20/sample_J1_h1_T1_2_square/r_1_T_1_noise_1_seed_43.txt
+[3/40] N=20 J=1 h=1 rxT=-1 rzzT=-1 r=1 t=1.0 noise=4.0 seed=43 samples=10000
+Saved 10000 samples to /Users/AntiEntropy/Documents/Research/Quantum Error Mitigation/tensor_network_numerics/data/N20/sample_J1_h1_T1_2_square/r_1_T_1_noise_4_seed_43.json
+Estimated <sum Z> = 4.947799999999902
+Wrote observable to /Users/AntiEntropy/Documents/Research/Quantum Error Mitigation/tensor_network_numerics/data/N20/sample_J1_h1_T1_2_square/r_1_T_1_noise_4_seed_43.txt
+[4/40] N=20 J=1 h=1 rxT=-1 rzzT=-1 r=1 t=1.0 noise=9.0 seed=43 samples=10000
+Saved 10000 samples to /Users/AntiEntropy/Documents/Research/Quantum Error Mitigation/tensor_network_numerics/data/N20/sample_J1_h1_T1_2_square/r_1_T_1_noise_9_seed_43.json
+Estimated <sum Z> = 4.947799999999902
+Wrote observable to /Users/AntiEntropy/Documents/Research/Quantum Error Mitigation/tensor_network_numerics/data/N20/sample_J1_h1_T1_2_square/r_1_T_1_noise_9_seed_43.txt
+[5/40] N=20 J=1 h=1 rxT=-1 rzzT=-1 r=1 t=1.0 noise=49.0 seed=43 samples=10000
+Saved 10000 samples to /Users/AntiEntropy/Documents/Research/Quantum Error Mitigation/tensor_network_numerics/data/N20/sample_J1_h1_T1_2_square/r_1_T_1_noise_49_seed_43.json
+Estimated <sum Z> = 2.7215999999998197
+Wrote observable to /Users/AntiEntropy/Documents/Research/Quantum Error Mitigation/tensor_network_numerics/data/N20/sample_J1_h1_T1_2_square/r_1_T_1_noise_49_seed_43.txt
+[6/40] N=20 J=1 h=1 rxT=-1 rzzT=-1 r=2 t=1.0 noise=0.0 seed=43 samples=10000
+Traceback (most recent call last):
+  File "/Users/AntiEntropy/Documents/Research/Quantum Error Mitigation/tensor_network_numerics/scripts/noisy.py", line 366, in <module>
+    main()
+  File "/Users/AntiEntropy/Documents/Research/Quantum Error Mitigation/tensor_network_numerics/scripts/noisy.py", line 360, in main
+    run_job(job_args)
+  File "/Users/AntiEntropy/Documents/Research/Quantum Error Mitigation/tensor_network_numerics/scripts/noisy.py", line 199, in run_job
+    samples = list(circ.sample(args.samples, seed=int(args.seed)))
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/miniconda3/envs/Qubit/lib/python3.11/site-packages/quimb/tensor/circuit.py", line 3647, in sample
+    p = self.compute_marginal(
+        ^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/miniconda3/envs/Qubit/lib/python3.11/site-packages/quimb/tensor/circuit.py", line 3272, in compute_marginal
+    tree = nm_lc.contraction_tree(
+           ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/miniconda3/envs/Qubit/lib/python3.11/site-packages/quimb/tensor/tensor_core.py", line 9189, in contraction_tree
+    return array_contract_tree(
+           ^^^^^^^^^^^^^^^^^^^^
+  File "/opt/miniconda3/envs/Qubit/lib/python3.11/site-packages/quimb/tensor/contraction.py", line 306, in array_contract_tree
+    return ctg.array_contract_tree(*args, optimize=optimize, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/miniconda3/envs/Qubit/lib/python3.11/site-packages/cotengra/interface.py", line 453, in array_contract_tree
+    tree = find_tree(inputs, output, size_dict, optimize)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/miniconda3/envs/Qubit/lib/python3.11/site-packages/cotengra/interface.py", line 391, in find_tree
+    return fn(inputs, output, size_dict, optimize, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/miniconda3/envs/Qubit/lib/python3.11/site-packages/cotengra/interface.py", line 333, in _find_tree_preset
+    return _PRESETS_TREE[optimize](inputs, output, size_dict, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/miniconda3/envs/Qubit/lib/python3.11/site-packages/cotengra/presets.py", line 186, in auto_optimize_hq_tree
+    return optimizer.search(inputs, output, size_dict, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/miniconda3/envs/Qubit/lib/python3.11/site-packages/cotengra/presets.py", line 109, in search
+    return self._get_optimizer_hyper_threadsafe().search(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/miniconda3/envs/Qubit/lib/python3.11/site-packages/cotengra/reusable.py", line 282, in search
+    searched, con = self._maybe_run_optimizer(inputs, output, size_dict)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/miniconda3/envs/Qubit/lib/python3.11/site-packages/cotengra/reusable.py", line 239, in _maybe_run_optimizer
+    con = self._run_optimizer(inputs, output, size_dict)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/miniconda3/envs/Qubit/lib/python3.11/site-packages/cotengra/reusable.py", line 272, in _run_optimizer
+    opt = self._get_suboptimizer()
+          ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/miniconda3/envs/Qubit/lib/python3.11/site-packages/cotengra/hyperoptimizers/hyper.py", line 1073, in _get_suboptimizer
+    return HyperOptimizer(**self._suboptimizer_kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/miniconda3/envs/Qubit/lib/python3.11/site-packages/cotengra/hyperoptimizers/hyper.py", line 565, in __init__
+    self.parallel = parallel
+    ^^^^^^^^^^^^^
+  File "/opt/miniconda3/envs/Qubit/lib/python3.11/site-packages/cotengra/hyperoptimizers/hyper.py", line 667, in parallel
+    self._pool = parse_parallel_arg(parallel)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/miniconda3/envs/Qubit/lib/python3.11/site-packages/cotengra/parallel.py", line 182, in parse_parallel_arg
+    return get_pool(maybe_create=True, backend=_AUTO_BACKEND)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/miniconda3/envs/Qubit/lib/python3.11/site-packages/cotengra/parallel.py", line 87, in get_pool
+    return get_reusable_executor(max_workers=n_workers)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/miniconda3/envs/Qubit/lib/python3.11/site-packages/joblib/externals/loky/reusable_executor.py", line 89, in get_reusable_executor
+    _executor, _ = _ReusablePoolExecutor.get_reusable_executor(
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/miniconda3/envs/Qubit/lib/python3.11/site-packages/joblib/externals/loky/reusable_executor.py", line 182, in get_reusable_executor
+    _executor = executor = cls(
+                           ^^^^
+  File "/opt/miniconda3/envs/Qubit/lib/python3.11/site-packages/joblib/externals/loky/reusable_executor.py", line 118, in __init__
+    super().__init__(
+  File "/opt/miniconda3/envs/Qubit/lib/python3.11/site-packages/joblib/externals/loky/process_executor.py", line 1092, in __init__
+    _check_system_limits()
+  File "/opt/miniconda3/envs/Qubit/lib/python3.11/site-packages/joblib/externals/loky/process_executor.py", line 972, in _check_system_limits
+    nsems_max = os.sysconf("SC_SEM_NSEMS_MAX")
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+PermissionError: [Errno 1] Operation not permitted
+ERROR conda.cli.main_run:execute(127): `conda run python tensor_network_numerics/scripts/noisy.py --batch tensor_network_numerics/scripts/configs/noisy_J1_h1_T1_2_square.jsonl` failed. (See above for error)
+[2026-06-20 00:07:04] finished status=0
