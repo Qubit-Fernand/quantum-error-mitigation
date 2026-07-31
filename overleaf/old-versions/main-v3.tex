@@ -1,0 +1,438 @@
+\documentclass[11pt]{article}
+
+\DeclareUnicodeCharacter{0301}{\'e}
+
+\usepackage[margin=1in]{geometry}
+\usepackage{multirow}
+\usepackage{amssymb,amsmath,amsthm,amsfonts}
+\usepackage{bm}
+\usepackage{textgreek}
+\usepackage{mathtools}
+\usepackage{enumitem}
+\usepackage[numbers,comma,sort&compress]{natbib}
+\usepackage{authblk}
+\usepackage{graphicx}
+\usepackage[font=small]{caption}
+\usepackage{subcaption} % [labelformat=simple]
+\usepackage{tablefootnote} 
+\usepackage{float}
+\usepackage[ruled,vlined,linesnumbered]{algorithm2e}
+\usepackage{algorithmic}
+\renewcommand{\algorithmicrequire}{\textbf{Input: }}  
+\renewcommand{\algorithmicensure}{\textbf{Output: }}
+\usepackage{physics}
+
+
+\usepackage{footnote}
+\usepackage{xcolor}
+\usepackage{mathrsfs}
+\usepackage{bbm}
+\usepackage{makecell}
+\usepackage{pbox}
+\usepackage[colorlinks]{hyperref}
+\hypersetup{citecolor=blue}
+% \urlstyle{same}
+%\captionsetup[figure]{labelfont=bf}
+
+\newtheorem{fact}{Fact}[section] 
+\newtheorem{theorem}{Theorem}
+\newtheorem{definition}{Definition}
+\newtheorem{lemma}{Lemma}
+\newtheorem{proposition}{Proposition}
+\newtheorem{example}{Example}
+\newtheorem{corollary}{Corollary}
+\newtheorem{remark}{Remark}
+\newtheorem{assumption}{Assumption}
+\newcommand{\eqn}[1]{(\ref{eqn:#1})}
+\newcommand{\eq}[1]{(\ref{eq:#1})}
+\newcommand{\prb}[1]{(\ref{prb:#1})}
+\newcommand{\thm}[1]{\hyperref[thm:#1]{Theorem~\ref*{thm:#1}}}
+\newcommand{\cor}[1]{\hyperref[cor:#1]{Corollary~\ref*{cor:#1}}}
+\newcommand{\defn}[1]{\hyperref[defn:#1]{Definition~\ref*{defn:#1}}}
+\newcommand{\lem}[1]{\hyperref[lem:#1]{Lemma~\ref*{lem:#1}}}
+\newcommand{\prop}[1]{\hyperref[prop:#1]{Proposition~\ref*{prop:#1}}}
+\newcommand{\assum}[1]{\hyperref[assum:#1]{Assumption~\ref*{assum:#1}}}
+\newcommand{\fig}[1]{\hyperref[fig:#1]{Figure~\ref*{fig:#1}}}
+\newcommand{\tab}[1]{\hyperref[tab:#1]{Table~\ref*{tab:#1}}}
+\newcommand{\algo}[1]{\hyperref[algo:#1]{Algorithm~\ref*{algo:#1}}}
+\renewcommand{\sec}[1]{\hyperref[sec:#1]{Section~\ref*{sec:#1}}}
+\newcommand{\append}[1]{\hyperref[append:#1]{Appendix~\ref*{append:#1}}}
+\newcommand{\fac}[1]{\hyperref[fac:#1]{Fact~\ref*{fac:#1}}}
+\newcommand{\lin}[1]{\hyperref[lin:#1]{Line~\ref*{lin:#1}}}
+\newcommand{\itm}[1]{\ref{itm:#1}}
+\newcommand{\bdelta}{\mathbf{\Delta}}
+\renewcommand{\arraystretch}{1.25}
+\newcommand{\algname}[1]{\textup{\texttt{#1}}}
+\renewcommand{\i}{\mathrm{i}}
+\renewcommand{\d}{\mathrm{d}}
+\renewcommand{\L}{\mathcal{L}}
+\newcommand{\ad}{\mathrm{ad}}
+\newcommand{\T}{\mathcal{T}}
+\newcommand{\B}{\Big}
+\renewcommand{\P}{\mathcal{P}}
+\newcommand{\simu}{\mathrm{sim}}
+\newcommand{\Hc}{H_{\mathrm{control}}}
+\newcommand{\He}{H_{\mathrm{eff}}}
+\newcommand{\A}{\mathcal{A}}
+\renewcommand{\O}{\mathcal{O}}
+\newcommand{\tot}{\mathrm{tot}}
+\newcommand{\G}{\mathcal{G}}
+\newcommand{\E}{\mathcal{E}}
+\newcommand{\com}{\mathrm{com}}
+\def\>{\rangle}
+\def\<{\langle}
+\def\trans{^{\top}}
+
+\newcommand{\xz}[1]{{\color{cyan} XZ: #1}}
+\newcommand{\tyl}[1]{{\color{blue} Tongyang: #1}}
+\newcommand{\zsy}[1]{{\color{teal} Shengyu: #1}}
+\newcommand{\sz}[1]{{\color{blue} Shuo: #1}}
+
+
+
+\title{Mitigating Physical and Trotter Errors in Hamiltonian Simulation via 1D Extrapolation
+}
+\author{}
+\date{}
+
+\begin{document}
+
+\maketitle
+Given an $n$-qubit Hamiltonian $H = \sum_{\gamma=1}^{\Gamma} H_{\gamma}$, we aim to simulate $e^{-\i H T}$ by Trotterization under Markovian physical noise. We consider the following two noise models with a controllable noise strength $\lambda >0$:
+\begin{itemize}
+    \item After each $e^{-\i H_j \tau}$ gate, \sz{Maybe each ``layer" to be more precise} a quantum channel $e^{\lambda\L_j}$ is applied, where $\L_j$ is a Lindbladian acting the same qubits as $H_j$. \sz{For each layer, both the odd and even $Z_iZ_{i+1}$ cover all the qubits, so do the transverse field $X_i$ layer.}
+    \item A continuous noise process described by Lindbladian $\lambda\L$.
+\end{itemize}
+For simplicity, we consider second-order Trotterization first. Let \[
+P_2(t)=e^{-\i H_1 t/2}\cdots e^{-\i H_{\Gamma} t/2} e^{-\i H_{\Gamma} t/2} \cdots e^{-\i H_1 t/2}
+\] be the second-order Trotter formula. The simulation is performed by repeatedly applying $P_2(sT)$ for $1/s$ times. 
+
+\textcolor{red}{Yicong: In addition to the number of interpolation nodes, try to prove that the overall sample complexity of ZNE procedure via 1D extrapolation is smaller than that by 2D extrapolation.}
+
+\section{Notations}
+For a sequence of operators $\A_1, \ldots, \A_{\Gamma}$, we denote $\prod_{\gamma=1}^\Gamma \A_{\gamma}= A_{\Gamma}\A_{\Gamma-1} \ldots \A_1$ and $\prod_{\gamma=\Gamma}^1 \A_{\gamma}= A_{1}\A_{2} \ldots \A_\Gamma$.
+\section{Circuit-Level Noise Model}
+We define \begin{align*}
+    \P_2(t)=e^{-\i \ad_{H_1} t/2}\cdots e^{-\i \ad_{H_\Gamma} t/2} e^{-\i \ad_{H_\Gamma} t/2} \cdots e^{-\i \ad_{H_1}  t/2}
+\end{align*}
+to be the adjoint action of $P_2(t)$ and \begin{align*}
+    \tilde{\P}_2(t,\lambda)=e^{-\i \ad_{H_1} t/2} e^{\lambda \L_1}\cdots e^{-\i \ad_{H_\Gamma} t/2}e^{\lambda \L_\Gamma} e^{-\i \ad_{H_\Gamma} t/2} e^{\lambda \L_\Gamma}\cdots e^{-\i \ad_{H_1}  t/2}e^{\lambda \L_1}
+\end{align*}
+be the noisy circuit. \sz{The whole circuit is $\P_2(sT)^{1/s}$}
+
+A much simplified model \sz{Assume noise acts after each Trotter step instead of layer}
+\begin{align*}
+\tilde{\P}_2(t)=\P_2(t)e^{\lambda \L},
+\end{align*}
+where $\L$ is a summation of local Lindbldians.
+
+Similar ideas can be found in~\cite{hakkaku2025dataefficienterrormitigationphysical}, where they approximate local noise in a quantum circuit as the global depolarizing noise in large depth regime. \sz{Check whether for each Trotter step or the whole quantum circuit.}
+\paragraph{Sparse Pauli-Lindblad Model}
+As mentioned above, in real circuit implementation, each $H_\gamma$ covers all the qubits as a layer. The sparse Pauli-Lindblad model fits well with the actual experiments assuming the following form:
+\begin{align*}
+    e^{\lambda\L} = \exp(\sum_i\lambda_i(P_i\cdot P_i^\dagger- I\cdot I )) =\bigcirc_i\left(w_i \cdot+\left(1-w_i\right) P_i \cdot P_i^{\dagger}\right),
+\end{align*}
+in which $w_i=\left(1+\mathrm{e}^{-2 \lambda_i}\right) / 2$ and $\bigcirc_{i=1}^n O_i(\cdot)=\left(O_n \circ O_{n-1} \circ \cdots \circ O_1\right)$. Each $P_i$ is only supported on a single qubit or a pair of connected 
+qubits, the number of possible channels is polynomial and that is why we call it sparse. Despite its simplicity, this model is able to capture crosstalk errors.
+
+The coefficients $\lambda_i$ varies from layer to layer. In practice, we first learn the error channel for each circuit layer by measuring the fidelity of repeating circuit layers. In small-scale experiments (e.g. 5-qubit or 9-qubit superconducting chip), we can learn more components of $P_i$ considering the actual topology and connectivity since the total number of channels is still accessible.
+
+\subsection{Method 1: Separating Trotter Error and Physical Error}
+\sz{We try to bound the difference among $\Tr[O\tilde{\P}_2(sT)\rho_0]$, $\Tr[O\P_2(sT)\rho_0]$ and $\Tr[O\mathcal{V_{\text{ideal}}}\rho_0]$. Then generalize to the long-time simulation with $1/s$ steps. Consider variation-of-parameters formula to give Taylor expansion of the observable averages.}
+
+We remark that noiseless $\P_2(t)$ can be regarded as the initial value $\tilde{\P}_2(t,\lambda=0)$ for Taylor expansion with regard to $\lambda$:
+\begin{align*}
+    \tilde{\P}_2(t,\lambda) = \P_2(t) + \left.\frac{\dd}{\dd\lambda}\tilde{\P}_2(t,\lambda)\right|_{\lambda=0}\lambda+\cdots+\left.\frac{\dd^n}{\dd\lambda^n}\tilde{\P}_2(t,\lambda)\right|_{\lambda=0}\frac{\lambda^n}{n!} + \int_0^\lambda \dd\lambda_1 \left.\frac{\dd^{n+1}}{\dd\lambda^{n+1}}\tilde{\P}_2(t,\lambda)\right|_{\lambda=\lambda_1}\frac{(\lambda-\lambda_1)^n}{n!},
+\end{align*}
+where the $n$-th order derivative and its value at $\lambda=0$ take the following form:
+\begin{align*}
+    \frac{\dd^n}{\dd\lambda^n}\tilde{\P}_2(t,\lambda) = \sum_{n_1+\cdots +n_{2\Gamma}=n}\binom{n}{n_1 \cdots n_{2\Gamma}}e^{-i\ad_{H_1}t/2}e^{\lambda\L}(\L)^{n_1}\cdots e^{-i\ad_{H_1}t/2}e^{\lambda\L}(\L)^{n_{2\Gamma}},\\
+    \left.\frac{\dd^n}{\dd\lambda^n}\tilde{\P}_2(t,\lambda)\right|_{\lambda=0} = \sum_{n_1+\cdots +n_{2\Gamma}=n}\binom{n}{n_1 \cdots n_{2\Gamma}}e^{-i\ad_{H_1}t/2}(\L)^{n_1}\cdots e^{-i\ad_{H_1}t/2}(\L)^{n_{2\Gamma}}.
+\end{align*}
+
+Similar for $\tilde{\P}_2(sT,\lambda)^{1/s}$, we only need to extend the number of exponential terms in product formula from $2\Gamma$ to $2\Gamma/s$, and substitute $t$ with $sT$. The observable error induced by noise is:
+\begin{align*}
+    \Tr[O\tilde{\P}_2(sT,\lambda)^{1/s}\rho_0] = \Tr[O\P_2(sT)^{1/s}\rho_0] + \Tr[O\sum_{n_1+\cdots +n_{2\Gamma/s}=1}e^{-i\ad_{H_1}sT/2}(\L)^{n_1}\cdots e^{-i\ad_{H_1}sT/2}(\L)^{n_{2\Gamma/s}} \rho_0]\lambda + \cdots 
+\end{align*}
+
+\sz{Issue: the coefficients before $\lambda$ contain $s$, which cannot be extracted into polynomial in effective way.}
+
+On the other hand, former work~\cite{watson2024exponentially} has already analyze the algorithmic error by variation-of-parameters formula:
+\begin{align*}
+    \Tr[O\P_2(sT)^{1/s}\rho_0] = \Tr[O\mathcal{V}_{\text{ideal}}(T)\rho_0] + C_1 s^p + C_2s^{p+1} + \cdots 
+\end{align*}
+
+Combining the two parts together, we have
+\begin{align*}
+    \Tr[O\tilde{\P}_2(sT,\lambda)^{1/s}\rho_0] = \Tr[O\mathcal{V}_{\text{ideal}}(T)\rho_0] + \operatorname{poly}_1(\lambda, s) +\operatorname{poly}_p(s).
+\end{align*}
+
+Then we choose a curve $\lambda=\Lambda(s)$ and well-conditioned interpolation set $\{s_i\}$ to cancel the polynomial terms to higher order. The circuit depth is keen to be reduced from 
+\begin{align*}
+    2\Gamma/s~\text{with}~1/s= O(\frac{NT^{p+1}}{\epsilon^{p}})\longrightarrow 2\Gamma\max (1/s_i)~\text{with}~\min\{s_i\} = 1/\operatorname{polylog}(1/\epsilon).
+\end{align*}
+\subsection{Method 2: BCH Formula}
+We consider a general $p$-th order product formula of the form
+\begin{align*}
+    P(t) = \prod_{v=1}^Me^{-\i t a_{v} H_{\gamma_v}},
+\end{align*}
+where the product is ordered from right to left. Here, $a_{v}$ are real coefficients, $M = \Upsilon\Gamma$ is the total number of unitary gates, and the sequence $\gamma_v$ specifies which Hamiltonian is applied at step $v$. The corresponding ideal channel $\P(t)$ is a superoperator given by
+\begin{align*}
+    \P(t) = \prod_{v=1}^Me^{-\i t a_{v} \A_{\gamma_v}},
+\end{align*}
+where $\A_{\gamma}:=\ad_{H_{\gamma}}$ denotes the adjoint action of $H_{\gamma}$.
+
+Suppose that the system is subject to physical noise with a controllable strength $\lambda>0$. Specifically, after each layer of unitary gates, a noise channel $e^{\lambda \L_{v}}$ is applied, where $\L_{v}$ is a Lindbladian. The resulting noisy channel is
+\begin{align*}
+    \tilde{\P}(t,\lambda)=\prod_{v=1}^M\left( e^{\lambda \L_{v}} e^{-\i t a_{v} \A_{\gamma_v}} \right).
+\end{align*}
+
+The Baker-Campbell-Hausdorff (BCH) formula gives a series expansion for the effective generator of $\tilde{\P}(t,\lambda)$:
+\begin{align}
+\label{eq:bch}
+    \tilde{\P}(t,\lambda) = \exp\bigg( \sum_{q=1}^{\infty} \Phi_q(t, \lambda) \bigg),
+\end{align}
+for sufficiently small $t$ and $\lambda$. The first-order term $\Phi_1$ is the sum of all elementary generators:
+\begin{align*}
+    \Phi_1(t, \lambda) = \sum_{v=1}^M \left( -\i t a_v \A_{\gamma_v} + \lambda \L_v \right) = -\i t \ad_{H} + \lambda\sum_{v=1}^{M}\L_{v}.
+\end{align*} 
+The $q$-th order term $\Phi_q$ is defined by \begin{align}
+    &\Phi_q(t,\lambda)=\sum_{\substack{p_v,q_v\ge 0\nonumber\\ p_1+q_1+\cdots+p_M+q_M=q }}\bigg(\prod_{v=1}^M \frac{\lambda^{p_v}(-\i ta_v)^{q_v}}{p_v!q_v!} \bigg)\\& \hspace{140pt}\cdot\phi_q(\underbrace{\L_M, \ldots, \L_M}_{p_M}, \underbrace{\A_{\gamma_M}, \cdots, A_{\gamma_M}}_{q_M},  \ldots, \underbrace{\L_1,  \ldots, \L_1}_{p_1}, \underbrace{\A_{\gamma_1},  \ldots, A_{\gamma_1}}_{q_1}) \label{eq:def-Phi-q} \\
+    &\phi_q(\mathcal{A}_1, \cdots, \mathcal{A}_q)=\frac{1}{q^2} \sum_{\sigma \in S_q} \frac{(-1)^{d_\sigma}}{\binom{q-1}{d_\sigma}}\left[\mathcal{A}_{\sigma(1)},\left[\mathcal{A}_{\sigma(2)},  \ldots,\left[\mathcal{A}_{\sigma(q-1)}, \mathcal{A}_{\sigma(q)}\right]\right]\right], \nonumber
+\end{align}
+where $S_q$ denotes the set of permutations of $[q]$ and $d_{\sigma}$ denotes the number of $i\in\{1, \ldots, q-1\}$ such that $\sigma(i)>\sigma(i+1)$. 
+
+The right-hand side of Eq.~\eq{bch} converges if $2t\sum_{\gamma=1}^{\Gamma}\|H_{\gamma}\|+\lambda\sum_{v=1}^{M}\|\L_v\|=\O (1)$, which implies \begin{align}
+    \label{eq:bch-converge} 
+    t = \O\B(\frac{1}{\sum_{\gamma}\|H_\gamma\|}\B), \quad \lambda = \O\B(\frac{1}{\sum_v\|\L_v\|}\B).
+\end{align} 
+Then we can apply Cauchy's estimate to upper bound the high-order remainder of the expansion, in a manner similar to the proof of \lem{remainder-f}. This yields an error bound that scales with the $1$-norm of the Hamiltonian $H$. To obtain a commutator-scaling bound, we need to deal with the divergence issue of the BCH formula. If $H$ a local Hamiltonian on a lattice of size $N$, \citet{mizuta2025commutator} showed that truncating the BCH formula to $\O(\log(N/\varepsilon))$ terms provides an $\varepsilon$-approximation of the noiseless product formula for simulation time $t=\O(1/\log(N/\varepsilon))$. This is a regime where the BCH formula is not guaranteed to converge. We extend this result to the noisy case. We will show that if the Hamiltonian $H$ and the noise Lindbldians $\L_v$ are local, the truncation of Eq.~\eq{bch} to $\O(\log(N/\varepsilon))$ terms is an $\varepsilon$-approximation of $\tilde{\P}(t,\lambda)$ if $|t|, \lambda =\O(1/\log(N/\varepsilon))$.
+
+A $k$-local Lindbladian on lattice $\Lambda=[N]$ can be decomposed as  \begin{align*}
+    \L=\sum_{X\subseteq \Lambda, |X|\le k } \L_X,
+\end{align*}
+where $\L_X$ only acts on $X$ nontrivially. The Lindbladian $\L$ is $g$-extensive if for any site $j\in \Lambda$, \begin{align*}
+    \sum_{X\subseteq \Lambda, j\in X}\|\L_X\|\le g.
+\end{align*} 
+\sz{Here the norm of superoperator denotes the limit to stretch the trace norm of density matrix, to some extent diamond norm.} Suppose that \begin{align*}
+    \A_\gamma = \sum_{X\subseteq \Lambda} \mathcal{A}_{X}^{\gamma}, \quad \L_v=\sum_{X\subseteq \Lambda} \L^{v}_X
+\end{align*}
+are $k$-local on a lattice of $N$ qubits. Suppose that $\sum_{\gamma\in[\Gamma]}\A_\gamma=\ad_H$ is $g_h$-extensive and $\sum_{v\in [M]}\L_v=:\L_{\tot}$ is $g_l$-extensive. We further assume that $\A_X^{\gamma}$ commute with each other for fixed $\gamma$, and $\L_{X}^{v}$ commute with each other for fixed $v$. This assumption on $\A_X^{\gamma}$ is common in analysis of Trotter methods subject to physical noise: a noise channel is applied following a layer of commuting gates. The assumption on $\L_X^{v}$ is true for Pauli Lindbladian \begin{align*}
+    \L_v\colon\rho\mapsto \sum_{i} \lambda_{v,i} (P_{v,i} \rho P_{v,i}^{\dagger}-\rho),
+\end{align*}
+where $\lambda_{v,i}\ge 0$ and $P_{v,i}$ are Pauli strings of a weight smaller than $k$. 
+\begin{theorem}
+\label{thm:bch-approx}
+    Given $\varepsilon\in (0,1)$, there exists a truncation order $q_0 = \O(\log(N/\varepsilon))$ such that \begin{align*}
+        \Bigg\|\tilde{\P}(t,\lambda)-\exp\bigg( -\i t \ad_H+\lambda\L_{\tot}+\sum_{q=2}^{q_0} \Phi_q(t, \lambda) \bigg)\Bigg\|\le \varepsilon,
+    \end{align*}
+    for all $t\in \mathbb{R}$, $\lambda\ge0$ such that $q_0 k(\Upsilon g_h|t|+g_l \lambda) = \O(1)$.
+\end{theorem}
+\begin{proof} 
+    \xz{TBD}
+\end{proof}
+We assume the order of the product formula and the locality parameter $k$ is $\O(1)$. Then, the parameter regime in \thm{bch-approx} becomes \begin{align}
+    t= \O\B(\frac{1}{\log(N/\varepsilon) g_h}\B), \quad \lambda = \O\B(\frac{1}{\log(N/\varepsilon) g_l}\B), 
+\end{align}
+which is not guaranteed to be in the convergence region characterized by Eq.~\eq{bch-converge}. Following \cite{aftab2024multi, mizuta2025commutator}, operator $\Phi_q(t,\lambda)$ can be bounded by \begin{align}
+    \|\Phi_q(t,\lambda)\|\le \frac{(q-1)!}{2kq^2} (2k(\Upsilon g_h |t| + g_l \lambda))^{q}N. 
+\end{align}
+
+Suppose that the Trotter step size is $sT$ for $s\in (0,1)$ and set the physical noise strength to be $\lambda = c(sT)^{p+1}$ for $c > 0$.  Define the effective generator of one Trotter step after truncation as \begin{align}
+    \G(s)&:=-\i  \ad_H+c(sT)^p\L_{\tot}+\frac{1}{sT}\sum_{q=2}^{q_0} \Phi_q(sT, c(sT)^{p+1}) \label{eq:def-G}\\
+         &=:-\i \ad_H+\sum_{q=p}^{q_0-1} \E_{q+1} (sT)^q, \label{eq:def-E}
+\end{align}
+such that \begin{align}
+    \|\tilde{\P}(sT,c(sT)^{p+1})-\exp(\G(s) sT)\|\le \varepsilon.
+\end{align}
+We bound the superoperators $\E_{q}$ in the following lemma. 
+\begin{lemma}
+    Define a constant
+    \begin{align}\label{eq:def-B}
+        B = \max\{2k\Upsilon g_h, (2kg_l)^{1/(p+1)}, (cg_l)^{1/(p+1)}/2\}.
+    \end{align}
+    For any $q\ge p+1$, the superoperator $\E_{q}$ defined in Eq.~\eq{def-E} can be bounded by \begin{align}
+        \|\E_q\| \le N(q-1)!(2B)^q.
+    \end{align}
+\end{lemma}
+\begin{proof}
+As $\P(t)$ is a $p$-th order product formula, the partial summation in the definition of $\Phi_q(t,\lambda)$ (see Eq.~\eqref{eq:def-Phi-q}) with $p_1, \ldots, p_M=0$ equals $0$. Then, the only $(p+1)$-th order term is $ct^{p+1}\L_{\tot}$, and we have \begin{align*}
+    \|\E_{p+1}\| = c\|\L_{\tot}\|\le c\sum_{j\in \Lambda}\sum_{X\subseteq \Lambda: j\in X}\sum_{v\in[M]} \|\L_X^v\| \le c Ng_{l}
+\end{align*}
+Intuitively, the coefficient operator of any $q$-th order term for $q>p+1$ can be bounded by \begin{align}
+    \|\E_q\|\le \sum_{j=0}^{\lfloor q/(p+1)\rfloor} \binom{q-pj}{j} \frac{(q-pj-1)!}{2k(q-pj)^2} (2k\Upsilon g_h)^{q-(p+1)j} (2kg_l)^{j }N.
+\end{align}
+\xz{TBD}
+For any  $q>p+1$, the norm of the coefficient operator $\|\E_q\|$ can be bounded by
+\begin{align}
+\|\E_q\| &\le \sum_{j=0}^{\lfloor q/(p+1)\rfloor} \binom{q-pj}{j} \frac{(q-pj-1)!}{2k(q-pj)^2} (2k\Upsilon g_h)^{q-(p+1)j} (2kg_l)^{j} N \nonumber \\
+&\le \sum_{j=0}^{\lfloor q/(p+1)\rfloor} \binom{q-pj}{j} \frac{(q-pj-1)!}{2k(q-pj)^2} B^q N \nonumber \\
+&\le \frac{N(q-1)!}{2k}B^q \sum_{j=0}^{q} \binom{q}{j} \le  N(q-1)!(2B)^q.
+\end{align}
+For $q=p+1$, we have \begin{align*}
+    \|\E_q\| = c\|\L_{\tot}\|\le cNg_l\le   N(2B)^{p+1} \le N(q-1)!(2B)^q.
+\end{align*}
+Therefore, we can conclude that \begin{align}
+     \|\E_q\| \le N(q-1)!(2B)^q
+\end{align}
+for all $q\ge p+1$.
+\end{proof}
+
+With this bound of the coefficients of the error series of $\G(s)$, we can bound the extrapolation error using the variation of parameter formula like Ref.~\cite{aftab2024multi}. 
+\begin{lemma}
+    Define $\mu_{\com}=2N^{\frac{1}{p+1}}q_0B$. The evolution $e^{\G(s) T}$ admits series expansion in $s$ given by \begin{align*}
+        e^{\G(s) T}=-e^{-\i \ad_H T}+ \sum_{q=p}^{\infty}\tilde{\E}_{q} s^q,
+    \end{align*}
+    where $\tilde{\E}_{q}$ are superoperators bounded by \begin{align*}
+       \|\tilde{\E}_{q}\|\le   e(2\mu_{\com}T)^{q(1+1/p)},
+    \end{align*}
+    if $2\mu_{\com}T\ge 1$, and bounded by \begin{align*}
+        \|\tilde{\E}_{q}\|\le e(2\mu_{\com}T)^{q},
+    \end{align*}
+    if $2\mu_{\com}T\le 1$.
+\end{lemma}
+\begin{proof}
+By Dyson series expansion in the interaction picture, we have 
+\begin{align*}
+    &e^{\G(s) T}-e^{-\i \ad_H T} \\
+    = \ & e^{-\i \ad_H T}  \sum_{j=1}^{\infty} \int_{0}^T \d \tau_1 \int_{0}^{\tau_1}\d \tau_2 \cdots \int_{0}^{\tau_{j-1}}\d \tau_j \prod_{j'=j}^{1}\bigg(e^{\i\ad_H \tau_{j'}}\bigg(\sum_{q=p}^{q_0-1}\E_{q+1}s^qT^q\bigg)e^{-\i \ad_H \tau_{j'}}\bigg) \\
+    = \ &  e^{-\i \ad_H T}\sum_{q = p}^{\infty}s^{q} \sum_{j=1}^{\infty} \sum_{\substack{p\le q_1,\ldots,q_j<q_0 \\ q_1+\cdots+q_j=q}} \int_{0}^T \d \tau_1 \int_{0}^{\tau_1}\d \tau_2 \cdots \int_{0}^{\tau_{j-1}}\d \tau_j \prod_{j'=j}^{1}\bigg(e^{\i\ad_H \tau_{j'}}\E_{q_{j'}+1}e^{-\i \ad_H \tau_{j'}}T^{q_{j'}}\bigg)\\
+    =:\,& \sum_{q=p}^{\infty}\tilde{\E}_{q} s^q   
+\end{align*}
+The superoperator $\tilde{\E}_{q}$ can be bounded by \begin{align*}
+    \big\|\tilde{\E}_{q}\big\|&\le \sum_{j=1}^{\infty} \sum_{\substack{p\le q_1,\ldots,q_j<q_0 \\ q_1+\cdots+q_j=q}} \int_{0}^T \d \tau_1 \int_{0}^{\tau_1}\d \tau_2 \cdots \int_{0}^{\tau_{j-1}}\d \tau_j \prod_{j'=1}^{j}\big(\big\|\E_{q_{j'}+1}\big\|T^{q_{j'}}\big) \\
+    &\le  \sum_{j=1}^{\infty} \sum_{\substack{p\le q_1,\ldots,q_j<q_0 \\ q_1+\cdots+q_j=q}}\frac{T^{q+j}}{j!}\prod_{j'=1}^{j}\big(N(q_{j'}+1)!(2B)^{q_{j'}+1}\big) \\
+    &\le \sum_{j=1}^{\infty} \sum_{\substack{p\le q_1,\ldots,q_j<q_0 \\ q_1+\cdots+q_j=q}}\frac{T^{q+j}}{j!}\prod_{j'=1}^{j} \mu_{\com}^{q_{j'}+1} = \sum_{j=1}^{\lfloor q/p\rfloor }\frac{(\mu_{\com}T)^{q+j}}{j!}\B( \sum_{\substack{p\le q_1,\ldots,q_j<q_0 \\ q_1+\cdots+q_j=q}} 1\B),
+\end{align*}
+where the third line follows from $N(q_{j'}+1)!(2B)^{q_{j'}+1} \le (2N^{\frac{1}{p+1}}q_0B)^{q_{j'}+1}=\mu_{\com}^{q_{j'}+1}$ for any $q_{j'} < q_0$.
+The second summation can be bounded by \begin{align*}
+    \sum_{\substack{p\le q_1,\ldots,q_j<q_0 \\ q_1+\cdots+q_j=q}} 1 &\le \sum_{\substack{ q_1,\ldots,q_j \ge 0 \\ q_1+\cdots+q_j=q}} 1=\binom{q+j-1}{j-1} \le 2^{q+j}.
+\end{align*}
+Therefore, for $2\mu_{\com}T\ge 1$, we have \begin{align*}
+    \big\|\tilde{\E}_{q}\big\|\le \sum_{j=1}^{\lfloor q/p\rfloor }\frac{(2\mu_{\com}T)^{q+j}}{j!} 
+    \le (2\mu_{\com}T)^{q+q/p}\sum_{j=1}^{\infty}\frac{1}{j!}\le e(2\mu_{\com}T)^{q(1+1/p)} ,
+\end{align*}
+and for $2\mu_{\com}T\le 1$, we have \begin{align*}
+    \big\|\tilde{\E}_{q}\big\| \le (2\mu_{\com}T)^{q}\sum_{j=0}^{\infty}\frac{ (2\mu_{\com}T)^{j}}{j!}\le (2\mu_{\com}T)^{q} e^{2\mu_{\com}T}\le e(2\mu_{\com}T)^{q}.
+\end{align*}
+
+\end{proof}
+
+The number of Trotter steps in the final algorithm should scales as \begin{align*}
+    \tilde{\O}\B((\mu_{\com}T)^{1+\frac{1}{p}}\B) =  \tilde{\O}\B(T^{1+\frac{1}{p}} N^{\frac{1}{p}}\max\B\{g_h^{1+\frac{1}{p}}, g_l^{\frac{1}{p}}\B\}\B).
+\end{align*}
+
+
+\section{Continuous Noise Model}
+\textbf{Here we assume that to implement the Trotter step for different step size, we only need to linearly scale the control Hamiltonian of the physical device.} Specifically, each application of $P_2(sT)$ is realized by evolving the quantum computer under a time-dependent control Hamiltonian $\Hc(t/s)$ for $t\in [0, sT_{\simu}]$, where $T_{\simu}$ is the physical time required to execute one Trotter step of simulated time $T$. Formally, we have \begin{align*}
+    P_2(sT) = \T \exp(\int_{0}^{sT_{\simu}} - \i \Hc(t/s) \, \d t).
+\end{align*}
+Concurrently, the physical device is subject to Markovian noise described by a Lindbladian $\lambda \L$. While implementing one Trotter step $P_2(sT)$ of step size $sT$, the dynamics of the physical device's density matrix $\tilde{\rho}_s(t)$ is described by \begin{align*}
+    \frac{\d \tilde{\rho}_s(t)}{\d t} = -\i\ad_{\Hc(t/s)}(\tilde{\rho}_s(t))+\lambda \L(\tilde{\rho}_s(t)),
+\end{align*}
+for $t\in[0, sT_{\simu}]$, where $\ad_H(\rho) :=[H,\rho]$.
+We define the ideal time-evolution operator and the time-evolution operator with noise strength $\lambda$ as \begin{align*}
+    \Phi_s(t_2,t_1):=\T \exp(\int_{t_1}^{t_2} -\i\ad_{\Hc(t/s)}\,\d t),\quad \tilde{\Phi}_{s,\lambda}(t_2, t_1):=\T \exp(\int_{t_1}^{t_2}(-\i \ad_{\Hc(t/s)}+\lambda \L)\,\d t). 
+\end{align*}
+
+\subsection{The Magnus Expansion}
+\begin{theorem}[{\cite[Theorem III]{magnus1954}}]
+\label{thm:magnus-exp}
+    Let $A(t)$ be a function of $t$ in an associative ring, and let \begin{align*}
+        Y(t) = \T \exp(\int_{0}^{t} A(s)\,\d s).
+    \end{align*}
+    Then, if certain unspecified conditions of convergence are satisfied, $Y(t)$ can be written in the form \begin{align*}
+        Y(t) = \exp \Omega(t),
+    \end{align*}
+    where 
+    \begin{align*}
+        \frac{\d \Omega}{\d t}=\sum_{n=0}^{\infty} \frac{B_n}{n!} \ad_{\Omega}^n A
+    \end{align*}
+    and $B_n$ are the Bernoulli numbers.
+\end{theorem}
+Take $A_{s,\lambda}(t) := s(-\i \ad_{\Hc(t)}+\lambda\L)$ in \thm{magnus-exp}, and then we have \begin{align}
+    Y_{s,\lambda}(T_{\simu}) & = \T\exp(\int_{0}^{T_\simu} s(-\i \ad_{\Hc(t)}+\lambda\L)\,\d t)\\
+    & = \T\exp(\int_{0}^{sT_\simu}(-\i \ad_{\Hc(t)}+\lambda\L)\,\d \tau) \\
+    & =\tilde{\Phi}_{s,\lambda}(sT_{\simu}, 0).
+\end{align}
+By \thm{magnus-exp}, if the convergence conditions are satisfied, $\tilde{\Phi}_{s,\lambda}(sT_{\simu}, 0)$ can be written as \begin{align*}
+    \tilde{\Phi}_{s,\lambda}(sT_{\simu}, 0) = \exp \Omega_{s,\lambda}(T_{\simu}).
+\end{align*}
+Following the proof of \cite[Theorem 6]{blanes2009magnus}, we can show that $\Omega_{s,\lambda}(T_{\simu})$ is an analytic function of $s$ and $\lambda$.
+\begin{lemma}
+    \label{lem:analytic-phi}
+    The function $\varphi(s,\lambda):=\log(Y_{s,\lambda}(T_{\simu}))$ is an analytic function of $s$ and $\lambda$ in the set $B_{\pi}$, with \begin{align*}
+        B_{\pi} :=\{s,\lambda \in \mathbb{C}: \int_{0}^{T_{\simu}}\|A_{s,\lambda}(t) \|\,\d t\le \pi \}.
+    \end{align*}
+\end{lemma}
+ 
+Now we take $\lambda = Cs$. 
+\begin{lemma}
+\label{lem:remainder-f}
+    Given $C> 0$, let $\He(s) := \frac{\varphi(s, Cs)}{sT_{\simu}}$ and \begin{align*}
+        f(s):= \exp(\He(s) T_{\simu}).
+    \end{align*}
+    Let \begin{align*}
+        r=\min\Big\{ \frac{1}{4\int_{0}^{T_{\simu}}\|\Hc(t)\|\, \d t}, \frac{1}{2\sqrt{C\|\L\|T_{\simu}}}\Big\}.
+    \end{align*}
+    For any integer $k\ge 1$, there exists a degree-$k$ polynomial $P_k(s)\colon \mathbb{C}\to \mathbb{C}^{2^n\times 2^n}$ and a remainder $R_k(s)\colon \mathbb{C}\to \mathbb{C}^{2^n\times 2^n}$, such that \begin{align*}
+        f(s) = P_k(s)+R_k(s), \text{ and }
+        \|R_k(s)\|=O\B(\frac{|s|^{k+1}}{r^k(r-|s|)}\B)
+    \end{align*}
+    for all $|s|\le \min\{r/2,r^2/(8\pi)\}$. 
+\end{lemma}
+\begin{proof}
+    For $|s|< r$, we have \begin{align}
+    \label{eq:converge-radius}
+        \int_{0}^{T_{\simu}}\|A_{s,Cs}(t) \|\,\d t\le\int_{0}^{T_{\simu}}(2|s|\|\Hc(t)\|+C|s|\|\L\|)\, \d t\le 1.
+    \end{align}
+    Let $g(s) = \varphi(s, Cs)$. By \lem{analytic-phi}, $g(s)$ is a holomorphic function of $s$ for $|s|< r$. Since $\lim_{s\to 0}g(s)= 0$, 
+    $\He(s)=\frac{g(s)}{sT_{\simu}}$ and $f(s) = \exp(\He(s)T_{\simu})$ are holomorphic functions of $s$ for $|s|< r$. For $s=0$, we define $\He(0) = \lim_{s\to 0} \He(s) = g'(0)/T_{\simu}= -\i HT/T_{\simu}$. \xz{TBD by comparing the series expansion of $\exp(\varphi(s, Cs))$ and noisy $P_2(sT)$.}
+    \citet{moan1998efficient} showed that $\|\varphi(s,C s)\|\le \pi$ for  $ \int_{0}^{T_{\simu}}\|A_{s, Cs}(t) \|\,\d t\le 1.08686871$. From Eq.~\eq{converge-radius}, the norm $\|g(s)\|\le \pi $ for all $|s|\le r$. 
+
+    
+    In the interaction picture, $f(s)$ can be written as \begin{align*}
+        f(s)&=\exp(\He(s) T_{\simu}) \\
+        &= \exp(\He(0)T_{\simu})\B(I+\T\exp\B(\int_{0}^{T_{\simu}}e^{-t\He(0)} (\He(s)-\He(0))e^{t\He(0)}\, \d t\B)\B).
+    \end{align*}
+    Note that $\He(0)=-\i HT/T_{\simu}$ is anti-hermitian, we can bound the norm of $f(s)$ as \begin{align*}
+        \|f(s)\|&\le \|\exp(\He(0)T_{\simu})\|\B(1+\B\|\T\exp\B(\int_{0}^{T_{\simu}}e^{-t\He(0)} (\He(s)-\He(0))e^{t\He(0)}\, \d t\B)\B\|\B)\\
+        &\le 1+\exp\B(\int_{0}^{T_{\simu}}\B\|e^{-t\He(0)} (\He(s)-\He(0))e^{t\He(0)}\B\|\, \d t\B)\\
+        &=1+\exp(\|\He(s)-\He(0)\|T_{\simu}).
+    \end{align*}
+    To bound the exponent, we first give a bound for $\|g''(s)\|$: 
+    \begin{align*}
+        \|g''(s)\| = \B\|\frac{1}{2\pi i}\int_{|z|=r} g(z) \frac{2}{(z-s)^3}\, \d z\B\| \le \max_{|z|\le r}\|g(z)\| \frac{2r}{(r-|s|)^3}\le \frac{16\pi}{r^2} ,
+    \end{align*}
+    for $|s|\le r/2$.
+    The exponent $\|\He(s)-\He(0)\|T_{\simu}$ can be bounded as \begin{align*}
+        \|(\He(s)-\He(0)\|T_{\simu} &= \frac{1}{|s|}\|g(s)-g'(0)s\|\\
+        &=\frac{1}{|s|}\B\|\int_0^s g''(z)(s-z)\, \d z\B\| \\
+        &\le \frac{1}{|s|}\max_{|z|\le s}\|g''(z)\| \frac{|s|^2}{2} \\
+        &\le \frac{|s|}{2}\frac{16\pi}{r^2} \le 1,
+    \end{align*}
+    for $|s|\le \min\{r/2,r^2/(8\pi)\}$. Then $\|f(s)\|\le 1+e$ for $s$ in the same region. Then for any integer $k\ge 1$, $f(s)$ can be decomposed as \begin{align*}
+        f(s) = P_k(s)+R_k(s),
+    \end{align*}
+    where $P_k(s)$ is the $k$-th-order Taylor polynomial and $R_k(s)$ is the remainder satisfying \begin{align*}
+        \|R(s)\| &=\B\|\frac{s^{k+1}}{2\pi \i}\int_{|z|=r}\frac{f(z)}{z^{k+1}(z-s)}\, \d z\B\|\\
+        &\le \max_{|z|\le r}\|f(z)\| \frac{|s|^{k+1}}{r^{k}(r-|s|)}\le (1+e)\frac{|s|^{k+1}}{r^{k}(r-|s|)}.
+    \end{align*}
+    \xz{Here I directly use some results of $\mathbb{C}\to \mathbb{C}$ holomorphic functions for $\mathbb{C}\to \mathbb{C}^{2^n \times 2^n}$ holomorphic functions, which need to further checked the correctness.}
+\end{proof}
+The scaling of the Trotter step size in \lem{remainder-f} is similar to qDRIFT, since the first-order noise dominants. Intuitively, if we take the noise strength $\lambda = Cs^{p}$ and use $p$-th-order product formulas, $s=O(r^{1+1/p})$ suffices. The key is to prove that the $g^{(j)}(0)=0$ for $2\le j\le p+1$, where $g(s) = \varphi(s, Cs^p)$.
+
+Take $\lambda = C s^p$ and $\P$ be a $p$-th-order product formula. By the variation of parameter formula, we have \begin{align*}
+    Y_{s,Cs^p}(T_{\simu}) & = \T \exp(s\int_0^{T_{\simu}}-\i \ad_{\Hc(t)} \, \d t)\\
+    &\quad+\int_{0}^{T_{\simu}} \exp_{\T}(s\int_{t}^{T_{\simu}}-\i \ad_{\Hc(\tau)}\, \d \tau )Cs^{p+1}\L\exp_{\T}(s\int_{0}^{t}(-\i \ad_{\Hc(\tau)}+Cs^p\L)\, \d \tau )\, \d t \\
+     &= \P(sT)+O(s^{p+1}) = e^{-\i HsT}+O(s^{p+1})
+\end{align*}
+Then we have \begin{align*}
+    \varphi(s,Cs^{p}) &= \log(Y_{s,Cs^p}(T_{\simu}))\\
+    & =\sum_{k=1}^{\infty}\frac{(-1)^{k-1}}{k}(Y_{s,Cs^p}(T_{\simu})-I)^k \\
+    & = \log(e^{-\i H s T})+O(s^{p+1})=-\i HsT + O(s^{p+1}).
+\end{align*}
+
+\bibliographystyle{plainnat}
+\bibliography{ref}
+\end{document}

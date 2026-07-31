@@ -1,0 +1,18 @@
+Article
+
+An Article is now our standard format for all primary research papers. We strongly encourage authors to use the minimum number of figures necessary to communicate their findings, and to keep the text as short as is reasonably possible.
+Format
+
+• Main text - up to 3,000 words, excluding abstract, Methods, references and figure captions.
+• Abstract - up to 200 words, unreferenced.
+• Display items - up to 6 items (figures and/or tables).
+• Extended data - up to 10 items (figures and/or tables), appearing online only.
+• Figure captions should be fewer than 350 words, begin with a brief introductory sentence, and describe the meaning of all error bars.
+• Articles can be divided into sections and subsections, but generic headings such as 'Introduction, 'Results' and
+'Discussion' should be avoided. Headings must be fewer than 60 characters including spaces.
+• Concluding paragraphs that do no more than summarize the conclusions presented elsewhere in the manuscript are not permitted.
+• Methods - up to 3,000 additional words, appearing online only.
+• References - up to 50.
+• Articles include received/accepted dates.
+• Articles may be accompanied by supplementary information, which should be referred to explicitly in the main text.
+• Articles are peer reviewed.
