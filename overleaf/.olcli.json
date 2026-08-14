@@ -1,9 +1,14 @@
 {
   "projectId": "685380d505877d77e92f7d59",
   "projectName": "Lindbladian Simulation with ZNE",
-  "lastPull": "2026-07-31T14:35:12.961Z",
+  "lastPull": "2026-08-13T10:06:45.100Z",
   "remoteManifest": [
     "old-versions/main-v1.tex",
+    "figures/circuit_topo3_sanitized_colorfix.pdf",
+    "figures/supp_tensor_network_circuit_noise343over8.pdf",
+    "figures/supp_tensor_network_circuit_noise0.pdf",
+    "figures/supp_tensor_network_circuit_noise343over8.svg",
+    "figures/supp_tensor_network_circuit_noise0.svg",
     "figures/nature_four_panel_unified_error_summary.pdf",
     "figures/OneDim3.png",
     "figures/OneDim2.png",

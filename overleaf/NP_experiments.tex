@@ -39,6 +39,8 @@
 \newtheorem*{informaltheorem}{Informal theorem}
 \usepackage{xcolor}
 \newcommand{\ruiqi}[1]{{\color{violet} (rq: #1)}}
+\newcommand{\syz}[1]{{\color{teal} (Shengyu: #1)}}
+\newcommand{\syzn}[1]{{\color{teal} #1}}
 
 
 \begin{document}
@@ -71,9 +73,19 @@
     {\normalfont\bfseries\raggedright}%
 }
 
+\renewcommand\subsection{%
+  \@startsection
+    {subsection}{2}{\z@}%
+    {2.2ex plus .6ex minus .2ex}%
+    {0.8ex plus .2ex}%
+    {\normalfont\normalsize\bfseries\raggedright}%
+}
+
 % REVTeX/APS 默认在这里强制 \MakeTextUppercase，需要覆盖掉
 \def\@hangfrom@section#1#2#3{\@hangfrom{#1#2}#3}
 \def\@hangfroms@section#1#2{#1#2}
+\def\@hangfrom@subsection#1#2#3{\@hangfrom{#1#2}#3}
+\def\@hangfroms@subsection#1#2{#1#2}
 \makeatother
 
 \title{Joint Mitigation of Algorithmic and Physical Errors in Noisy Hamiltonian Simulation}
@@ -82,41 +94,42 @@
 \date{}
 
 \begin{abstract}
-Product-formula Hamiltonian simulation is naturally suited to near-term quantum processors, but its accuracy is set by two competing errors: finite-step Trotter bias and physical hardware noise. We introduce a joint extrapolation strategy that ties the tunable noise strength to the Trotter step size, $\lambda(s)=c(sT)^{p+1}$ for a $p$-th order product formula. Along this one-dimensional path, the leading physical-noise and Trotter terms appear at the same order and can be canceled by a single Richardson extrapolation. The analysis uses a finite-order Baker--Campbell--Hausdorff truncation bound, controlled by doubly right-nested commutators, so that the guarantee does not rely on convergence of the full BCH series. For local Hamiltonians with local Lindbladian noise, the protocol mitigates physical noise together with Trotter error with only a constant asymptotic overhead relative to noiseless Trotter extrapolation, provided the required noise strengths lie above the intrinsic device-noise floor. We demonstrate the workflow on Trotterized Ising dynamics using an adaptively learned sparse Pauli--Lindblad noise strength on a superconducting processor, and benchmark the same one-dimensional construction against a two-dimensional Richardson baseline in tensor-network simulations.
+Product-formula Hamiltonian simulation is naturally suited to near-term quantum processors, but its accuracy is set by two competing errors: finite-step Trotter bias and physical hardware noise. We introduce a joint extrapolation strategy that ties the tunable noise strength to the Trotter step size, $\lambda(s)=c(sT)^{p+1}$ for a $p$-th order product formula. Along this one-dimensional path, the leading physical-noise and Trotter terms appear at the same order and can be canceled by a single Richardson extrapolation. The analysis uses a finite-order Baker--Campbell--Hausdorff truncation bound, controlled by doubly right-nested commutators, so that the guarantee does not rely on convergence of the full BCH series. For local Hamiltonians with local Lindbladian noise, the protocol mitigates physical noise together with Trotter error with only a constant asymptotic overhead relative to noiseless Trotter extrapolation, provided the required noise strengths lie above the intrinsic device-noise floor. We demonstrate the protocol on Trotterized Ising dynamics using an adaptively learned sparse Pauli--Lindblad noise strength on a superconducting processor, and validate the same one-dimensional construction in tensor-network simulations by comparing it with the corresponding two-dimensional Richardson construction.
 \end{abstract}
 
 \maketitle
 
-\sz{To be a physics-facing and reader-facing paper.}
-
+\sz{To be a physics-facing and reader-facing paper. Check Citation order.}
+\syz{The writing needs polishing. We'd better treat academic writing more seriously, and use AI to help refine the language and logic. }
 \noindent Hamiltonian simulation is a leading route to useful quantum computation, with applications from condensed-matter dynamics to quantum chemistry and high-energy physics~\cite{kim2023evidence,childs2018toward,mcardle2020quantum,bauer2023quantum}.
 Product formulas~\cite{doi:10.1126/science.273.5278.1073,suzuki1985decomposition,suzuki1991general} are especially attractive on near-term processors because they compile into repeated local gate layers, require no large ancillary registers, and preserve the locality and commutator structure of the target Hamiltonian.
-Their experimental difficulty is a depth trade-off: increasing the number of Trotter steps reduces deterministic product-formula bias, but the deeper circuit accumulates more physical noise~\cite{xu2025exponentiallydecayingquantumsimulation}; using fewer steps protects the device, but leaves a larger algorithmic error.
-In the regime where near-term experiments are informative, both effects are visible and the relevant target is the joint zero-noise, zero-step limit.
+Their experimental difficulty is a depth trade-off between algorithmic bias and physical noise \syz{a trade-off is usually between two things. Here is the algorithmic bias and physical noise? If yes, we can write it as ``a trade-off between algorithmic bias and physical noise''?}: increasing the number of Trotter steps reduces deterministic product-formula bias, but the deeper circuit accumulates more physical noise~\cite{xu2025exponentiallydecayingquantumsimulation}; using fewer steps protects the device, but leaves a larger algorithmic error.
+In the regime where near-term experiments are informative, both effects are visible and the relevant target is the joint zero-noise, zero-step-size \syz{stepsize?} limit.
 
-Existing mitigation strategies usually organize this limit as two separate extrapolation directions.
-Zero-noise extrapolation (ZNE)~\cite{li2017efficient,PhysRevLett.119.180509} estimates the zero-noise response at fixed Trotter step number, while Trotter extrapolation reduces the finite-step bias~\cite{watson2025exponentially,mizuta2025commutator}.
-One may apply these two procedures sequentially, or sample a two-dimensional Richardson grid over noise strength and step size~\cite{vazquez2023well}.
-These approaches are systematic, but they require many circuit families and inherit the conditioning of both extrapolation axes, which is costly precisely when circuit depth is already the limiting resource.
+Existing mitigation strategies usually approach this limit through two independent extrapolation directions.
+Zero-noise extrapolation (ZNE)~\cite{li2017efficient,PhysRevLett.119.180509} estimates the zero-noise response at \syzn{a} fixed Trotter step number, while Trotter extrapolation reduces the finite-step-size bias~\cite{watson2025exponentially,mizuta2025commutator}.
+A common implementation is therefore sequential: one first extrapolates along the noise-strength direction for each Trotter step size, and then extrapolates the resulting zero-noise estimates toward zero step size, effectively traversing a two-dimensional grid as in \fig{joint-path-schematic}(a)~\cite{vazquez2023well}. \syz{A common practice applies these two procedures sequentially, traversing the two-dimensional grid formed by different Trotter step sizes and noise strengths; see Figure. \ref{fig:joint-path-schematic} (a).}
+This construction is systematic, but it multiplies the number of circuit settings and compounds the conditioning of the two extrapolations, making it expensive in the depth-limited regime where mitigation is most needed. \syz{need to be polished...}
 
-The central idea of this work is to use the depth/noise trade-off as the mitigation coordinate.
-Instead of sampling the full two-dimensional error surface, we choose a calibrated path through it by tying the tunable noise strength to the Trotter step size, $\lambda(s)=c(sT)^{p+1}$ for a $p$-th order product formula.
-Because the leading physical-noise contribution is linear in $\lambda$ whereas the leading Trotter contribution scales as $s^{p+1}$, this choice makes both mechanisms appear at the same order in a single variable.
-A Richardson rule along this one-dimensional path can therefore cancel the leading physical-noise and Trotter terms with one set of coefficients.
+The central idea of this work is to turn the depth/noise trade-off itself into the mitigation coordinate.
+Instead of sampling the full two-dimensional error grid, we choose a calibrated path through it by tying the tunable noise strength to the Trotter step size, $\lambda(s)=c(sT)^{p+1}$ for a $p$-th order product formula.
+Because the leading physical-noise contribution is linear in $\lambda$ whereas the leading Trotter contribution scales as $s^{p+1}$, this path makes the two biases appear at the same order in one variable.
+A single Richardson extrapolation along the path can therefore cancel the leading physical-noise and Trotter terms simultaneously.
 
-The main theoretical question is whether this path retains the commutator-sensitive guarantees that make product formulas useful.
-Recent work has shown that physical and Trotter errors can be coupled in simplified mitigation settings~\cite{hakkaku2025dataefficienterrormitigationphysical}, but a commutator-sensitive analysis for noisy product formulas requires more than a formal power-series argument.
-We use a finite-order Baker--Campbell--Hausdorff truncation bound controlled by doubly right-nested commutators~\cite{wang2026lindbladiansimulationcommutatorbounds}, avoiding any assumption that the full BCH series converges.
-For local Hamiltonians with local Lindbladian noise, this gives a joint mitigation guarantee with the same asymptotic scaling as noiseless Trotter extrapolation up to constant factors, provided the required noise strengths remain within the experimentally accessible window.
+The main theoretical question is whether such a coupled path can retain the commutator-sensitive product-formula scaling that underlies efficient Hamiltonian simulation. \syz{Not quite clear.}
+Prior coupled extrapolation ideas can reduce the dimensionality of the mitigation procedure in simplified settings~\cite{hakkaku2025dataefficienterrormitigationphysical}, but they do not give a commutator-sensitive resource guarantee for noisy product formulas. \syz{We need to elaborate on the method in \cite{hakkaku2025dataefficienterrormitigationphysical} and see why it cannot jointly mitigate the two errors. Hopefully it is not only because of lack of a good analysis or argument, but the method simply does not work efficiently.}
+For local Hamiltonian simulation, this distinction is important: a formal power-series cancellation alone does not show that the required step sizes and noise strengths remain compatible with the locality structure of the dynamics.
+We address this by adopting a recently developed finite-order Baker--Campbell--Hausdorff truncation bound for open-system dynamics, controlled by doubly right-nested commutators, and applying it to the noisy product-formula channel~\cite{wang2026lindbladiansimulationcommutatorbounds}. \syz{We adopt a recently developed BCH truncation bound in a commutator scaling for open quantum systems.}
+This avoids any assumption that the full BCH series converges and yields a joint mitigation guarantee with the same asymptotic scaling as noiseless Trotter extrapolation up to constant factors, provided the required noise strengths remain within the experimentally accessible window. 
 
-We support this picture in two complementary ways.
-On superconducting hardware, an adaptively learned sparse Pauli--Lindblad model supplies calibrated noise amplification for the paired extrapolation nodes, demonstrating the one-dimensional workflow on a real device.
-In tensor-network simulations, the same one-dimensional construction is compared directly with a two-dimensional Richardson baseline, showing comparable extrapolation accuracy while using fewer sampled nodes.
-Together, these results support a simple physical picture of the protocol: replace a two-axis mitigation problem by a calibrated one-dimensional path, while retaining the commutator structure of the underlying Hamiltonian simulation.
+We validate this picture through two complementary tests: a hardware implementation on a superconducting quantum computer and a controlled numerical simulation using tensor networks. \syzn{We validated our algorithm through two complementary experiments: a numerical simulation using tensor networks and a physical implementation on a superconducting quantum computer.}
+On superconducting hardware, an adaptively learned sparse Pauli--Lindblad model supplies calibrated noise amplification for the paired extrapolation nodes, and the resulting one-dimensional fits move the measured observables closer to the joint zero-noise, zero-step-size reference. \sz{Add a quantitative hook here: for both tested parameter settings.} \syz{What we demonstrated is more than just a workflow; it also has supportive results.}
+In tensor-network simulations, the same construction is compared directly with its two-dimensional Richardson counterpart, achieving comparable extrapolation accuracy with fewer sampled circuit settings.
+Together, these results show that a calibrated one-dimensional path can replace a two-axis mitigation procedure while preserving the commutator structure that makes product-formula simulation efficient. \syz{This ending sentence should reinforce the strength of our result.}
 
 \tab{qualitative-comparison} summarizes this positioning relative to existing mitigation routes.
 
-\begin{table*}[t]
+\begin{table*}[!t]
 \caption{
 Qualitative positioning of mitigation strategies for product-formula Hamiltonian simulation.
 %A check mark means that the feature is addressed within the stated scope of the approach; the prior coupled column refers to the data-efficient one-dimensional extrapolation of Ref.~\cite{hakkaku2025dataefficienterrormitigationphysical}.
@@ -144,19 +157,19 @@ Provable commutator scaling & \xmark & \cmark & \xmark & \xmark & \cmark \\
 
 \xzwdone{Reader-facing issue: Results should open with the experimental claim and the figure logic, not with the full theory setup. Consider moving most formal definitions below to Methods and keeping only the path geometry plus the takeaway here.}
 
-\section{A one-dimensional path for joint extrapolation.}
+\section{A one-dimensional path for joint extrapolation}
 
-\noindent We first present the central idea and theoretical scheme: physical-noise mitigation and Trotter-error extrapolation need not be performed on an independent two-dimensional grid.
-The scheme calibrates the tunable noise strength at each Trotter step size and extrapolates along the one-dimensional path \sz{introduce $T,s,\lambda,$ and $c$ first}
+\noindent The key observation is that the two error sources can be paired before extrapolation, so physical-noise mitigation and Trotter-error extrapolation need not be performed on an independent two-dimensional grid.
+For total evolution time $T$, dimensionless Trotter step size $s$, tunable noise strength $\lambda$, and coupling constant $c$, the coupled protocol calibrates the noise strength at each step size and extrapolates along the one-dimensional path \sz{introduce $T,s,\lambda,$ and $c$ first}
 \begin{equation}
     \lambda(s)=c(sT)^{p+1}.
     \label{eq:lambda-coupling}
 \end{equation}
 This choice matches the leading physical-noise contribution, which is linear in $\lambda$, to the leading Trotter contribution, which scales as $s^{p+1}$.
-The path is therefore designed so that both mechanisms enter the same Richardson variable.
+Both mechanisms therefore enter the same Richardson variable and can be canceled by a single one-dimensional extrapolation.
 \fig{joint-path-schematic} illustrates the geometry for the first-order case $p=1$, where the coupled path is quadratic in $s$.
 The point of the schematic is the Richardson node set: the conventional approach assigns independent nodes to the two axes, while the coupled approach uses each sampled point as one paired node.
-We then implement the corresponding noise amplification using an adaptively learned sparse Pauli--Lindblad model on a superconducting processor, and finally compare the same one-dimensional path with a two-dimensional Richardson baseline in tensor-network simulations.
+We then implement the corresponding noise amplification using an adaptively learned sparse Pauli--Lindblad model on a superconducting processor, and finally compare the same one-dimensional path with its two-dimensional Richardson counterpart in tensor-network simulations.
 
 \begin{figure}[t]
     \centering
@@ -171,53 +184,58 @@ We then implement the corresponding noise amplification using an adaptively lear
     \label{fig:joint-path-schematic}
 \end{figure}
 
-The geometric replacement in \fig{joint-path-schematic} can be stated as the following informal guarantee; the formal resource theorem, including the Richardson coefficient bounds, finite-BCH conditions, intrinsic-noise-floor assumption and worst-case shot complexity, is given in Supplementary Note~1~\cite{supplementary}.
+The geometric replacement in \fig{joint-path-schematic} can be stated as the following informal guarantee; the formal resource theorem, including the Richardson coefficient bounds, finite-BCH conditions, intrinsic-noise-floor assumption and worst-case shot complexity, is given in Supplementary Note~2~\cite{supplementary}.
 \begin{informaltheorem}
 If calibrated noise strengths can be realized at the coupled nodes $\lambda(s_j)=c(s_jT)^{p+1}$, then a one-dimensional Richardson rule along this path cancels the leading Trotter and physical-noise biases simultaneously.
-Thus $m$ paired circuit families replace an $m\times m'$ rectangular Richardson grid, while finite-order BCH expansion preserves the commutator scaling of Trotter error up to constants.
+Thus $m$ paired circuit families replace an $m\times m'$ rectangular Richardson grid, while finite-order BCH expansion preserves the commutator scaling of Trotter error up to constants. \sz{Fine-grained variance evidence.}
 \end{informaltheorem}
 % \xzwdone{The informal theorem should state the public contribution in defensible terms: m paired nodes replace an m-by-m' grid; one Richardson rule cancels leading Trotter and noise bias; finite-BCH control preserves commutator scaling up to constants. Avoid vague sample-shot claims here unless the exact cost statement is already proved.}
 % \xzwdone{This paragraph answers a Methods question: how Richardson nodes and coefficients are constructed. In Results, keep only the consequence needed to interpret Fig.~1 and send the node-construction details to Methods.}
 % \xzwdone{Move to methods. Current version is author-facing instead of reader-facing, have not introduced Richardson extrapolation yet.}
 % \\\\
 \par\medskip
-\section{Finite-BCH expansion for error cancellation.}
+\section{Finite-BCH expansion for error cancellation}
 
 \noindent With the noisy product-formula channel $\widetilde{\Pcal}(t,\lambda)$ defined in Eq.~\eqref{eq:noisy-product-layer} in \hyperref[sec:methods]{Methods}, 
 the observable average over the coupled path reduces to a one-variable function
-\begin{equation}\label{eq:fg}
+\begin{equation}\label{eq:outcome}
     f(s)=g(s,\lambda(s))
     = \tr\!\left[O\widetilde{\Pcal}(sT,c(sT)^{p+1})^{1/s}\rho_0\right].
 \end{equation}
-The function in Eq.~\eqref{eq:fg} is hard to analyze directly because it is defined by a product of noncommuting noisy layers.
+The function in Eq.~\eqref{eq:outcome} is hard to analyze directly because it is defined by a product of noncommuting noisy layers.
 We therefore introduce a truncated surrogate $f_{q}(s)$, obtained by replacing the noisy product channel by its finite-BCH expansion through order $q$ in Eq.~\eqref{eq:tBCH}:
-\begin{align}\label{eq:poly}
-    f_{q}(s)=\tr\!\left[Oe^{\mathcal{G}_{q}(s)T} \rho_0\right]=f(0)+\sum_{\ell=1}^{m-1}a_\ell s^\ell+R_m(s),
+\begin{align}\label{eq:surrogate}
+    f_{q}(s)=\tr\!\left[Oe^{\mathcal{G}_{q}(s)T} \rho_0\right]. %=f(0)+\sum_{\ell=1}^{m-1}a_\ell s^\ell+R_m(s),
 \end{align}
-where $f(0)$ corresponds to the ideal zero-noise, zero-step target, $a_\ell$ are the coefficients of the low-order polynomial expansion, and $R_m(s)$ is the residual.
-
-For a maximum allowed step size $s_0$ and all selected nodes $s_j\le s_0$, the finite-BCH truncation theorem ensures $|f(s_j)-f_{q}(s_j)|\le \eps_{q}$, where $\eps_{q}$ is controlled by doubly right-nested commutators of the Hamiltonian and Lindbladian generators.
-The deviation of $e^{\mathcal{G}_{q}(s)T}$ from $e^{-i\ad_HT}$ is expanded by an interaction-picture Dyson series, yielding the power expansion.
-Then,
-\begin{align*}
-    |f(s)-f(0)|\leq |f(s)-f_{q}(s)|+|f_{q}(s)-f(0)|.
-\end{align*}
+For a maximum allowed step size $s_0$ and all selected nodes $s_j\le s_0$, the finite-BCH truncation theorem \syzn{in \cite{wang2026lindbladiansimulationcommutatorbounds}} ensures $|f(s_j)-f_{q}(s_j)|\le \eps_{q}$, where $\eps_{q}$ is controlled by doubly right-nested commutators of the Hamiltonian and Lindbladian generators.
+On the other hand, the deviation of $e^{\mathcal{G}_{q}(s)T}$ from $e^{-i\ad_HT}$ can be derived by an interaction-picture Dyson series. %yielding the power expansion. 
+For an $m$-node Richardson extrapolation, we can expand \eqref{eq:surrogate} as 
+\begin{align}
+    f_{q}(s)=f(0)+\sum_{\ell=1}^{m-1}a_\ell s^\ell+R_m(s),
+\end{align}
+where $f(0)$ corresponds to the ideal zero-noise, zero-step-size target, $a_\ell$ are the coefficients of the low-order polynomial expansion, and $R_m(s)$ is the residual. 
+\syz{Where is $q$? Do you mean to replace $m$ by $q$?}
+\sz{$m$ is the Richardson order, while $q$ is the truncation order. Two independent parameters.}
+%Then,\begin{align*}
+%    |f(s)-f(0)|\leq |f(s)-f_{q}(s)|+|f_{q}(s)-f(0)|.
+%\end{align*}
 
 % The coefficients $a_\ell$ contain both product-formula error and physical-noise error.
-The coupling in Eq.~\eqref{eq:lambda-coupling} places the leading noise and Trotter contributions at the same order in $s$, so an $m$-node Richardson rule cancels the polynomial part $a_\ell s^\ell$ of Eq.~\eqref{eq:poly} with a single set of coefficients, rather than using independent coefficients in a two-dimensional grid.
-
+The coupling in Eq.~\eqref{eq:lambda-coupling} places the leading noise and Trotter contributions at the same order in $s$, so an $m$-node Richardson rule cancels the polynomial part $a_\ell s^\ell$ of Eq.~\eqref{eq:surrogate} with a single set of coefficients, rather than using independent coefficients in a two-dimensional grid.
 For Richardson coefficients $b_j$ at nodes $s_j$, the deterministic error separates as
 \begin{equation}
     \left|\sum_{j=1}^{m}b_j f(s_j)-f(0)\right|
     \leq \norm{\mathbf{b}}_1\eps_{q} + \norm{\mathbf{b}}_1 \max_{s_j}|R_m(s_j)|.
 \end{equation}
 The first term is the accumulated finite-BCH truncation error.
-The second term is the Richardson error for the surrogate expansion after the low-order polynomial terms cancel.
-Supplementary Note 1~\cite{supplementary} gives the model-dependent resource estimates for $k$-local Hamiltonians with local Lindbladian noise, these bounds give the same asymptotic scaling as noiseless Trotter extrapolation up to a constant factor in the step size, provided the required noise strengths remain above the intrinsic noise floor. \sz{Repeating the first section formal theorem.}
+The second term is the Richardson remainder error for the surrogate expansion after the low-order polynomial terms cancel.
+Supplementary Note 2~\cite{supplementary} gives the model-dependent resource estimates for $k$-local Hamiltonians with local Lindbladian noise.
+Together, these bounds give the same asymptotic scaling as noiseless Trotter extrapolation up to a constant factor in the step size.
+%, provided the required noise strengths remain above the intrinsic noise floor. \sz{Repeating the first section formal theorem.}
 \par\medskip
 %\noindent\textbf{Experimental demonstration and benchmark.}
 
-\section{Experimental demonstration and benchmark}
+\section{Superconducting hardware experiments}
 
 \noindent We demonstrate the mitigation workflow on a connected 9-qubit subgraph of the 12-qubit \emph{Wuyue No.2} superconducting quantum processor provided by China Mobile~\cite{ChinaMobileWuyueQuantumCloud}, as shown in \fig{hardware-implementation}.
 The target dynamics are generated by the transverse-field Ising Hamiltonian
@@ -231,16 +249,32 @@ Starting from $\ket{0}^{\otimes n}$, we implement the evolution using a second-o
 
 \begin{figure}[t]
     \centering
-    \includegraphics[width=0.92\linewidth]{figures/circuit_topo3_sanitized.pdf}
+    \includegraphics[width=0.92\linewidth]{figures/circuit_topo3_sanitized_colorfix.pdf}
     \caption{
     Hardware implementation of Trotterized Ising dynamics.
     (a) A second-order symmetric ($p=2$) Trotter step alternates transverse-field rotations and Ising interactions.
     (b) The interaction layer is scheduled in three parallel $R_{ZZ}$ patterns containing non-overlapping qubit pairs.
     (c) Colored edges identify these patterns on the connected 9-qubit subgraph.
     (d) The logical rotations are compiled into the device gate set $\{H,R_Z,\mathrm{C}Z\}$: $R_X(\theta)=H R_Z(\theta)H$, whereas $R_{ZZ}$ uses fixed Clifford basis changes, controlled-$Z$ entanglers and an angle-dependent $R_Z$ rotation.
-    }
+    %\syz{The two red/pink colors are still too similar to be easily distinguished.}
+    \sz{Add compilation details in Methods, ZZ cross merge. $M$ is not the original $M$ but number of layers.}}
     \label{fig:hardware-implementation}
 \end{figure}
+
+\begin{figure*}[t]
+    \centering
+    \includegraphics[width=\textwidth]{figures/nature_four_panel_unified_error_summary.pdf}
+    \caption{
+    Coupled one-dimensional extrapolation on quantum hardware.
+    Hardware expectation values (orange circles) are shown at the paired nodes $N=\{4,3,2\}$ and $G=\{1,64/27,8\}$.
+    Solid curves show the quadratic least-squares model $Q_2$ fitted to the hardware data, dashed curves show the quartic three-node Richardson interpolant $Q_4$, and the black dotted line marks the noiseless, non-Trotterized reference obtained by direct numerical evolution of the 9-qubit Hamiltonian for the same parameter setting and initial state.
+    Panels show (a) $\theta_h=\theta_J=-1$ and (b) $\theta_h=\theta_J=-2$.
+    Main-panel error bars are standard errors over 12 measurement batches.
+    The lower-left insets show the relative intercept error $\epsilon_{\mathrm{rel}}=|\widehat{\langle M_Z\rangle}(0)-\langle M_Z\rangle_{\mathrm{ref}}|/|\langle M_Z\rangle_{\mathrm{ref}}|$ on a logarithmic scale.
+    Inset intervals are 95\% confidence intervals obtained from $20{,}000$ batch-bootstrap resamples; a downward triangle denotes an interval extending to zero.
+    }
+    \label{fig:hardware-joint-extrapolation}
+\end{figure*}
 
 For noise modelling, we group each parameterized Pauli rotation in the compiled Trotter circuit with its neighboring fixed Clifford operations to form a circuit layer.
 The accumulated noise in each circuit layer is represented by an angle-independent sparse Pauli--Lindblad channel applied after that layer~\cite{berg_probabilistic_2023}.
@@ -261,21 +295,6 @@ We determine the noise rates from the readout-mitigated Pauli expectation values
 The inferred model is not intended as a complete device characterization; it is learned to reproduce the noisy expectation values for the specified circuit--input--observable family and to calibrate noise amplification.
 The native hardware execution corresponds to unit noise gain ($G=1$); larger gains are realized by sampling additional Pauli insertions from the learned model without increasing the target-circuit depth.
 The circuit mapping and observable-level readout calibration are described in Supplementary Note~3, and the learned layerwise sparse Pauli--Lindblad model in Supplementary Note~4~\cite{supplementary}.
-
-\begin{figure*}[t]
-    \centering
-    \includegraphics[width=\textwidth]{figures/nature_four_panel_unified_error_summary.pdf}
-    \caption{
-    Coupled one-dimensional extrapolation on quantum hardware.
-    Hardware expectation values (orange circles) are shown at the paired nodes $N=\{4,3,2\}$ and $G=\{1,64/27,8\}$.
-    Solid curves show the quadratic least-squares model $Q_2$ fitted to the hardware data, dashed curves show the quartic three-node Richardson interpolant $Q_4$, and the black dotted line marks the noiseless, non-Trotterized reference obtained by direct numerical evolution of the 9-qubit Hamiltonian for the same parameter setting and initial state.
-    Panels show (a) $\theta_h=\theta_J=-1$ and (b) $\theta_h=\theta_J=-2$.
-    Main-panel error bars are standard errors over 12 measurement batches.
-    The lower-left insets show the relative intercept error $\epsilon_{\mathrm{rel}}=|\widehat{\langle M_Z\rangle}(0)-\langle M_Z\rangle_{\mathrm{ref}}|/|\langle M_Z\rangle_{\mathrm{ref}}|$ on a logarithmic scale.
-    Inset intervals are 95\% confidence intervals obtained from $20{,}000$ batch-bootstrap resamples; a downward triangle denotes an interval extending to zero.
-    }
-    \label{fig:hardware-joint-extrapolation}
-\end{figure*}
 
 We first implement on the superconducting processor the one-dimensional joint extrapolation path, in which each Trotter count is paired with a prescribed learned-noise gain.
 For $N_j\in\{4,3,2\}$, we set $x_j=1/N_j$ and pair each Trotter count with the learned-channel gain
@@ -301,24 +320,43 @@ Together, these results provide a hardware demonstration of the paired-node work
 
 \begin{figure}[!t]
     \centering
-    \includegraphics[width=0.97\linewidth]{figures/observable_error_3d_r2_3_4_5_noise_cube_J1_h1_T1_gray_noisy_lines_N_20_seed_43.pdf}
+    \includegraphics[width=0.97\linewidth]{figures/a100_mz_landscape_234.pdf}
     \caption{
-    Richardson extrapolation landscape for the simulated 20-qubit Ising instance.
-    The observable error is plotted on a logarithmic scale over Trotter step counts $r=2,3,4,5$ and calibrated noise strengths \sz{$\lambda\in \{8,3.375,1\}$ check $(\frac{1}{8}:\frac{1}{27}:\frac{1}{64})$} for $J=h=T=1$.
+    Richardson extrapolation landscape obtained from sparse Pauli dynamics for the simulated 100-qubit open Ising chain.
+    The observable is the average longitudinal magnetization $M_Z=N^{-1}\sum_i Z_i$, and the error is plotted as $\log_{10}|M_Z-M_Z^{\rm exact}|$.
+    The Hamiltonian convention follows Eq.~\eqref{eq:ising-hamiltonian}; using $R_P(\theta)=e^{-i\theta P/2}$, the parameters are $\theta_h=\theta_J=-2$.
+    The one-dimensional path uses the inverse-cubic paired nodes $(r,\lambda)\in\{(2,8),(3,64/27),(4,1)\}$, while the two-dimensional comparison uses the rectangular grid $r\in\{2,3,4\}$ and $\lambda\in\{0,1,64/27,8\}$.
+    The reference value $M_Z^{\rm exact}$ denotes the corresponding exact noiseless expectation.
+    % \sz{Minus sign, unify with $\theta_j$ above.}
+    % \sz{$\lambda\in \{8,3.375,1\}$ check $(\frac{1}{8}:\frac{1}{27}:\frac{1}{64})$}
+    Error bars are obtained by propagating the trajectory-level standard errors in the observable $M_Z$ before mapping the resulting intervals to the logarithmic error axis.
     Fixed-noise slices show the noisy data across Trotter step counts, cyan diamonds show zero-noise extrapolations at fixed $r$, and the red curve marks the one-dimensional joint-QEM path.
-    Open squares indicate the projection of the two-dimensional Richardson grid used as the baseline.
-    \sz{Which observable? The one-dimensional joint method reduces the bias of noisy estimates and gives a final extrapolated value close to the two-dimensional Richardson baseline. How to compute /what is the exact reference value?}}
+    Open squares indicate the projection of the corresponding two-dimensional Richardson construction.}
+    % \sz{Which observable? The one-dimensional joint method reduces the bias of noisy estimates and gives a final extrapolated value close to the two-dimensional Richardson baseline. How to compute /what is the exact reference value?}
     \label{fig:richardson-landscape}
 \end{figure}
 
 % \paragraph{Tensor-network validation.}
 
+\section{Sparse Pauli dynamics numerical demonstration}
 
-We next benchmark the coupled construction against a tensor-product two-dimensional Richardson grid in a controlled tensor-network simulation using \texttt{quimb}~\cite{Gray2018}
+\noindent We use the same transverse-field Ising Hamiltonian form as in Eq.~\eqref{eq:ising-hamiltonian}, specialized to a one-dimensional chain.
+We validate the coupled construction on $N=100$ qubits using a sparse Pauli dynamics simulation in the Heisenberg picture, also closely related to Pauli propagation~\cite{Rall2019PauliPropagation,begusic2025sparsepauli}.
+The simulation propagates the observable $M_Z=N^{-1}\sum_i Z_i$ backward through the noisy second-order product-formula circuit and truncates the resulting sparse Pauli expansion, rather than constructing the full $2^N$ state or unitary.
 % We also study the joint extrapolation path directly in a controlled tensor-network simulation using \texttt{quimb}~\cite{Gray2018}. 
-\sz{$c$ is not fixed since the proportion is fixed. We only require the min $\lambda$ above the intrinsic floor, supplementary discusses the trade-off choice.}
-The one-dimensional protocol evaluates the coupled curve $\lambda(s)=c(sT)^{p+1}$ with $p=2$, \wxy{with $c=?$ and $p=?$}, while the baseline uses a tensor-product Richardson rule over independent step-size and noise-strength nodes.
-Thus the two-dimensional baseline provides a useful accuracy benchmark, but requires a rectangular grid of noisy circuit settings. As shown in \fig{tensor-network-validation}, \sz{Update} the joint one-dimensional extrapolation has an evaluation error of $0.012$, which is smaller than the two-dimensional baseline using a one-dimensional set of extrapolation nodes, and the measurement cost is reduced to one-fifth of the 2-d baseline. Therefore, the one-dimensional protocol preserves the extrapolation accuracy while reducing the measurement cost.
+% \sz{$c$ is not fixed since the proportion is fixed. We only require the min $\lambda$ above the intrinsic floor, supplementary discusses the trade-off choice.}
+The second-order formula has $p=2$, so the coupled path uses the inverse-cubic relation $\lambda_r=(r_{\max}/r)^3$ after normalizing the shortest-step node to $\lambda_{r_{\max}}=1$.
+% \wxy{with $c=?$ and $p=?$}
+The two-dimensional counterpart uses the tensor-product Richardson rule over independent step-size and noise-strength nodes.
+Thus the two-dimensional construction provides a useful controlled comparison, but requires a rectangular grid of noisy circuit settings.
+As shown in \fig{richardson-landscape}, the one-dimensional path at $(r,\lambda)\in\{(2,8),(3,64/27),(4,1)\}$ has absolute evaluation error $3.8\times10^{-3}$ relative to the exact Majorana-covariance reference~\cite{Lieb1961TwoSoluble,Pfeuty1970TFIM,TerhalDiVincenzo2002FreeFermions}, with propagated trajectory standard error $9.9\times10^{-3}$.
+The corresponding noise-free Trotter extrapolation and two-dimensional Richardson estimate have absolute errors $2.8\times10^{-2}$ and $2.4\times10^{-2}$, respectively, in this run.
+% \sz{Update the numerical figure and the quoted errors after the 10-trajectory data and error bars are available.}
+% \sz{Update to Ruiqi' approach $80$-$100$ qubits. and the corresponding quantitative results. Measurement cost inaccurate.}
+The comparison is therefore a configuration-count benchmark: the coupled path uses three paired noisy settings, whereas the two-dimensional construction uses a $3\times3$ grid of noisy extrapolation settings.
+% It does not claim a reduction in measurement-shot cost.
+% \sz{Weird, remove reduction, $3\times3$.}
+Therefore, the one-dimensional protocol preserves the relevant extrapolation accuracy while using a paired one-dimensional set of calibrated circuit settings.
 
 %\begin{figure}[t]
 %    \centering
@@ -347,11 +385,13 @@ The method is suitable for near-term and early fault-tolerant devices where incr
 \section{Methods}
 \label{sec:methods}
 
+\sz{Check whether the Lemmas in Methods in the entanglement paper also appear in the Supplementary. Maybe methods should be a slim version of Supplementary.}
 \xzwdone{Methods should now serve as the audit trail for the claims in Results: node construction, cost comparison, hardware fitting choices, and tensor-network parameters. Keep theory details only insofar as they justify the extrapolation expansion.}
 
-\noindent \textbf{Product-formula and noisy-channel model.} 
+\subsection{Product-formula and noisy-channel model} 
 
 Let $H=\sum_{\gamma=1}^{\Gamma}H_\gamma$ and suppose that a $p$-th order product formula implements one short-time step through
+\sz{Add compilation and the revised $M$ as layer number.}
 \begin{equation}
     P(t)=\prod_{v=1}^{M} e^{-i t a_v H_{\gamma_v}} .
 \end{equation}
@@ -373,8 +413,34 @@ For dimensionless step size $s$ and total time $T$, the measured expectation is
     \tr\!\left[O\widetilde{\Pcal}(sT,\lambda)^{1/s}\rho_0\right].
 \end{equation}
 The target value is $\lim_{s,\lambda\to0}g(s,\lambda)$.
+% Supplementary Notes~1 and 2~\cite{supplementary} review the noise-amplification primitives, Richardson extrapolation, and coupled-path notation used in this model.
 
-\noindent \textbf{Richardson nodes and extrapolation.} % and resource accounting.}
+\subsection{Circuit compilation of Ising dynamics}
+
+For the hardware experiment we compile the transverse-field Ising dynamics in Eq.~\eqref{eq:ising-hamiltonian} at the level of logical rotation layers before mapping to the device gate set.
+Let $\tau$ denote one Trotter time step, write $H_X=h\sum_i X_i$, and decompose the Ising interaction into the three edge-color patterns shown in \fig{hardware-implementation},
+\begin{equation}
+    H_{ZZ}=\sum_{c=1}^{3} H_{ZZ}^{(c)},\qquad
+    H_{ZZ}^{(c)}=J\sum_{(i,j)\in E_c} Z_iZ_j ,
+\end{equation}
+where each $E_c$ contains disjoint hardware edges.
+A naive second-order palindromic schedule would apply the three Ising patterns with half angles in the order $1,2,3,3,2,1$ around the transverse-field rotations.
+However, all $Z_iZ_j$ terms commute, including terms in different edge-color patterns, so the mirrored $R_{ZZ}$ halves can be reordered and merged by angle addition.
+Thus the compiled Strang step is implemented as
+\begin{equation}
+    S_2(\tau)
+    =e^{-i\tau H_X/2}
+    \left(\prod_{c=1}^{3} e^{-i\tau H_{ZZ}^{(c)}}\right)
+    e^{-i\tau H_X/2},
+\end{equation}
+with $e^{-i\tau H_{ZZ}^{(c)}}=\prod_{(i,j)\in E_c}R_{ZZ}^{(ij)}(2J\tau)$ executed in parallel within each color class.
+Counting angle-dependent logical rotation layers, an isolated displayed step therefore has five layers: one transverse-field half layer, three merged $R_{ZZ}$ patterns, and one transverse-field half layer.
+In a repeated Trotter circuit, adjacent transverse-field half layers at step boundaries are combined, so each interior step contributes four logical layers.
+
+The native compilation follows the convention in \fig{hardware-implementation}(d): each $R_X$ is implemented as $H R_Z H$, while each $R_{ZZ}$ rotation is implemented using fixed Clifford basis changes, controlled-$Z$ entangling gates, and one angle-dependent $R_Z$ rotation.
+Consequently, the layer index $v$ and the number $M$ in the noisy-channel model above refer to these compiled logical layers after commuting, merging, and parallel scheduling, rather than to the individual Ising edges or the unmerged factors of the formal palindromic product.
+
+\subsection{Richardson nodes and extrapolation} % and resource accounting.}
 
 For a scalar function
 \begin{equation}
@@ -387,7 +453,7 @@ Executable nodes are therefore chosen by integer Trotter counts $r_j$ through $s
 In the coupled protocol, the measured nodes are the pairs $(s_j,\lambda(s_j))$ with $\lambda(s)=c(sT)^{p+1}$.
 Equivalently, the Richardson rule acts on the one-variable function $f(s)=g(s,\lambda(s))$ and extrapolates from the sampled nodes $s_j>0$ to the ideal limit $s=0$.
 The order $m$ is the number of paired nodes and fixes how many low-order powers in this one-variable expansion are canceled.
-See Supplementary Note~1~\cite{supplementary} for the explicit node construction and coefficient bounds.
+The Richardson construction and node conventions are given in Supplementary Note~1~\cite{supplementary}.
 The residual bias is bounded by $\|\bm b\|_1\max_j|R_m(s_j)|$.
 The coupling constant $c$ sets the relative scale of the amplified noise and can be chosen to balance the physical-noise and Trotter remainders.
 The exponent in $\lambda(s)=c(sT)^{p+1}$ is chosen so that the leading physical-noise contribution, which is linear in $\lambda$, enters the same one-variable expansion as the leading Trotter contribution.
@@ -407,7 +473,7 @@ Choosing a smaller exponent would leave noise as the dominant error, whereas cho
 % Moreover, if the noise-direction coefficients have one-norm $\|\bm b'\|_1$, each grid point must be estimated to accuracy smaller by this factor; for non-optimized grids this norm can grow rapidly with the extrapolation order.
 % The coupled path removes this second extrapolation axis.
 
-\noindent \textbf{Finite-order BCH expansion.}
+\subsection{Finite-order BCH expansion}
 
 After imposing the coupled path, the one-step channel in Eq.~\eqref{eq:noisy-product-layer} is the ordered BCH product $\widetilde{\Pcal}(sT,\lambda(s))=\prod_{v=1}^{M}e^{\mathcal{K}_{2v}}e^{\mathcal{K}_{2v-1}}$, with generators
 \begin{equation}
@@ -422,18 +488,19 @@ we consider a finite-order truncation of the BCH expansion $e^{sT\mathcal{G}_{q}
 \begin{equation}\label{eq:tBCH}
     \begin{aligned}
     sT\,\Gcal_{q}(s)
-    &:=
-    -isT\ad_H+\sum_{j=2}^{q}
+    &:=\sum_{j=1}^{q}
     \mathcal{B}_j(\mathcal{K}_1,\ldots,\mathcal{K}_{2M}),\\
+    \norm{
     \widetilde{\Pcal}(sT,\lambda(s))
-    &=
+    -
     e^{sT\Gcal_{q}(s)}
-    +\mathcal{R}_{q+1}.
+    }
+    &\le
+    e\,\alpha_{\comm,q}(s).
     \end{aligned}
 \end{equation}
-Here each $\mathcal{B}_q$ is the degree-$q$ BCH Lie polynomial, a finite linear combination of $q$-fold nested commutators of the generators $\mathcal{K}_\mu$.
-The discarded tail $\mathcal{R}_{q+1}$ is then bounded directly using the truncation theorem of Ref.~\cite{wang2026lindbladiansimulationcommutatorbounds}.
-The tail is controlled by doubly right-nested commutator sums of the schematic form
+Here $\mathcal{B}_j$ is the degree-$j$ BCH Lie polynomial, a finite linear combination of $j$-fold nested commutators of the generators $\mathcal{K}_\mu$.
+The finite-BCH tail parameter $\alpha_{\comm,q}(s)$ is obtained after substituting the coupled generators into the truncation theorem of Ref.~\cite{wang2026lindbladiansimulationcommutatorbounds}; it collects the discarded terms above order $q$ and is controlled by doubly right-nested commutator sums of the schematic form
 \begin{equation}
     \sum
     \left\|
@@ -456,67 +523,77 @@ The remaining bias has two pieces: BCH monomials whose grade is not canceled by 
 For $k$-local Hamiltonians and local Lindbladian noise, nested commutators are nonzero only when successive local supports overlap.
 The commutator sums are therefore governed by support growth and local-extensiveness parameters, rather than by the extensive operator norm of the full Hamiltonian.
 Taking $q=O(\log(N/\eps))$ makes the truncation error $O(\eps)$ while changing the allowed step size only by logarithmic local factors.
-For plane-wave electronic-structure Hamiltonians, the corresponding control parameter is the layer number of the second-quantized monomials generated under repeated commutation.
-The supplementary material gives the full truncation bookkeeping; here we use it only to justify the finite expansion on which the coupled Richardson rule acts.
+The supplementary material gives the full truncation bookkeeping; in the main text we use only this consequence: the coupled Richardson expansion can be justified by finite-order commutator bounds rather than by convergence of the full BCH series.
+The finite-BCH truncation tool used here is detailed in Supplementary Note~1~\cite{supplementary}.
 
-\noindent \textbf{Intrinsic noise floor.}
+\subsection{Intrinsic noise floor}
 
 The theoretical path assumes that the experiment can realize the effective noise strengths $\lambda(s_j)$ at all Richardson nodes.
-Real hardware has an intrinsic noise level $\lambda_0$ before amplification, so the implemented values are better viewed as $\lambda_0+\lambda_{\mathrm{amp}}(s_j)$.
-If $\lambda_0$ is comparable to the smallest target value on the path, the uncancelled offset contributes a residual term that is not removed by the coupled Richardson coefficients.
-The resource statement therefore assumes that the floor is below the smallest coupled noise strength up to the target additive accuracy.
-In practice, one first chooses a set of Trotter counts and the accessible noise window $[\lambda_{\min},\lambda_{\max}]$, then selects $c$ so that
+Real hardware has an intrinsic noise floor, denoted by $\lambda_{\mathrm{intrinsic}}$, below which the effective noise strength cannot be tuned.
+In practice, one first chooses a set of Trotter counts and the accessible noise window $[\lambda_{\mathrm{intrinsic}},\lambda_{\max}]$.
+The coupling constant is then anchored by the largest Trotter count $r_{\max}$, namely the shortest-step node on the path,
 \begin{equation}
-    \lambda_{\min}
-    \le
+    c(T/r_{\max})^{p+1}
+    =
+    \lambda_{\mathrm{intrinsic}} .
+\end{equation}
+The other Richardson nodes then require
+\begin{equation}
     c(T/r_j)^{p+1}
-    \le
-    \lambda_{\max}
-    \qquad \text{for all } j .
+    =
+    \lambda_{\mathrm{intrinsic}}
+    \left(\frac{r_{\max}}{r_j}\right)^{p+1},
 \end{equation}
-Equivalently, the admissible values of $c$ are the intersection of the intervals
-$[\lambda_{\min}/(T/r_j)^{p+1},\,\lambda_{\max}/(T/r_j)^{p+1}]$ over all nodes.
-If the intrinsic floor is written separately as $\lambda_0$, the amplified component must realize $c(T/r_j)^{p+1}-\lambda_0$ within the available amplification range.
-\xzwdone{This should become an operational prescription: given a device noise window $[\lambda_{\min},\lambda_{\max}]$ and chosen $r_j$, how is $c$ selected or constrained? This also helps readers judge when the protocol is experimentally feasible.}
-The same tunable noise strength is also required by a two-dimensional baseline; the coupled construction changes how many noise-strength values must be sampled.
+and the chosen node set is feasible only if these remaining target strengths do not exceed $\lambda_{\max}$.
+\xzwdone{This has become an operational prescription: given a device noise window $[\lambda_{\mathrm{intrinsic}},\lambda_{\max}]$ and chosen $r_j$, the shortest-step node fixes $c$ and the remaining nodes give the feasibility check.}
+The same tunable noise strength is also required by the corresponding two-dimensional construction; the coupled construction changes how many noise-strength values must be sampled.
+Supplementary Notes~2 and 5~\cite{supplementary} give the theoretical feasibility condition and its hardware instantiation.
 
-\noindent \textbf{Learned noise model.}
+\subsection{Learned noise model}
 
-The hardware workflow uses an adaptively learned sparse Pauli--Lindblad model
+The hardware workflow uses an adaptively learned sparse Pauli--Lindblad model for each circuit layer $l$,
 \begin{equation}
-    \Lind(\rho)=\sum_{k\in\mathcal{K}}\lambda_k(P_k\rho P_k-\rho),
+    \Lind_l(\rho)
+    =
+    \sum_{k\in\mathcal{K}_l}
+    \hat{\lambda}_{l,k}
+    (P_{l,k}\rho P_{l,k}-\rho),
 \end{equation}
-with $|\mathcal{K}|$ much smaller than the full Pauli group.
+with $|\mathcal{K}_l|$ much smaller than the full Pauli group on the qubits involved in that layer.
 The Pauli--Lindblad rates are obtained by adaptive learning on circuits matched to the target compiled circuit family.
 After learning, noise amplification is implemented by scaling the retained rates and sampling the corresponding Pauli insertions, which realizes calibrated noise strengths for ZNE without lengthening the target Trotter circuit.
 The learned channel is used as an effective model for the observable and circuit family; it is not intended to reconstruct every microscopic noise process.
+Supplementary Note~4~\cite{supplementary} gives the sparse Pauli--Lindblad learning procedure and representative learned channels.
 \xzw{Still needs hardware metadata: what circuits are used for learning, how many retained Pauli terms, and how the scaling factor maps learned rates to the amplified noise strengths used in Fig.~3.}
 
-\noindent \textbf{Hardware data processing.}
+\subsection{Hardware data processing}
 
 The measured observable is the average longitudinal magnetization, estimated from bitstrings produced by computational-basis measurements.
 Readout mitigation is applied before gate-noise learning by inverting local calibration matrices for the selected qubits at the observable level.
 For each paired node and calibrated noise-strength setting, repeated circuit executions provide sample means and uncertainty estimates.
 The node estimates are obtained with the same low-order polynomial or exponential calibration ansatz across all Trotter configurations within a panel, so that the one-dimensional path fit is not affected by changing the noise-amplification model from node to node.
 The paired values are then fitted as even polynomials in $x=1/N_{\mathrm{Trotter}}$ for the second-order symmetric formula.
-This hardware workflow implements the coupled one-dimensional path using learned-channel noise amplification; the tensor-network benchmark uses the same path in a controlled simulation where it can be compared directly with a two-dimensional Richardson grid.
+This hardware workflow implements the coupled one-dimensional path using learned-channel noise amplification; the sparse Pauli dynamics validation uses the same path in a controlled simulation where it can be compared directly with the corresponding two-dimensional Richardson construction.
+Supplementary Notes~3 and 5~\cite{supplementary} record the circuit mapping, readout calibration and paired-node hardware extrapolation data.
 \xzw{Still needs hardware fit metadata: specify the exact fit models used in the plotted hardware panels, how the model/order is chosen, and how uncertainty is propagated from ZNE into the final $1/N_{\mathrm{Trotter}}$ fit.}
 
-\noindent \textbf{Classical simulations.}
+\subsection{Classical simulations}
 
-The tensor-network data use the same average magnetization observable as the hardware experiment, but on a 20-qubit open one-dimensional transverse-field Ising chain with $J=h=1$ and total time $T=1$.
+The sparse Pauli dynamics data use the same average magnetization observable as the hardware experiment, but on a 100-qubit open one-dimensional transverse-field Ising chain with $\theta_h=\theta_J=-2$ and total time $T=1$.
 The initial state is the computational-basis state $\ket{0}^{\otimes N}$.
-Noisy and noiseless product-formula circuits are represented with \texttt{quimb} and sampled with a fixed random seed, using $10^4$ computational-basis samples for each noisy circuit setting.
-\sz{To be revised, noise grid proportional to $\{1/8, 1/27, 1/64, 1/125\}$ and scale the smallest to floor $1$.}
-The simulated Trotter counts are $r\in\{2,3,4,5\}$.
-The noise grid is $\lambda\in\{0,1,3.375,8,15.625\}$, corresponding to the nonzero scale factors $(r/2)^3$ for $r=2,3,4,5$.
-The one-dimensional benchmark uses the paired monotone path
+Noisy product-formula circuits are represented in the Heisenberg picture as sparse linear combinations of Pauli strings and sampled with a fixed random seed for the Pauli-noise trajectory.
+Conditioned on a sampled noise pattern, the $M_Z$ expectation is evaluated deterministically, so these data do not include computational-basis measurement-shot variance.
+% \sz{To be revised, noise grid proportional to $\{1/8, 1/27, 1/64, 1/125\}$ and scale the smallest to floor $1$.}
+The simulated Trotter counts are $r\in\{2,3,4\}$.
+The noise grid includes $\lambda\in\{0,1,64/27,8\}$, where the nonzero values are obtained from the inverse-cubic ratios $(4/r)^3$ after normalizing the shortest-step node $r=4$ to $\lambda=1$.
+The one-dimensional construction uses the paired monotone path
 \[
-    (r,\lambda)\in\{(2,15.625),(3,8),(4,3.375),(5,1)\},
+    (r,\lambda)\in\{(2,8),(3,64/27),(4,1)\},
 \]
-while the two-dimensional baseline uses the full rectangular grid of four Trotter counts and five noise strengths.
-The plotted error is the logarithm of the absolute difference between the average magnetization and a common noiseless reference, computed from a sparse high-resolution evolution with $10^4$ Taylor steps and then divided by $N$.
-\xzwdone{This paragraph is still too thin for a numerical benchmark. List J, h, T, initial state, p, c, r nodes, noise nodes, bond dimension or truncation tolerance, and the noiseless reference used to compute the plotted error.}
+while the two-dimensional counterpart uses the full rectangular grid of three Trotter counts and four noise strengths.
+The common noiseless reference is computed from the exact free-fermion Majorana covariance solution for the same Hamiltonian, total time and initial state~\cite{Lieb1961TwoSoluble,Pfeuty1970TFIM,TerhalDiVincenzo2002FreeFermions}; the plotted error is $\log_{10}|M_Z-M_Z^{\mathrm{exact}}|$.
+% \xzwdone{This paragraph is still too thin for a numerical benchmark. List J, h, T, initial state, p, c, r nodes, noise nodes, bond dimension or truncation tolerance, and the noiseless reference used to compute the plotted error.}
 Both methods are compared against this same reference expectation, so the plotted errors isolate the bias removed by extrapolation rather than differences in state preparation or measurement.
+Supplementary Note~6~\cite{supplementary} gives the sparse Pauli dynamics implementation details and numerical settings.
 
 \end{document}
