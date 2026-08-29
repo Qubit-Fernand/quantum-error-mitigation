@@ -1353,7 +1353,7 @@ where $w_k=\left(1+e^{-2 \lambda_k}\right) / 2$. \sz{Quantum circuit schematic f
 We first learn the coefficients $\lambda_k$ based on an adaptive/improved scheme
 \begin{figure}[!htbp]
     \centering
-    \includegraphics[width=0.92\linewidth]{figures/trotter_ising_hardware_implementation.pdf}
+    \includegraphics[width=0.92\linewidth]{figures/archive/trotter_ising_hardware_implementation.pdf}
     \caption{
     Hardware implementation of Trotterized Ising dynamics.
     (a) A second-order symmetric Trotter step alternates transverse-field rotations and Ising interactions.
@@ -1368,12 +1368,12 @@ We first learn the coefficients $\lambda_k$ based on an adaptive/improved scheme
     \centering
     \begin{subfigure}{0.48\linewidth}
         \centering
-        \includegraphics[width=\linewidth]{figures/hardware_joint_extrapolation_minus1.pdf}
+        \includegraphics[width=\linewidth]{figures/archive/hardware_joint_extrapolation_minus1.pdf}
         \caption{}
     \end{subfigure}
     \begin{subfigure}{0.48\linewidth}
         \centering
-        \includegraphics[width=\linewidth]{figures/hardware_joint_extrapolation_minus2.pdf}
+        \includegraphics[width=\linewidth]{figures/archive/hardware_joint_extrapolation_minus2.pdf}
         \caption{}
     \end{subfigure}
     \caption{
@@ -1397,14 +1397,14 @@ For the two-dimensional baseline, we use a tensor-product Richardson extrapolati
 
 \begin{figure}[!htbp]
     \centering
-    \includegraphics[width=0.8\linewidth]{figures/richardson_error_vs_r_N_20_seed_43.pdf}
+    \includegraphics[width=0.8\linewidth]{figures/archive/richardson_error_vs_r_N_20_seed_43.pdf}
     \caption{Average magnetization error as a function of the number of Trotter steps $r$ for a $1$D transverse-field Ising model with $N=20$ qubits. The curves compare the raw noisy estimates at several noise-amplification levels with the estimates obtained by the joint one-dimensional extrapolation, the noise-free Trotter extrapolation, and the tensor-product two-dimensional Richardson baseline. Results are obtained by classical tensor-network simulation with \textup{\texttt{quimb}} at seed 43.}
     \label{fig:richardson-error-vs-r}
 \end{figure}
 
 \begin{figure}[!htbp]
     \centering
-    \includegraphics[width=0.8\linewidth]{figures/richardson_error_vs_inv_r_N_20_seed_43.pdf}
+    \includegraphics[width=0.8\linewidth]{figures/archive/richardson_error_vs_inv_r_N_20_seed_43.pdf}
     \caption{The same average magnetization error data plotted against the Trotter step size $1/r$. This view highlights the extrapolation behavior as the step size approaches zero. The inset compares the final extrapolated estimates from the joint one-dimensional method, the noise-free Trotter extrapolation, and the two-dimensional baseline. Results are obtained by classical tensor-network simulation with \textup{\texttt{quimb}} at seed 43.}
     \label{fig:richardson-error-vs-inv-r}
 \end{figure}

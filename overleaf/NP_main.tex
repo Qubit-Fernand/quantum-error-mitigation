@@ -125,7 +125,8 @@ For local Hamiltonian simulation, this distinction is important: a formal power-
 We address this by adopting a recently developed finite-order Baker--Campbell--Hausdorff truncation bound for open-system dynamics, controlled by doubly right-nested commutators, and applying it to the noisy product-formula channel~\cite{wang2026lindbladiansimulationcommutatorbounds}. %\syz{We adopt a recently developed BCH truncation bound in a commutator scaling for open quantum systems.}
 This avoids any assumption that the full BCH series converges and yields a joint mitigation guarantee with the same asymptotic scaling as noiseless Trotter extrapolation up to constant factors, provided the required noise strengths remain within the experimentally accessible window. 
 
-We validate this picture through two complementary tests: a hardware implementation on a superconducting quantum computer and a controlled SPD simulation. \syzn{We validated our algorithm through two complementary experiments: an SPD simulation and a physical implementation on a superconducting quantum computer.}
+We validate our scheme through two complementary experiments: a hardware implementation on a superconducting quantum computer and a controlled SPD simulation. 
+%{We validated our algorithm through two complementary experiments: an SPD simulation and a physical implementation on a superconducting quantum computer.}
 On superconducting hardware, an adaptively learned sparse Pauli--Lindblad model supplies calibrated noise amplification for the paired extrapolation nodes, and the resulting one-dimensional fits move the measured observables closer to the joint zero-noise, zero-step-size reference. \sz{Add a quantitative hook here: for both tested parameter settings.} %\syz{What we demonstrated is more than just a workflow; it also has supportive results.}
 In SPD simulations, the same construction is compared directly with its two-dimensional Richardson counterpart, achieving comparable extrapolation accuracy with fewer sampled circuit settings.
 Together, these results show that a calibrated one-dimensional path can replace a two-axis mitigation procedure while preserving the commutator structure that makes product-formula simulation efficient. %\syz{This ending sentence should reinforce the strength of our result.}
@@ -154,16 +155,16 @@ Provable commutator scaling & \xmark & \cmark & \xmark & \xmark & \cmark \\
 \end{ruledtabular}
 \end{table*}
 
-\sz{\centering\textit{Can we jointly mitigate physical and Trotter errors while maintaining commutator scaling?}}
+%\sz{\centering\textit{Can we jointly mitigate physical and Trotter errors while maintaining commutator scaling?}}
 
 %\section{Results}
 
-\xzwdone{Reader-facing issue: Results should open with the experimental claim and the figure logic, not with the full theory setup. Consider moving most formal definitions below to Methods and keeping only the path geometry plus the takeaway here.}
+%\xzwdone{Reader-facing issue: Results should open with the experimental claim and the figure logic, not with the full theory setup. Consider moving most formal definitions below to Methods and keeping only the path geometry plus the takeaway here.}
 
 \section{A one-dimensional path for joint extrapolation}
 
 \noindent The key observation is that the two error sources can be paired before extrapolation, so physical-noise mitigation and Trotter-error extrapolation need not be performed on an independent two-dimensional grid.
-For total evolution time $T$, dimensionless Trotter step size $s$, tunable noise strength $\lambda$, and coupling constant $c$, the coupled protocol calibrates the noise strength at each step size and extrapolates along the one-dimensional path \sz{introduce $T,s,\lambda,$ and $c$ first}
+For total evolution time $T$, dimensionless Trotter step size $s$, tunable noise strength $\lambda$, and coupling constant $c$, the coupled protocol calibrates the noise strength at each step size and extrapolates along the one-dimensional path %\sz{introduce $T,s,\lambda,$ and $c$ first}
 \begin{equation}
     \lambda(s)=c(sT)^{p+1}.
     \label{eq:lambda-coupling}
@@ -389,8 +390,10 @@ The method is suitable for near-term and early fault-tolerant devices where incr
 \section{Methods}
 \label{sec:methods}
 
-\sz{Check whether the Lemmas in Methods in the entanglement paper also appear in the Supplementary. Maybe methods should be a slim version of Supplementary.}
-\xzwdone{Methods should now serve as the audit trail for the claims in Results: node construction, cost comparison, hardware fitting choices, and SPD parameters. Keep theory details only insofar as they justify the extrapolation expansion.}
+%\sz{Check whether the Lemmas in Methods in the entanglement paper also appear in the Supplementary. 
+
+\sz{Methods should be a slim version of Supplementary.}
+%\xzwdone{Methods should now serve as the audit trail for the claims in Results: node construction, cost comparison, hardware fitting choices, and SPD parameters. Keep theory details only insofar as they justify the extrapolation expansion.}
 
 \subsection{Product-formula and noisy-channel model} 
 
@@ -420,7 +423,7 @@ The target value is $\lim_{s,\lambda\to0}g(s,\lambda)$.
 % Supplementary Notes~1 and 2~\cite{supplementary} review the noise-amplification primitives, Richardson extrapolation, and coupled-path notation used in this model.
 
 \subsection{Circuit compilation of Ising dynamics}
-\sz{Add compilation details in Methods, ZZ cross merge. $M$ is not the original $M$ but number of layers. Add pointer in the main text.}
+\sz{Add compilation details in Methods, ZZ cross merge. $M$ is not the original $M$ but number of layers. Add pointer in the main text. $\lambda$ after final $X$ rotation is set to zero.}
 For the hardware experiment we compile the transverse-field Ising dynamics in Eq.~\eqref{eq:ising-hamiltonian} at the level of logical rotation layers before mapping to the device gate set.
 Let $\tau$ denote one Trotter time step, write $H_X=h\sum_i X_i$, and decompose the Ising interaction into the three edge-color patterns shown in \fig{hardware-implementation},
 \begin{equation}
@@ -453,7 +456,7 @@ For a scalar function
 an $m$-node Richardson rule estimates $f(0)$ by $\sum_{j=1}^{m}b_j f(s_j)$, where the coefficients satisfy $\sum_j b_j=1$ and $\sum_j b_j s_j^\ell=0$ for $1\le\ell\le m-1$.
 Here $s$ is the dimensionless inverse Trotter count; the physical duration of one product-formula step is $sT$.
 Executable nodes are therefore chosen by integer Trotter counts $r_j$ through $s_j=1/r_j$, so the circuit step duration is $T/r_j$.
-\xzwdone{Be careful with notation: earlier $s$ behaves like a step size or inverse step number. If $r_j$ is the Trotter count, define whether $s_j=T/r_j$ or $s_j=1/r_j$ and use the same convention in every figure axis and fit.}
+%\xzwdone{Be careful with notation: earlier $s$ behaves like a step size or inverse step number. If $r_j$ is the Trotter count, define whether $s_j=T/r_j$ or $s_j=1/r_j$ and use the same convention in every figure axis and fit.}
 In the coupled protocol, the measured nodes are the pairs $(s_j,\lambda(s_j))$ with $\lambda(s)=c(sT)^{p+1}$.
 Equivalently, the Richardson rule acts on the one-variable function $f(s)=g(s,\lambda(s))$ and extrapolates from the sampled nodes $s_j>0$ to the ideal limit $s=0$.
 The order $m$ is the number of paired nodes and fixes how many low-order powers in this one-variable expansion are canceled.
@@ -549,7 +552,7 @@ The other Richardson nodes then require
     \left(\frac{r_{\max}}{r_j}\right)^{p+1},
 \end{equation}
 and the chosen node set is feasible only if these remaining target strengths do not exceed $\lambda_{\max}$.
-\xzwdone{This has become an operational prescription: given a device noise window $[\lambda_{\mathrm{intrinsic}},\lambda_{\max}]$ and chosen $r_j$, the shortest-step node fixes $c$ and the remaining nodes give the feasibility check.}
+%\xzwdone{This has become an operational prescription: given a device noise window $[\lambda_{\mathrm{intrinsic}},\lambda_{\max}]$ and chosen $r_j$, the shortest-step node fixes $c$ and the remaining nodes give the feasibility check.}
 The same tunable noise strength is also required by the corresponding two-dimensional construction; the coupled construction changes how many noise-strength values must be sampled.
 Supplementary Notes~2 and 5~\cite{supplementary} give the theoretical feasibility condition and its hardware instantiation.
 

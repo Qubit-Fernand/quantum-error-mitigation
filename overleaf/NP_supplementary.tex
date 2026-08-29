@@ -774,8 +774,6 @@ Replacing $N$ by $N_{\mathrm{eff}}$ in \thm{supp-extrapolation-k-local} gives an
 % \red{Xinzhao suggests Chebyshev + median of mean}
 The preceding theorem uses a bounded-outcome concentration estimate. A sharper statement keeps the actual single-shot variances of the extrapolation data points. This refinement does not change the worst-case $1/\eps^2$ dependence, but it makes explicit the statistical prefactor saved when a one-dimensional path replaces a two-dimensional grid.
 
-\red{Assign $\epsilon=\frac{\eps}{4}\|O\|$}
-
 \begin{lemma}[Median-of-means bound with shot allocation]
 \label{lem:supp-mom-shot-allocation}
 Consider an extrapolation target  as a linear combination of expectation values
@@ -860,9 +858,7 @@ For a two-dimensional tensor-product extrapolation with step-size coefficients $
     \right).
     \label{eq:supp-2d-opt-shot}
 \end{align}
-Thus the two-dimensional grid pays both the additional number of circuit settings and the coefficient weights in the noise direction. 
-\red{Variacne itself is hard to analyze, however a key observation is that for Pauli and Pauli average.}
-For example, in the random-site Pauli estimator for average magnetization, one shot has $X\in\{\pm1\}$ and variance $1-\mu^2$, where $\mu=\mb E X$. Writing the corresponding means as $\mu_{j,\mathrm{path}}$ on the one-dimensional path and $\mu_{j,\ell}$ on the two-dimensional grid, and using $m\le m_s m_\lambda$, the one-dimensional equal-shot upper bound is no larger whenever
+Thus the two-dimensional grid pays both the additional number of circuit settings and the coefficient weights in the noise direction. \red{When $X$ is a single Pauli or,} For example, in the random-site Pauli estimator for average magnetization, one shot has $X\in\{\pm1\}$ and variance $1-\mu^2$, where $\mu=\mb E X$. Writing the corresponding means as $\mu_{j,\mathrm{path}}$ on the one-dimensional path and $\mu_{j,\ell}$ on the two-dimensional grid, and using $m\le m_s m_\lambda$, the one-dimensional equal-shot upper bound is no larger whenever
 \begin{equation}
     m\sum_j b_j^2(1-\mu_{j,\mathrm{path}}^2)
     \le
@@ -870,15 +866,15 @@ For example, in the random-site Pauli estimator for average magnetization, one s
     \sum_{j,\ell}b_j^2d_\ell^2(1-\mu_{j,\ell}^2).
     \label{eq:supp-equal-shot-comparison-condition}
 \end{equation}
-\red{For each fixed $j$, there are $d>1$}
 Similarly, the optimized-allocation upper bound is no larger whenever
+\red{Often $m$ is one of $m_s$ and $m_\lambda$. And for fixed $j$, point-wisely, there is certain $d_l>1$ (try to prove for well-conditioned).}
 \begin{equation}
     \left(\sum_j |b_j|\sqrt{1-\mu_{j,\mathrm{path}}^2}\right)^2
     \le
     \left(\sum_{j,\ell}|b_jd_\ell|\sqrt{1-\mu_{j,\ell}^2}\right)^2 .
     \label{eq:supp-opt-shot-comparison-condition}
 \end{equation}
-In the parameter regimes represented by our hardware and numerical data, the observed values of $\mu$ typically keep these single-shot variances comparable across the sampled settings, so the setting-count and coefficient factors remain the dominant source of the sampling advantage.
+In the parameter regimes represented by our hardware and Sparse Pauli Dynamics (SPD) simulation data, the observed values of $\mu$ typically keep these single-shot variances comparable across the sampled settings, so the setting-count and coefficient factors remain the dominant source of the sampling advantage.
 
 
 \section{Circuit Mapping and Readout Calibration}
@@ -925,7 +921,7 @@ At the native-gate level, $R_X(\theta)$ is implemented as $H R_Z(\theta)H$, whil
 
 \begin{figure}[!htbp]
     \centering
-    \includegraphics[width=0.95\linewidth]{figures/lcqem_experimental_workflow.pdf}
+    \includegraphics[width=0.95\linewidth]{figures/supple/lcqem_experimental_workflow.pdf}
     \caption{\red{Fig. x of Ref.~[]}
     Experimental learning-and-mitigation workflow.
     Target Trotter circuits are mapped to the hardware topology and compiled into native gates.
@@ -936,23 +932,23 @@ At the native-gate level, $R_X(\theta)$ is implemented as $H R_Z(\theta)H$, whil
     \label{fig:supp-workflow}
 \end{figure}
 
-Before learning the effective gate-noise channel, we mitigate readout error at the observable level. \fig{supp-readout} shows both the full confusion matrix on the 9-qubit subgraph and the local single-qubit calibration matrices. The global matrix is strongly diagonally dominant, indicating that the readout channel is close to an independent bit-flip model on the relevant device subgraph. The local matrices capture the dominant contribution for the magnetization observable while avoiding the sampling cost of inverting the full global matrix in every data-processing step.
+Before learning the effective gate-noise channel, we mitigate readout error at the observable level. \fig{supp-readout} shows both the reconstructed global readout confusion matrix on the 9-qubit subgraph and the local single-qubit calibration matrices used for the hardware configuration with $N_{\mathrm{Trotter}}=3$ and $\theta_h=\theta_J=-2$, one of the paired nodes in the main-text hardware demonstration. The global matrix is strongly diagonally dominant, indicating that the readout channel is close to an independent bit-flip model on the relevant device subgraph. The local matrices capture the dominant contribution for the magnetization observable while avoiding the sampling cost of inverting the full global matrix in every data-processing step.
 
 \begin{figure}[!htbp]
     \centering
     \begin{subfigure}{0.48\linewidth}
         \centering
-        \includegraphics[width=\linewidth]{figures/supp_readout_global.pdf}
+        \includegraphics[width=\linewidth]{figures/supple/supp_readout_global_reconstructed_from_local.pdf}
         \caption{}
     \end{subfigure}
     \begin{subfigure}{0.48\linewidth}
         \centering
-        \includegraphics[width=\linewidth]{figures/supp_readout_local.pdf}
+        \includegraphics[width=\linewidth]{figures/supple/supp_readout_local.pdf}
         \caption{}
     \end{subfigure}
-    \caption{\red{Data to be aligned}
-    Readout calibration data for the selected 9-qubit device subgraph.
-    (a) Full $2^9\times2^9$ global confusion matrix, whose entries give the conditional probabilities of measured bitstrings given prepared computational-basis states.
+    \caption{
+    Readout calibration data for the selected 9-qubit device subgraph at $N_{\mathrm{Trotter}}=3$ and $\theta_h=\theta_J=-2$.
+    (a) Reconstructed full $2^9\times2^9$ global confusion matrix, whose entries give the conditional probabilities of measured bitstrings given prepared computational-basis states under the tensor-product model formed from the measured single-qubit local readout matrices.
     (b) Single-qubit local calibration matrices used for observable-level readout mitigation of the magnetization.
     The diagonal dominance of the calibration data supports local observable-level correction for the measured average magnetization.
     }
@@ -983,14 +979,14 @@ where $\mathcal{K}_l$ contains the Pauli components retained by the sparse model
 
 Training circuits are produced by replacing the target circuit rotation angles by Clifford angles in $\{0,\pi/2,\pi,3\pi/2\}$ while preserving the same circuit layout, qubit mapping, layer grouping and native-gate compilation. Their noiseless expectation values are computed classically, while their noisy expectation values are measured on hardware after readout mitigation. Solving the resulting sparse inverse problem yields the effective Pauli--Lindblad rates. The learned channel is an effective model for the observable and circuit family: components that are invisible to the measured expectation or degenerate with other components need not be separately identified. This is why the main text treats the model as a calibrated noise knob rather than as microscopic noise tomography.
 
-\fig{supp-learned-hardware-noise} shows a representative learned hardware noise channel for a Trotterized circuit with step number $N_{\text{Trotter}}=3$. The figure displays the inferred Pauli-noise components across the Clifford layers of the compiled circuit, giving a layer-resolved view of the channel used to generate controlled noise strengths for ZNE.
+\fig{supp-learned-hardware-noise} shows a representative learned hardware noise channel for the same Trotterized circuit configuration, with step number $N_{\text{Trotter}}=3$ and $\theta_h=\theta_J=-2$. The figure displays the inferred Pauli-noise components across the Clifford layers of the compiled circuit, giving a layer-resolved view of the channel used to generate controlled noise strengths for ZNE.
 
 \begin{figure}[!htbp]
     \centering
-    \includegraphics[width=0.9\linewidth,height=0.84\textheight,keepaspectratio]{figures/supp_learned_hardware_noise_model.pdf}
-    \caption{\red{Data to be aligned}
-    Learned effective hardware noise model for a Trotterized Ising circuit with Trotter step number $N_{\text{Trotter}}=3$.
-    The plot shows the inferred sparse Pauli--Lindblad components associated with the Clifford layers in the compiled hardware circuit.
+    \includegraphics[width=0.98\linewidth,height=0.84\textheight,keepaspectratio]{figures/supple/supp_learned_hardware_noise_model_with_circuit.pdf}
+    \caption{
+    Learned effective hardware noise model for a Trotterized Ising circuit with $N_{\text{Trotter}}=3$ and $\theta_h=\theta_J=-2$.
+    The left panels show the inferred sparse Pauli--Lindblad components associated with the Clifford layers, and the right panel shows the corresponding compiled hardware circuit structure.
     These learned components provide the calibrated noise channel used for controlled noise amplification in the subsequent ZNE step.
     }
     \label{fig:supp-learned-hardware-noise}
@@ -1015,32 +1011,32 @@ In addition to the settings shown in the main text, \fig{supp-hardware-1d-cherry
     \centering
     \begin{subfigure}{0.48\linewidth}
         \centering
-        \includegraphics[width=\linewidth]{figures/supp_1d_cherry_zq1zq2_data0420.png}
+        \includegraphics[width=\linewidth]{figures/supple/supp_1d_cherry_zq1zq2_data0420.png}
         \caption{}
     \end{subfigure}
     \begin{subfigure}{0.48\linewidth}
         \centering
-        \includegraphics[width=\linewidth]{figures/supp_1d_cherry_mean_magnetization_data0407.png}
+        \includegraphics[width=\linewidth]{figures/supple/supp_1d_cherry_mean_magnetization_data0407.png}
         \caption{}
     \end{subfigure}
     \begin{subfigure}{0.48\linewidth}
         \centering
-        \includegraphics[width=\linewidth]{figures/supp_1d_cherry_zq12_data0407.png}
+        \includegraphics[width=\linewidth]{figures/supple/supp_1d_cherry_zq12_data0407.png}
         \caption{}
     \end{subfigure}
     \begin{subfigure}{0.48\linewidth}
         \centering
-        \includegraphics[width=\linewidth]{figures/supp_1d_cherry_zq2_data0407.png}
+        \includegraphics[width=\linewidth]{figures/supple/supp_1d_cherry_zq2_data0407.png}
         \caption{}
     \end{subfigure}
     \begin{subfigure}{0.48\linewidth}
         \centering
-        \includegraphics[width=\linewidth]{figures/supp_1d_cherry_zq11zq9_data0624.png}
+        \includegraphics[width=\linewidth]{figures/supple/supp_1d_cherry_zq11zq9_data0624.png}
         \caption{}
     \end{subfigure}
     \begin{subfigure}{0.48\linewidth}
         \centering
-        \includegraphics[width=\linewidth]{figures/supp_1d_cherry_zq2zq4_data0420.png}
+        \includegraphics[width=\linewidth]{figures/supple/supp_1d_cherry_zq2zq4_data0420.png}
         \caption{}
     \end{subfigure}
     \caption{
@@ -1080,7 +1076,7 @@ The intercept $a_0$ estimates the joint zero-noise, zero-step endpoint. The refe
 \section{Numerical Learned-Channel Validation}
 \label{sec:supp-note-6}
 
-To check that the learning procedure scales beyond the 9-qubit hardware instance, we also use classically simulated noisy circuits. The simulations use the same Trotterized Ising structure and average magnetization observable as in the hardware experiments. A synthetic sparse Pauli noise model is applied to the circuit, and LCQEM is run using finite-shot Clifford training data. The reference tensor-network simulations in the main text use \texttt{quimb}~\cite{Gray2018}.
+To check that the learning procedure scales beyond the 9-qubit hardware instance, we also use classically simulated noisy circuits. The simulations use the same Trotterized Ising structure and average magnetization observable as in the hardware experiments. A synthetic sparse Pauli noise model is applied to the circuit, and LCQEM is run using finite-shot Clifford training data. The reference SPD simulations in the main text use the sparse Pauli propagation procedure described below.
 
 \fig{supp-numerical-learning} shows a representative learned-noise validation on a $5\times6$ lattice. The inferred noise parameters reproduce the noisy target-circuit expectation values under several noise strengths. This comparison isolates the learning step: the ``realistic'' noisy expectations are generated directly from the synthetic noise model, whereas the learned expectations are generated from the fitted sparse Pauli--Lindblad channel.
 
@@ -1088,12 +1084,12 @@ To check that the learning procedure scales beyond the 9-qubit hardware instance
     \centering
     \begin{subfigure}{0.48\linewidth}
         \centering
-        \includegraphics[width=\linewidth]{figures/supp_numerical_learned_noise_params.pdf}
+        \includegraphics[width=\linewidth]{figures/supple/supp_numerical_learned_noise_params.pdf}
         \caption{}
     \end{subfigure}
     \begin{subfigure}{0.48\linewidth}
         \centering
-        \includegraphics[width=\linewidth]{figures/supp_numerical_learned_expectations_5x6.pdf}
+        \includegraphics[width=\linewidth]{figures/supple/supp_numerical_learned_expectations_5x6.pdf}
         \caption{}
     \end{subfigure}
     \caption{
@@ -1108,56 +1104,122 @@ To check that the learning procedure scales beyond the 9-qubit hardware instance
 
 \FloatBarrier
 
-\section{Numerical Details and Circuit Representations}
+\section{Classical-Simulation Numerical Details}
 \label{sec:supp-note-6}
-% \red{Experimental setup: python version, mac kernel.}
-% \textcolor{red}{This section may later include additional numerical details from the main text, especially tensor-network simulation details.}
+\red{Experimental setup: python version, mac kernel.}
+\textcolor{red}{This section may later include additional numerical details from the main text, especially SPD simulation details.}
 
-% \red{Add feature parameters such as treewidth or rank ot explain the runtime of tensor network. Investigate contraction algorithm.}
+\red{Add feature parameters such as retained Pauli support size and truncation threshold to explain the runtime of SPD.}
 
-% \red{Add error bar to the 3D plot graph, especially the sample complexity requirement, maybe $10\times 10^6$ or $10^{10}$ in total.}
+\red{Add error bar to the 3D plot graph, especially the sample complexity requirement, maybe $10\times 10^6$ or $10^{10}$ in total.}
 
-All the results and plots are obtained by numerical simulations on a local Apple M3 Pro machine with 12 CPU cores and 36 GB unified memory via Python 3.11.12. We use the \texttt{quimb}~\cite{Gray2018} library to represent noisy and noiseless product-formula circuits; representative tensor-network graph representations are shown in \fig{supp-tensor-network-circuit-graphs}.
+All the results and plots are obtained by numerical simulations on a local Apple M3 Pro machine with 12 CPU cores and 36 GB unified memory via Python 3.11.12. We use an SPD implementation to represent the Heisenberg-evolved observables as sparse Pauli expansions under noisy and noiseless product-formula circuits.
 
-% The simulations reported here were run locally on macOS 26.4.1 (build 25E253) on an Apple M3 Pro machine with 12 CPU cores and 36 GB unified memory. The Python environment used Python 3.11.12 with \texttt{quimb} 1.14.0, \texttt{NumPy} 2.4.6 and \texttt{SciPy} 1.15.2.
+% The simulations reported here were run locally on macOS 26.4.1 (build 25E253) on an Apple M3 Pro machine with 12 CPU cores and 36 GB unified memory. The Python environment used Python 3.11.12 with \texttt{NumPy} 2.4.6 and \texttt{SciPy} 1.15.2.
 
-The main-text numerical benchmark uses the same average magnetization observable as the hardware experiment, but on a 100-qubit open one-dimensional transverse-field Ising chain with $\theta_h=\theta_J=-2$ and total simulated time $T=1$. The initial state is $|0\rangle^{\otimes N}$, and the dynamics are approximated by the same second-order symmetric product formula used in the hardware demonstration.
+The SPD benchmark in the main text uses the same average magnetization observable as the hardware experiment, but on a 20-qubit open one-dimensional transverse-field Ising chain with $J=h=1$ and total simulated time $T=1$. The initial state is $|0\rangle^{\otimes N}$, and the dynamics are approximated by the same second-order symmetric product formula used in the hardware demonstration.
 
-The plotted observable values are obtained by sparse Pauli dynamics in the Heisenberg picture: the observable $M_Z=N^{-1}\sum_i Z_i$ is propagated backward through the noisy product-formula circuit as a sparse Pauli expansion. A stochastic Pauli-noise trajectory samples one fault pattern, and conditioned on that pattern the $M_Z$ expectation is evaluated deterministically. Thus the plotted trajectory-level data include Pauli-noise Monte Carlo variation and sparse-truncation error, but not computational-basis measurement-shot variance.
-
-The simulated Trotter counts are $r\in\{2,3,4\}$. The noise grid is
+The simulated Trotter counts are $r\in\{1,2,3,7\}$, and each noisy circuit setting is sampled with $10^4$ computational-basis shots using a fixed random seed. The noise grid is
 \begin{equation}
-    \lambda\in\{0,1,64/27,8\},
+    \lambda\in\{0,1,343/27,343/8,343\},
 \end{equation}
 % \red{To be fixed, wrong proportion.}
-where the nonzero values are obtained from the inverse-cubic ratios $(4/r)^3$ after normalizing the shortest-step node $r=4$ to $\lambda=1$. The one-dimensional benchmark uses the paired monotone path
+where the nonzero values are obtained from the inverse-cubic ratios $1:(1/2)^3:(1/3)^3:(1/7)^3$ after normalizing the smallest value to $1$. The one-dimensional benchmark uses the paired monotone path
 \begin{equation}
     (r,\lambda)\in
-    \{(2,8),(3,64/27),(4,1)\},
+    \{(1,343),(2,343/8),(3,343/27),(7,1)\},
 \end{equation}
-whereas the two-dimensional Richardson baseline uses the full rectangular grid of three Trotter counts and four noise strengths. The common noiseless reference is the corresponding exact noiseless expectation $M_Z^{\mathrm{exact}}$ for the same Hamiltonian, total time and initial state, computed using the standard free-fermion Majorana-covariance solution of the one-dimensional transverse-field Ising chain~\cite{Lieb1961TwoSoluble,Pfeuty1970TFIM,TerhalDiVincenzo2002FreeFermions}; the plotted error is the absolute deviation $|M_Z-M_Z^{\mathrm{exact}}|$.
-\sz{Update this note after the 10-trajectory data and error bars are finalized.}
-\red{Add ${1,2,3,7}$}
+whereas the two-dimensional Richardson baseline uses the full rectangular grid of four Trotter counts and five noise strengths. The common noiseless reference is computed with the sparse Hamiltonian solver by numerically integrating the dynamics with a first-order Euler method using $10^4$ time steps for the same Hamiltonian, total time and initial state. This solver outputs the total $Z$ magnetization, so we divide it by $N$ to obtain the reference average magnetization $M_Z^{\mathrm{ref}}$; the plotted error is the absolute deviation $|M_Z-M_Z^{\mathrm{ref}}|$.
+
 \begin{figure}[!htbp]
     \centering
     \begin{subfigure}{0.48\linewidth}
         \centering
-        \includegraphics[width=\linewidth]{figures/supp_tensor_network_circuit_noise0.pdf}
+        \includegraphics[width=\linewidth]{figures/supple/supp_tensor_network_circuit_noise0.pdf}
         \caption{$\lambda=0$.}
     \end{subfigure}
     \begin{subfigure}{0.48\linewidth}
         \centering
-        \includegraphics[width=\linewidth]{figures/supp_tensor_network_circuit_noise343over8.pdf}
+        \includegraphics[width=\linewidth]{figures/supple/supp_tensor_network_circuit_noise343over8.pdf}
         \caption{$\lambda=343/8$.}
     \end{subfigure}
     \caption{
-    Tensor-network graph representations of representative product-formula circuits, retained here as circuit-structure illustrations.
-    Both panels use the local illustrative setup $N=20$, $J=h=T=1$, $r=2$ and a fixed random seed.
-    The noisy panel corresponds to $\lambda=343/8$ in this illustrative setup.
-    The displayed graphs are generated by \texttt{quimb}; SVG vector versions are provided with the source files.
+    Circuit graph representations of representative product-formula circuits used in the numerical benchmark.
+    Both panels use $N=20$, $J=h=T=1$, $r=2$ and the fixed random seed used in the sampling experiments.
+    The noisy panel corresponds to the inverse-cubic path node $(r,\lambda)=(2,343/8)$.
+    SVG vector versions are provided with the source files.
     }
-    \label{fig:supp-tensor-network-circuit-graphs}
+    \label{fig:supp-spd-circuit-graphs}
 \end{figure}
+
+\red{SPD details}
+
+\begin{center}
+\textbf{Supplementary Note 6: Methodological Overview of SPD}
+\end{center}
+
+This supplementary note reviews the SPD procedure adopted in the main text. The presentation and numerical implementation are based on the framework introduced in Ref.~\cite{doi:10.1126/sciadv.adk4321}.
+
+\red{Highlight clever way: noise channel in SPD converted into the change of coefficient.}
+
+\subsection*{Operator evolution in the Heisenberg picture}
+
+SPD computes observable expectation values by evolving operators rather than quantum states. Let an observable be represented by a linear combination of $n$-qubit Pauli operators,
+\begin{equation}
+O = \sum_{Q \in \mathcal{P}} a_Q\, Q ,
+\end{equation}
+where $\mathcal{P}$ denotes a subset of the $n$-qubit Pauli group and $a_Q \in \mathbb{C}$. Each summand $a_Q Q$ defines a \emph{Pauli path}, whose associated \emph{weight} is the coefficient $a_Q$. For a circuit described by the unitary $U$, the expectation value of interest is
+\begin{equation}
+\langle O \rangle = \langle 0 | U^\dagger O U | 0 \rangle.
+\end{equation}
+Rather than propagating the input state through the circuit, SPD constructs the Heisenberg-evolved observable through the adjoint map
+\begin{equation}
+U^\dagger O U \equiv \mathcal{U}^\dagger(O).
+\end{equation}
+
+We focus on circuits assembled from Clifford operations and Pauli rotations, with each gate written as
+\begin{equation}\label{eq:SPD_gate}
+U(\theta) := e^{-i \theta P/2} C,
+\end{equation}
+where $P$ is a Pauli operator and $C$ is a Clifford gate. An arbitrary rotation angle can be decomposed as $\theta=\theta'+k\pi/2$. Because the contribution $k\pi/2$ corresponds to a Clifford rotation, it may be incorporated into the Clifford part of the gate, leaving a residual angle satisfying $|\theta'|<\pi/4$.
+
+
+\subsection*{Expansion of Pauli paths under a rotation}
+
+Conjugating $O$ by the gate in Eq.~\eqref{eq:SPD_gate} produces an updated Pauli expansion,
+\begin{equation}\label{eq:SPD_after}
+U(\theta)^\dagger\, O\, U(\theta)
+= \sum_{Q \in \mathcal{P}'} a'_Q Q ,
+\end{equation}
+whose Pauli support is
+\begin{equation}
+\mathcal{P}' =
+\{C^\dagger Q C \,|\,Q\in\mathcal{P}\}
+\cup
+\{C^\dagger P Q C\,|\,Q\in\mathcal{P},\{P,Q\}=0\}.
+\end{equation}
+The corresponding weights are updated according to
+\begin{equation}
+a_Q' =
+\begin{cases}
+a_Q \cos\theta + i a_{P Q} \sin\theta, & \{P,Q\}=0,\\
+a_Q, & [P,Q]=0.
+\end{cases}
+\label{eq:SPD_coeff_update}
+\end{equation}
+Thus, a non-Clifford Pauli rotation can enlarge the Pauli support of the evolved observable. If every generated term is retained, successive rotations may cause the number of Pauli paths to grow exponentially with circuit depth.
+
+
+\subsection*{Truncated approximate propagation}
+
+SPD controls this growth by pruning the Pauli expansion after every Pauli-rotation update. In particular, the post-update set $\mathcal{P}'$ appearing in Eq.~\eqref{eq:SPD_after} is truncated before the next rotation is processed, thereby replacing the exact Heisenberg evolution with a computationally manageable approximation.
+
+The original SPD prescription~\cite{doi:10.1126/sciadv.adk4321} employs a weight threshold $\delta$: after each update, a path indexed by $Q\in\mathcal{P}'$ is retained only when its weight obeys $|a_Q|\geq\delta$.
+
+For the implementation considered here, we use a fixed path budget instead of a fixed weight cutoff. Specifically, at most $M_{\max}$ Pauli paths are retained at any stage of the evolution. Whenever the size of $\mathcal{P}'$ is larger than $M_{\max}$, paths are ordered by the magnitudes of their weights, and those with the smallest magnitudes are removed until the prescribed limit is satisfied. This strategy preserves as many Pauli paths as the chosen computational budget permits. It also makes $M_{\max}$ a direct measure of the computational resources required by SPD; accordingly, $M_{\max}$ is used as the SPD cost parameter throughout the main text.
+
+
+
 
 \bibliographystyle{qubit-doi}
 \bibliography{ref-codex}
