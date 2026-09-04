@@ -1,0 +1,768 @@
+{
+  "schema_version": 1,
+  "backend": "clean-room channel sparse-Pauli prototype",
+  "grid_type": "full_r_noise_grid",
+  "config": {
+    "n_sites": 100,
+    "J": 1.0,
+    "h": 1.0,
+    "evolution_time": 1.0,
+    "observable": "MZ",
+    "site": null,
+    "trotter_steps": [
+      1,
+      2,
+      3,
+      7
+    ],
+    "noise_scales": [
+      0.0,
+      1.0,
+      12.703703703703706,
+      42.875,
+      343.0
+    ],
+    "master_seed": 43,
+    "trajectories": 1,
+    "effective_trajectories": 1,
+    "noise_mode": "channel",
+    "max_terms": 50000,
+    "truncation_cutoff": 1e-12,
+    "convention": {
+      "internal_hamiltonian": "H = -J sum_i Z_i Z_{i+1} - h sum_i X_i",
+      "paper_hamiltonian": "H = J_paper sum_i Z_i Z_{i+1} + h_paper sum_i X_i",
+      "J_internal": 1.0,
+      "h_internal": 1.0,
+      "T": 1.0,
+      "J_paper": -1.0,
+      "h_paper": -1.0,
+      "rzzT": -1.0,
+      "rxT": -1.0,
+      "theta_J": -2.0,
+      "theta_h": -2.0
+    }
+  },
+  "nodes": [
+    {
+      "trotter_steps": 1,
+      "noise_scale": 0.0,
+      "expectation": {
+        "mean": 0.345139821803165,
+        "stderr": 0.0,
+        "count": 1
+      },
+      "trajectories": [
+        {
+          "observable": "MZ",
+          "n_sites": 100,
+          "J": 1.0,
+          "h": 1.0,
+          "evolution_time": 1.0,
+          "trotter_steps": 1,
+          "noise_scale": 0.0,
+          "master_seed": 43,
+          "trajectory_id": 0,
+          "point_seed": 15180423132059893439,
+          "expectation": 0.345139821803165,
+          "imaginary_magnitude": 0.0,
+          "n_terms": 1380,
+          "max_terms_seen": 1380,
+          "dropped_terms": 0,
+          "total_gates": 1790,
+          "noise_event_count": 0,
+          "noise_event_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "noise_channel_count": 1491,
+          "noise_mode": "channel",
+          "runtime_seconds": 1.6840497609227896,
+          "truncation_cutoff": 1e-12,
+          "max_terms": 50000
+        }
+      ]
+    },
+    {
+      "trotter_steps": 1,
+      "noise_scale": 1.0,
+      "expectation": {
+        "mean": 0.33531349730784116,
+        "stderr": 0.0,
+        "count": 1
+      },
+      "trajectories": [
+        {
+          "observable": "MZ",
+          "n_sites": 100,
+          "J": 1.0,
+          "h": 1.0,
+          "evolution_time": 1.0,
+          "trotter_steps": 1,
+          "noise_scale": 1.0,
+          "master_seed": 43,
+          "trajectory_id": 0,
+          "point_seed": 1501162009649359478,
+          "expectation": 0.33531349730784116,
+          "imaginary_magnitude": 0.0,
+          "n_terms": 1380,
+          "max_terms_seen": 1380,
+          "dropped_terms": 0,
+          "total_gates": 1790,
+          "noise_event_count": 0,
+          "noise_event_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "noise_channel_count": 1491,
+          "noise_mode": "channel",
+          "runtime_seconds": 1.6712005510926247,
+          "truncation_cutoff": 1e-12,
+          "max_terms": 50000
+        }
+      ]
+    },
+    {
+      "trotter_steps": 1,
+      "noise_scale": 12.703703703703706,
+      "expectation": {
+        "mean": 0.2404162981152967,
+        "stderr": 0.0,
+        "count": 1
+      },
+      "trajectories": [
+        {
+          "observable": "MZ",
+          "n_sites": 100,
+          "J": 1.0,
+          "h": 1.0,
+          "evolution_time": 1.0,
+          "trotter_steps": 1,
+          "noise_scale": 12.703703703703706,
+          "master_seed": 43,
+          "trajectory_id": 0,
+          "point_seed": 5743035848144675962,
+          "expectation": 0.2404162981152967,
+          "imaginary_magnitude": 0.0,
+          "n_terms": 1380,
+          "max_terms_seen": 1380,
+          "dropped_terms": 0,
+          "total_gates": 1790,
+          "noise_event_count": 0,
+          "noise_event_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "noise_channel_count": 1491,
+          "noise_mode": "channel",
+          "runtime_seconds": 1.683910520747304,
+          "truncation_cutoff": 1e-12,
+          "max_terms": 50000
+        }
+      ]
+    },
+    {
+      "trotter_steps": 1,
+      "noise_scale": 42.875,
+      "expectation": {
+        "mean": 0.10655466612688952,
+        "stderr": 0.0,
+        "count": 1
+      },
+      "trajectories": [
+        {
+          "observable": "MZ",
+          "n_sites": 100,
+          "J": 1.0,
+          "h": 1.0,
+          "evolution_time": 1.0,
+          "trotter_steps": 1,
+          "noise_scale": 42.875,
+          "master_seed": 43,
+          "trajectory_id": 0,
+          "point_seed": 10275071897326726999,
+          "expectation": 0.10655466612688952,
+          "imaginary_magnitude": 0.0,
+          "n_terms": 1380,
+          "max_terms_seen": 1380,
+          "dropped_terms": 0,
+          "total_gates": 1790,
+          "noise_event_count": 0,
+          "noise_event_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "noise_channel_count": 1491,
+          "noise_mode": "channel",
+          "runtime_seconds": 1.6873453222215176,
+          "truncation_cutoff": 1e-12,
+          "max_terms": 50000
+        }
+      ]
+    },
+    {
+      "trotter_steps": 1,
+      "noise_scale": 343.0,
+      "expectation": {
+        "mean": 0.00015225641599115805,
+        "stderr": 0.0,
+        "count": 1
+      },
+      "trajectories": [
+        {
+          "observable": "MZ",
+          "n_sites": 100,
+          "J": 1.0,
+          "h": 1.0,
+          "evolution_time": 1.0,
+          "trotter_steps": 1,
+          "noise_scale": 343.0,
+          "master_seed": 43,
+          "trajectory_id": 0,
+          "point_seed": 14126562262166533328,
+          "expectation": 0.00015225641599115805,
+          "imaginary_magnitude": 0.0,
+          "n_terms": 1380,
+          "max_terms_seen": 1380,
+          "dropped_terms": 0,
+          "total_gates": 1790,
+          "noise_event_count": 0,
+          "noise_event_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "noise_channel_count": 1491,
+          "noise_mode": "channel",
+          "runtime_seconds": 1.6771414950489998,
+          "truncation_cutoff": 1e-12,
+          "max_terms": 50000
+        }
+      ]
+    },
+    {
+      "trotter_steps": 2,
+      "noise_scale": 0.0,
+      "expectation": {
+        "mean": 0.5387545958134784,
+        "stderr": 0.0,
+        "count": 1
+      },
+      "trajectories": [
+        {
+          "observable": "MZ",
+          "n_sites": 100,
+          "J": 1.0,
+          "h": 1.0,
+          "evolution_time": 1.0,
+          "trotter_steps": 2,
+          "noise_scale": 0.0,
+          "master_seed": 43,
+          "trajectory_id": 0,
+          "point_seed": 7652620891348822659,
+          "expectation": 0.5387545958134784,
+          "imaginary_magnitude": 0.0,
+          "n_terms": 12780,
+          "max_terms_seen": 12780,
+          "dropped_terms": 0,
+          "total_gates": 3180,
+          "noise_event_count": 0,
+          "noise_event_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "noise_channel_count": 2682,
+          "noise_mode": "channel",
+          "runtime_seconds": 14.868364181369543,
+          "truncation_cutoff": 1e-12,
+          "max_terms": 50000
+        }
+      ]
+    },
+    {
+      "trotter_steps": 2,
+      "noise_scale": 1.0,
+      "expectation": {
+        "mean": 0.5136827973259452,
+        "stderr": 0.0,
+        "count": 1
+      },
+      "trajectories": [
+        {
+          "observable": "MZ",
+          "n_sites": 100,
+          "J": 1.0,
+          "h": 1.0,
+          "evolution_time": 1.0,
+          "trotter_steps": 2,
+          "noise_scale": 1.0,
+          "master_seed": 43,
+          "trajectory_id": 0,
+          "point_seed": 3938564774273042482,
+          "expectation": 0.5136827973259452,
+          "imaginary_magnitude": 0.0,
+          "n_terms": 12780,
+          "max_terms_seen": 12780,
+          "dropped_terms": 0,
+          "total_gates": 3180,
+          "noise_event_count": 0,
+          "noise_event_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "noise_channel_count": 2682,
+          "noise_mode": "channel",
+          "runtime_seconds": 14.87838556803763,
+          "truncation_cutoff": 1e-12,
+          "max_terms": 50000
+        }
+      ]
+    },
+    {
+      "trotter_steps": 2,
+      "noise_scale": 12.703703703703706,
+      "expectation": {
+        "mean": 0.29824368934695855,
+        "stderr": 0.0,
+        "count": 1
+      },
+      "trajectories": [
+        {
+          "observable": "MZ",
+          "n_sites": 100,
+          "J": 1.0,
+          "h": 1.0,
+          "evolution_time": 1.0,
+          "trotter_steps": 2,
+          "noise_scale": 12.703703703703706,
+          "master_seed": 43,
+          "trajectory_id": 0,
+          "point_seed": 9579669055787376039,
+          "expectation": 0.29824368934695855,
+          "imaginary_magnitude": 0.0,
+          "n_terms": 12780,
+          "max_terms_seen": 12780,
+          "dropped_terms": 0,
+          "total_gates": 3180,
+          "noise_event_count": 0,
+          "noise_event_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "noise_channel_count": 2682,
+          "noise_mode": "channel",
+          "runtime_seconds": 15.062916461378336,
+          "truncation_cutoff": 1e-12,
+          "max_terms": 50000
+        }
+      ]
+    },
+    {
+      "trotter_steps": 2,
+      "noise_scale": 42.875,
+      "expectation": {
+        "mean": 0.08100674749161214,
+        "stderr": 0.0,
+        "count": 1
+      },
+      "trajectories": [
+        {
+          "observable": "MZ",
+          "n_sites": 100,
+          "J": 1.0,
+          "h": 1.0,
+          "evolution_time": 1.0,
+          "trotter_steps": 2,
+          "noise_scale": 42.875,
+          "master_seed": 43,
+          "trajectory_id": 0,
+          "point_seed": 4292168483092271767,
+          "expectation": 0.08100674749161214,
+          "imaginary_magnitude": 0.0,
+          "n_terms": 12780,
+          "max_terms_seen": 12780,
+          "dropped_terms": 0,
+          "total_gates": 3180,
+          "noise_event_count": 0,
+          "noise_event_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "noise_channel_count": 2682,
+          "noise_mode": "channel",
+          "runtime_seconds": 15.104318488389254,
+          "truncation_cutoff": 1e-12,
+          "max_terms": 50000
+        }
+      ]
+    },
+    {
+      "trotter_steps": 2,
+      "noise_scale": 343.0,
+      "expectation": {
+        "mean": 1.9176115678875035e-06,
+        "stderr": 0.0,
+        "count": 1
+      },
+      "trajectories": [
+        {
+          "observable": "MZ",
+          "n_sites": 100,
+          "J": 1.0,
+          "h": 1.0,
+          "evolution_time": 1.0,
+          "trotter_steps": 2,
+          "noise_scale": 343.0,
+          "master_seed": 43,
+          "trajectory_id": 0,
+          "point_seed": 2222572213604562729,
+          "expectation": 1.9176115678875035e-06,
+          "imaginary_magnitude": 0.0,
+          "n_terms": 1386,
+          "max_terms_seen": 4136,
+          "dropped_terms": 5768,
+          "total_gates": 3180,
+          "noise_event_count": 0,
+          "noise_event_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "noise_channel_count": 2682,
+          "noise_mode": "channel",
+          "runtime_seconds": 9.80636210180819,
+          "truncation_cutoff": 1e-12,
+          "max_terms": 50000
+        }
+      ]
+    },
+    {
+      "trotter_steps": 3,
+      "noise_scale": 0.0,
+      "expectation": {
+        "mean": 0.4231939396021852,
+        "stderr": 0.0,
+        "count": 1
+      },
+      "trajectories": [
+        {
+          "observable": "MZ",
+          "n_sites": 100,
+          "J": 1.0,
+          "h": 1.0,
+          "evolution_time": 1.0,
+          "trotter_steps": 3,
+          "noise_scale": 0.0,
+          "master_seed": 43,
+          "trajectory_id": 0,
+          "point_seed": 11103704079057535314,
+          "expectation": 0.4231939396021852,
+          "imaginary_magnitude": 0.0,
+          "n_terms": 50000,
+          "max_terms_seen": 50000,
+          "dropped_terms": 43396,
+          "total_gates": 4570,
+          "noise_event_count": 0,
+          "noise_event_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "noise_channel_count": 3873,
+          "noise_mode": "channel",
+          "runtime_seconds": 127.36412908323109,
+          "truncation_cutoff": 1e-12,
+          "max_terms": 50000
+        }
+      ]
+    },
+    {
+      "trotter_steps": 3,
+      "noise_scale": 1.0,
+      "expectation": {
+        "mean": 0.3958036041277234,
+        "stderr": 0.0,
+        "count": 1
+      },
+      "trajectories": [
+        {
+          "observable": "MZ",
+          "n_sites": 100,
+          "J": 1.0,
+          "h": 1.0,
+          "evolution_time": 1.0,
+          "trotter_steps": 3,
+          "noise_scale": 1.0,
+          "master_seed": 43,
+          "trajectory_id": 0,
+          "point_seed": 7941648316611728060,
+          "expectation": 0.3958036041277234,
+          "imaginary_magnitude": 0.0,
+          "n_terms": 50000,
+          "max_terms_seen": 50000,
+          "dropped_terms": 43618,
+          "total_gates": 4570,
+          "noise_event_count": 0,
+          "noise_event_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "noise_channel_count": 3873,
+          "noise_mode": "channel",
+          "runtime_seconds": 127.24821327254176,
+          "truncation_cutoff": 1e-12,
+          "max_terms": 50000
+        }
+      ]
+    },
+    {
+      "trotter_steps": 3,
+      "noise_scale": 12.703703703703706,
+      "expectation": {
+        "mean": 0.18434041064073214,
+        "stderr": 0.0,
+        "count": 1
+      },
+      "trajectories": [
+        {
+          "observable": "MZ",
+          "n_sites": 100,
+          "J": 1.0,
+          "h": 1.0,
+          "evolution_time": 1.0,
+          "trotter_steps": 3,
+          "noise_scale": 12.703703703703706,
+          "master_seed": 43,
+          "trajectory_id": 0,
+          "point_seed": 14649991740904016765,
+          "expectation": 0.18434041064073214,
+          "imaginary_magnitude": 0.0,
+          "n_terms": 50000,
+          "max_terms_seen": 50000,
+          "dropped_terms": 45040,
+          "total_gates": 4570,
+          "noise_event_count": 0,
+          "noise_event_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "noise_channel_count": 3873,
+          "noise_mode": "channel",
+          "runtime_seconds": 132.15573770180345,
+          "truncation_cutoff": 1e-12,
+          "max_terms": 50000
+        }
+      ]
+    },
+    {
+      "trotter_steps": 3,
+      "noise_scale": 42.875,
+      "expectation": {
+        "mean": 0.02905039799624,
+        "stderr": 0.0,
+        "count": 1
+      },
+      "trajectories": [
+        {
+          "observable": "MZ",
+          "n_sites": 100,
+          "J": 1.0,
+          "h": 1.0,
+          "evolution_time": 1.0,
+          "trotter_steps": 3,
+          "noise_scale": 42.875,
+          "master_seed": 43,
+          "trajectory_id": 0,
+          "point_seed": 10136370338758070281,
+          "expectation": 0.02905039799624,
+          "imaginary_magnitude": 0.0,
+          "n_terms": 50000,
+          "max_terms_seen": 50000,
+          "dropped_terms": 50779,
+          "total_gates": 4570,
+          "noise_event_count": 0,
+          "noise_event_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "noise_channel_count": 3873,
+          "noise_mode": "channel",
+          "runtime_seconds": 126.52004959248006,
+          "truncation_cutoff": 1e-12,
+          "max_terms": 50000
+        }
+      ]
+    },
+    {
+      "trotter_steps": 3,
+      "noise_scale": 343.0,
+      "expectation": {
+        "mean": 1.5741108764666127e-09,
+        "stderr": 0.0,
+        "count": 1
+      },
+      "trajectories": [
+        {
+          "observable": "MZ",
+          "n_sites": 100,
+          "J": 1.0,
+          "h": 1.0,
+          "evolution_time": 1.0,
+          "trotter_steps": 3,
+          "noise_scale": 343.0,
+          "master_seed": 43,
+          "trajectory_id": 0,
+          "point_seed": 11240649921436421055,
+          "expectation": 1.5741108764666127e-09,
+          "imaginary_magnitude": 0.0,
+          "n_terms": 596,
+          "max_terms_seen": 4112,
+          "dropped_terms": 8911,
+          "total_gates": 4570,
+          "noise_event_count": 0,
+          "noise_event_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "noise_channel_count": 3873,
+          "noise_mode": "channel",
+          "runtime_seconds": 15.187538800761104,
+          "truncation_cutoff": 1e-12,
+          "max_terms": 50000
+        }
+      ]
+    },
+    {
+      "trotter_steps": 7,
+      "noise_scale": 0.0,
+      "expectation": {
+        "mean": 0.35048016364959017,
+        "stderr": 0.0,
+        "count": 1
+      },
+      "trajectories": [
+        {
+          "observable": "MZ",
+          "n_sites": 100,
+          "J": 1.0,
+          "h": 1.0,
+          "evolution_time": 1.0,
+          "trotter_steps": 7,
+          "noise_scale": 0.0,
+          "master_seed": 43,
+          "trajectory_id": 0,
+          "point_seed": 13435681151955992783,
+          "expectation": 0.35048016364959017,
+          "imaginary_magnitude": 0.0,
+          "n_terms": 50000,
+          "max_terms_seen": 50000,
+          "dropped_terms": 304509,
+          "total_gates": 10130,
+          "noise_event_count": 0,
+          "noise_event_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "noise_channel_count": 8637,
+          "noise_mode": "channel",
+          "runtime_seconds": 911.3183187320828,
+          "truncation_cutoff": 1e-12,
+          "max_terms": 50000
+        }
+      ]
+    },
+    {
+      "trotter_steps": 7,
+      "noise_scale": 1.0,
+      "expectation": {
+        "mean": 0.30313699113207615,
+        "stderr": 0.0,
+        "count": 1
+      },
+      "trajectories": [
+        {
+          "observable": "MZ",
+          "n_sites": 100,
+          "J": 1.0,
+          "h": 1.0,
+          "evolution_time": 1.0,
+          "trotter_steps": 7,
+          "noise_scale": 1.0,
+          "master_seed": 43,
+          "trajectory_id": 0,
+          "point_seed": 12949123732133374159,
+          "expectation": 0.30313699113207615,
+          "imaginary_magnitude": 0.0,
+          "n_terms": 50000,
+          "max_terms_seen": 50000,
+          "dropped_terms": 304025,
+          "total_gates": 10130,
+          "noise_event_count": 0,
+          "noise_event_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "noise_channel_count": 8637,
+          "noise_mode": "channel",
+          "runtime_seconds": 910.791118118912,
+          "truncation_cutoff": 1e-12,
+          "max_terms": 50000
+        }
+      ]
+    },
+    {
+      "trotter_steps": 7,
+      "noise_scale": 12.703703703703706,
+      "expectation": {
+        "mean": 0.057290142965219594,
+        "stderr": 0.0,
+        "count": 1
+      },
+      "trajectories": [
+        {
+          "observable": "MZ",
+          "n_sites": 100,
+          "J": 1.0,
+          "h": 1.0,
+          "evolution_time": 1.0,
+          "trotter_steps": 7,
+          "noise_scale": 12.703703703703706,
+          "master_seed": 43,
+          "trajectory_id": 0,
+          "point_seed": 193772647859765993,
+          "expectation": 0.057290142965219594,
+          "imaginary_magnitude": 0.0,
+          "n_terms": 50000,
+          "max_terms_seen": 50000,
+          "dropped_terms": 302387,
+          "total_gates": 10130,
+          "noise_event_count": 0,
+          "noise_event_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "noise_channel_count": 8637,
+          "noise_mode": "channel",
+          "runtime_seconds": 903.0899696238339,
+          "truncation_cutoff": 1e-12,
+          "max_terms": 50000
+        }
+      ]
+    },
+    {
+      "trotter_steps": 7,
+      "noise_scale": 42.875,
+      "expectation": {
+        "mean": 0.000549498124507763,
+        "stderr": 0.0,
+        "count": 1
+      },
+      "trajectories": [
+        {
+          "observable": "MZ",
+          "n_sites": 100,
+          "J": 1.0,
+          "h": 1.0,
+          "evolution_time": 1.0,
+          "trotter_steps": 7,
+          "noise_scale": 42.875,
+          "master_seed": 43,
+          "trajectory_id": 0,
+          "point_seed": 13037885485194804082,
+          "expectation": 0.000549498124507763,
+          "imaginary_magnitude": 0.0,
+          "n_terms": 50000,
+          "max_terms_seen": 50000,
+          "dropped_terms": 289403,
+          "total_gates": 10130,
+          "noise_event_count": 0,
+          "noise_event_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "noise_channel_count": 8637,
+          "noise_mode": "channel",
+          "runtime_seconds": 845.3730916995555,
+          "truncation_cutoff": 1e-12,
+          "max_terms": 50000
+        }
+      ]
+    },
+    {
+      "trotter_steps": 7,
+      "noise_scale": 343.0,
+      "expectation": {
+        "mean": 0.0,
+        "stderr": 0.0,
+        "count": 1
+      },
+      "trajectories": [
+        {
+          "observable": "MZ",
+          "n_sites": 100,
+          "J": 1.0,
+          "h": 1.0,
+          "evolution_time": 1.0,
+          "trotter_steps": 7,
+          "noise_scale": 343.0,
+          "master_seed": 43,
+          "trajectory_id": 0,
+          "point_seed": 10206899485655039479,
+          "expectation": 0.0,
+          "imaginary_magnitude": 0.0,
+          "n_terms": 0,
+          "max_terms_seen": 1870,
+          "dropped_terms": 6230,
+          "total_gates": 10130,
+          "noise_event_count": 0,
+          "noise_event_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "noise_channel_count": 8637,
+          "noise_mode": "channel",
+          "runtime_seconds": 12.137640092521906,
+          "truncation_cutoff": 1e-12,
+          "max_terms": 50000
+        }
+      ]
+    }
+  ],
+  "runtime_seconds": 4189.373800216243
+}

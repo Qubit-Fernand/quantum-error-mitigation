@@ -1,0 +1,33 @@
+{
+  "scan": "1237",
+  "quantity": "Z0",
+  "exact": -0.03302166401177553,
+  "one_d_estimate": -0.02728485457970536,
+  "one_d_stderr": 0.0,
+  "one_d_log10_error": -2.2413295764684324,
+  "noise_free_estimate": -0.02578880146767659,
+  "noise_free_stderr": 0.0,
+  "noise_free_log10_error": -2.1406897883117844,
+  "two_d_estimate": -0.027719122239613637,
+  "two_d_stderr": 0.0,
+  "two_d_log10_error": -2.275515901529373,
+  "zne_values_by_r": [
+    0.5864157758281249,
+    0.08499673920847005,
+    0.016381912482486816,
+    -0.026045499257451157
+  ],
+  "zne_stderr_by_r": [
+    0.0,
+    0.0,
+    0.0,
+    0.0
+  ],
+  "zne_log10_errors_by_r": [
+    -0.20800254869754997,
+    -0.9280502656276031,
+    -1.3062416098719254,
+    -2.1563832713310758
+  ],
+  "grid_data_file": "/Users/AntiEntropy/Documents/Code/sim4jointQEM/results/a100/channel-pull/plot_repo/results/a100/results/a100_z1_grid_1237.json"
+}

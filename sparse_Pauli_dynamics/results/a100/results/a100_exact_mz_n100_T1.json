@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "backend": "exact majorana covariance pfaffian",
+  "result": {
+    "n_sites": 100,
+    "J": 1.0,
+    "h": 1.0,
+    "evolution_time": 1.0,
+    "observable": "MZ",
+    "site": null,
+    "expectation": 0.3350068408439256,
+    "imaginary_magnitude": 9.742102494308323e-15,
+    "runtime_seconds": 0.7597155440598726,
+    "method": "majorana_covariance_pfaffian"
+  },
+  "convention": {
+    "internal_hamiltonian": "H = -J sum_i Z_i Z_{i+1} - h sum_i X_i",
+    "paper_hamiltonian": "H = J_paper sum_i Z_i Z_{i+1} + h_paper sum_i X_i",
+    "J_internal": 1.0,
+    "h_internal": 1.0,
+    "T": 1.0,
+    "J_paper": -1.0,
+    "h_paper": -1.0,
+    "rzzT": -1.0,
+    "rxT": -1.0,
+    "theta_J": -2.0,
+    "theta_h": -2.0
+  }
+}

@@ -1,0 +1,33 @@
+{
+  "scan": "1237",
+  "quantity": "MZ",
+  "exact": 0.3350068408439256,
+  "one_d_estimate": 0.30797903209406174,
+  "one_d_stderr": 0.0,
+  "one_d_log10_error": -1.5681891628258195,
+  "noise_free_estimate": 0.3476086257015966,
+  "noise_free_stderr": 0.0,
+  "noise_free_log10_error": -1.8995679390935223,
+  "two_d_estimate": 0.3271660345458722,
+  "two_d_stderr": 0.0,
+  "two_d_log10_error": -2.1056392749698842,
+  "zne_values_by_r": [
+    0.3446556138722377,
+    0.5358834954014183,
+    0.4182586360194009,
+    0.33066329034433134
+  ],
+  "zne_stderr_by_r": [
+    0.0,
+    0.0,
+    0.0,
+    0.0
+  ],
+  "zne_log10_errors_by_r": [
+    -2.015527909548715,
+    -0.6970705330675299,
+    -1.0796063929399946,
+    -2.3621551248663986
+  ],
+  "grid_data_file": "/Users/AntiEntropy/Documents/Research/Quantum Error Mitigation/sparse_Pauli_dynamics/results/a100/results/a100_mz_grid_1237.json"
+}
