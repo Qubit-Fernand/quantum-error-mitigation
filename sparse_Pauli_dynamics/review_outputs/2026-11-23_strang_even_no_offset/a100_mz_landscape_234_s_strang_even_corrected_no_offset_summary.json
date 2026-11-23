@@ -1,0 +1,66 @@
+{
+  "endpoint_display_offsets": false,
+  "review_note": "Same archived truncated SPD data; not a convergence validation.",
+  "step_variable": "s=1/r",
+  "step_basis_powers": [
+    0,
+    2,
+    4
+  ],
+  "trotter_steps": [
+    2,
+    3,
+    4
+  ],
+  "trotter_coefficients_exact": [
+    "4/15",
+    "-81/35",
+    "64/21"
+  ],
+  "trotter_coefficients": [
+    0.26666666666666666,
+    -2.3142857142857145,
+    3.0476190476190474
+  ],
+  "paired_noise_scales": [
+    8.0,
+    2.37037037037037,
+    1.0
+  ],
+  "noise_coefficients": [
+    1.976833976833977,
+    -1.0369843527738267,
+    0.0601503759398496
+  ],
+  "input_sha256": "a9f597f970aae856f8dbbe8d02b49c8e62751e7e2a1f2d9a0305d9f318fadfaf",
+  "exact_reference_file": "/Users/AntiEntropy/Documents/Research/Quantum Error Mitigation/Code/sparse_Pauli_dynamics/results/a100/results/a100_exact_mz_n100_T1.json",
+  "exact_reference_sha256": "8e75ae192f5e04e7b9b6718a0b7a27bc19b9faeecd3719f40e3cc8226ff63b1a",
+  "scan": "234",
+  "quantity": "MZ",
+  "exact": 0.3350068408439256,
+  "one_d_estimate": 0.33478385795293,
+  "one_d_stderr": 0.0,
+  "one_d_log10_error": -3.65172845816812,
+  "noise_free_estimate": 0.33347756207462254,
+  "noise_free_stderr": 0.0,
+  "noise_free_log10_error": -2.815513340660433,
+  "two_d_estimate": 0.33219271994440946,
+  "two_d_stderr": 0.0,
+  "two_d_log10_error": -2.5506572484560555,
+  "zne_values_by_r": [
+    0.5385530276591004,
+    0.42280488307697106,
+    0.38294480439816303
+  ],
+  "zne_stderr_by_r": [
+    0.0,
+    0.0,
+    0.0
+  ],
+  "zne_log10_errors_by_r": [
+    -0.6913370291757138,
+    -1.0565151681128584,
+    -1.31932041911218
+  ],
+  "grid_data_file": "/Users/AntiEntropy/Documents/Research/Quantum Error Mitigation/Code/sparse_Pauli_dynamics/results/a100/results/a100_mz_grid_234.json"
+}

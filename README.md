@@ -1,19 +1,79 @@
 # Project Memory 记得和 overleaf 里的 memory 一起看
 
-**项目目录：** 对应的文稿位于同级目录 [../overleaf/](../overleaf/)，两者是独立 Git 仓库。
+**项目目录：** 对应的文稿位于同级目录 [../Overleaf/](../Overleaf/)，两者是独立 Git 仓库。
 
-目录调整（2026-11-07）：本代码仓库位于 `Code/`；文稿独立仓库为 `../overleaf/`。以下历史记录中的 `overleaf/` 指迁移前位置。
+目录调整（2026-11-07）：本代码仓库位于 `Code/`；文稿独立仓库为 `../Overleaf/`。以下历史记录中的 `overleaf/` 指迁移前位置。
 
-2026-10-21 讨论记录：**target-equivalent noise learning 与 IBM 方案、RB / XEB 的类比及待核对事项**，见 [Overleaf README](../overleaf/README.md)。用户决定等独立文章公开后阅读细节再讨论。
+2026-10-21 讨论记录：**target-equivalent noise learning 与 IBM 方案、RB / XEB 的类比及待核对事项**，见 [Overleaf README](../Overleaf/README.md)。用户决定等独立文章公开后阅读细节再讨论。
 
-最新论文待办：**“sum of operator norms” 表述不准确，后续由用户自己修改**。详细位置见 [Overleaf memory 顶部](../overleaf/codex_memory.md)。正文暂不改动。
+最新论文待办：**“sum of operator norms” 表述不准确，后续由用户自己修改**。详细位置见 [Overleaf memory 顶部](../Overleaf/codex_memory.md)。正文暂不改动。
+
+## 2026-11-23 Richardson 系数修正与选定的 corrected 图
+
+图片已复制到同级 Overleaf 的实际图片搜索目录 [../Overleaf/figures/](../Overleaf/figures/)，两份文件都以 `_corrected.pdf` 结尾，避免覆盖 v1。
+
+本次使用原存档 JSON 和同一精确连续时间参考，修正步长外推系数并重新绘图；没有重新生成 SPD 数据或运行硬件。原始绘图脚本、输入数据及无 corrected 后缀的 v1 PDF 均保留。
+
+### 系数修正
+
+- 原脚本把 `x_trotter=1/r**2` 与 x 的 `[0,2,4]` / `[0,2,4,6]` 幂次组合，实际消去 s 的 4、8（及 12）次项，未消去 s²。
+- 新增 `second_order_trotter_coefficients.py`，以 `s=1/r` 的 `{1,s²,s⁴}` / `{1,s²,s⁴,s⁶}` 基底计算精确 Fraction 权重。
+- 按 r=(2,3,4) 排列，权重为 `(4/15, -81/35, 64/21)`；按 r=(1,2,3,7) 排列，权重为 `(-1/1152, 64/675, -729/1600, 117649/86400)`。
+- paired、无噪声 Trotter-only、2D 外层步长外推均改用这些权重。2D 内层固定 r 的噪声外推保持原样：`u=sqrt(lambda)` 配偶次 u 幂，等价于 lambda 的连续幂。
+- 原 r 和逆三次噪声配对 `(r_max/r)^3` 不变。对有噪 paired 曲线，此处是使用偶次拟合模型，不构成严格只有偶次项的证明。
+
+### 两张选定图的显示配置
+
+| 节点 / 论文位置 | corrected PDF | elev | azim | z 轴刻度 |
+|---|---|---:|---:|---|
+| r={2,3,4} / 图 4 | `a100_mz_landscape_234_s_corrected.pdf` | 25° | −60° | 仅 `−1.0, −2.0, −3.0, −4.0`，`FixedLocator([-4,-3,-2,-1])` + `%.1f` |
+| r={1,2,3,7} / 图 S3 | `a100_mz_landscape_1237_s_corrected.pdf` | 20° | −60° | 保留原 `MultipleLocator(0.5)`，标签 `%.1f`；没有套用 234 的整数刻度配置 |
+
+两张图都使用 **no-offset**：1D、noise 0、2D 三个外推端点均位于 `(s,lambda)=(0,0)`，z 坐标保持真实的 log10 绝对误差。取消原来的 `marker_gap`、noise 方向 `+0.015` 及方法各异的文字错位；文字仅保留统一右侧留白 `label_gap = 0.05 * max(ptp(step_positions), 1)`，没有 z 方向文字偏移。配色、图例顺序和其余布局沿用原程序，z 轴范围仍按原逻辑自动计算。
+
+### 同数据数值与范围
+
+| 节点 | paired 绝对误差 | Trotter-only 绝对误差 | 2D 绝对误差 |
+|---|---:|---:|---:|
+| 234 | 0.000222982891 | 0.001529278769 | 0.002814120900 |
+| 1237 | 0.001458611941 | 0.000198949771 | 0.024808410248 |
+
+这些是同一批截断 SPD 数据上的复算，尚未验证截断收敛。已核对视角、刻度、offset 调整前后的数值 summary 完全相同。
+
+### 可复现入口与文件来源
+
+代码位于 `sparse_Pauli_dynamics/`：
+
+- 系数函数：`scripts/second_order_trotter_coefficients.py`。
+- 234：`scripts/plot_a100_mz_landscape_strang_even_selected.py`；输出目录 `review_outputs/2026-11-23_selected_view_234/`。
+- 1237：`scripts/plot_a100_mz_landscape_strang_even_no_offset.py`；输出目录 `review_outputs/2026-11-23_strang_even_no_offset/`。
+- 输入为 `results/a100/results/a100_mz_grid_234.json`、`a100_mz_grid_1237.json`，共同参考为 `a100_exact_mz_n100_T1.json`。
+
+复现时从 `sparse_Pauli_dynamics/` 运行，使用新输出目录（脚本拒绝覆盖已有结果）：
+
+```bash
+MPLBACKEND=Agg python -B scripts/plot_a100_mz_landscape_strang_even_selected.py --scan 234 --quantity MZ --axis s --data-dir results/a100/results --elev 25 --azim -60 --outdir /absolute/path/to/new-review-234
+MPLBACKEND=Agg python -B scripts/plot_a100_mz_landscape_strang_even_no_offset.py --scan 1237 --quantity MZ --axis s --data-dir results/a100/results --elev 20 --azim -60 --outdir /absolute/path/to/new-review-1237
+```
+
+后续更新（2026-11-23）：已将 `NP_main.tex` 图 4 和 `NP_supplementary.tex` 的 1237 图（v1 为 S3，当前稿编译编号为 S4）的 `includegraphics` 引用切换到上述 corrected PDF。正文的三个绝对误差分别更新为 `2.23e-4`（paired）、`1.53e-3`（Trotter-only）、`2.81e-3`（2D）；引言原“comparable 10^-2-level”表述同步改为主文算例绝对误差 `2.23e-4`。补充材料本轮仅改图片引用，正文及图注保持不变。图的呈现顺序、节点和配置数均不变。已用 `latexcompile NP_main.tex NP_supplementary.tex` 完成本地编译；提交与远端同步状态以 Git 历史为准。
+
+本轮检查另确认两项独立待办，尚未修改：主文 Methods 与补充说明 5 将有噪拟合的偶次幂归因于理想 Strang 对称性，仍需额外依据；主文 Methods 与补充说明 6 的“isolates extrapolation bias”不能替代 SPD 截断收敛验证。这些不应与本次确定的系数／数值更新混为一谈。
+
+选定 PDF 的 SHA-256（已核对 Downloads 与 Overleaf 副本一致）：
+
+```text
+234: b58c7b4e23be8ecb34d1f5c7ebacd561d62b57244afba0affd54af87e291c10e
+1237: 3df5207d86ce2487f3f67d704b96826454768bd5399c313da8dea7cf4878558c
+```
+
 
 ## Memory 分工与查阅入口
 
 - **本文件（项目根目录）**：记录项目整体、实验代码、数值运行、环境与资源路径等。
-- **[overleaf/codex_memory.md](../overleaf/codex_memory.md)**：记录论文修改、文献引用、投稿、版本规划及相关来信待办。处理论文任务时优先查阅该文件。
+- **[overleaf/codex_memory.md](../Overleaf/codex_memory.md)**：记录论文修改、文献引用、投稿、版本规划及相关来信待办。处理论文任务时优先查阅该文件。
 - 同一事项只保留一份详细记录；根目录使用链接指向论文 memory，避免重复维护。新增论文 TODO 放在 Overleaf memory 标题下方，按最新优先排列。
-- **当前 arXiv v2 三篇待补引文献，以及 Endo / Pegah 来信的定位与处理待办，统一见 [Overleaf memory 顶部](../overleaf/codex_memory.md)。**
+- **当前 arXiv v2 三篇待补引文献，以及 Endo / Pegah 来信的定位与处理待办，统一见 [Overleaf memory 顶部](../Overleaf/codex_memory.md)。**
 - 根目录其余历史记录暂保留；后续新增内容按以上分工归档。
 
 ## 2026-09-10 明早阅读：为什么旧 S56 / S58 不能直接给出总运行次数
@@ -161,11 +221,11 @@ C=n\sum_jr_j
 - 若希望去掉额外 m，需重新分析最终加权估计器的统计误差，例如优化节点分配或随机选择节点；不能仅将旧 S56 与 S58 相除。
 - 也不能由截图直接得到 `O(log log(1/ε)/ε^2)`：截图里的因子本身是三次方，而改变其幂次同样需要新的统计分析。
 - 资源标签应明确写成“所有节点合计的 independent circuit executions”和“每次运行至多的 Trotter steps”，避免再次把每节点与总量混淆。
-- 复核源：`../overleaf/NP_supplementary.tex` 中 `lem:supp-richardson`、`thm:supp-general-application`，以及证明末尾以 `The remaining error budget is statistical.` 开始的段落。旧总步数标签为 `eq:supp-general-total-steps`，最大深度标签为 `eq:supp-general-coherent-depth`。
+- 复核源：`../Overleaf/NP_supplementary.tex` 中 `lem:supp-richardson`、`thm:supp-general-application`，以及证明末尾以 `The remaining error budget is statistical.` 开始的段落。旧总步数标签为 `eq:supp-general-total-steps`，最大深度标签为 `eq:supp-general-coherent-depth`。
 
 ## 2026-09-05 写作审阅：剩余建议与当前状态
 
-当前主稿为 `../overleaf/NP_main.tex`，补充材料为 `../overleaf/NP_supplementary.tex`。以下是待讨论的写作建议，不代表已确认的理论缺陷或自动执行计划；继续按小块讨论，保留作者及合作者批注。
+当前主稿为 `../Overleaf/NP_main.tex`，补充材料为 `../Overleaf/NP_supplementary.tex`。以下是待讨论的写作建议，不代表已确认的理论缺陷或自动执行计划；继续按小块讨论，保留作者及合作者批注。
 
 已处理：单步修正 `O((sT)^{p+1})` 与固定总时间、累计 `1/s` 步后的修正 `O(s^p)` 已在相关正文中区分；摘要已明确 BCH truncation bound 来自前一篇工作，并已突出真实超导硬件实验及补充的 100-qubit SPD 验证。后续应以当前文件为准，保留用户自行调整的措辞。
 
@@ -185,11 +245,11 @@ C=n\sum_jr_j
 - The project-local deterministic/channel-mode sparse-Pauli-dynamics bundle now lives at `/Users/AntiEntropy/Documents/Research/Quantum Error Mitigation/Code/sparse_Pauli_dynamics`. Use this folder first for the A100/SPD landscape code, data and `_s.pdf` figures.
 - The bundle was migrated from `/Users/AntiEntropy/Documents/Code/sim4jointQEM/results/a100/channel-pull` and keeps only the minimal `a100_spd` module, reproduction scripts, JSON data for scans `234` and `1237`, and the corresponding `M_Z`/`Z_0` `_s.pdf` figures.
 - The deterministic data are the Pauli error channel coefficient-update version (`noise_mode=channel`), not sampled noisy trajectories. The migrated plotter infers the one-dimensional paired noise path from the scan rule and reads plotted values from the channel grid at those nodes.
-- For `../overleaf/figures/a100_mz_landscape_234_s.pdf`, start from `sparse_Pauli_dynamics/scripts/plot_a100_mz_landscape.py` and its gray noisy-slice plotting path (`gray_values`, `noise_colors`, endpoint label offsets) rather than the older `tensor_network_numerics/notebooks/plot_3d.ipynb` N=20 notebook.
+- For `../Overleaf/figures/a100_mz_landscape_234_s.pdf`, start from `sparse_Pauli_dynamics/scripts/plot_a100_mz_landscape.py` and its gray noisy-slice plotting path (`gray_values`, `noise_colors`, endpoint label offsets) rather than the older `tensor_network_numerics/notebooks/plot_3d.ipynb` N=20 notebook.
 
 ## 2026-08-29 Active Manuscript Source Correction
 
-- For the current Overleaf manuscript Methods comments, edit `../overleaf/NP_main.tex`, not `../overleaf/NP_experiments.tex`. `NP_experiments.tex` may contain older or side-copy text and should not be treated as the active main manuscript unless the user explicitly asks for that file.
+- For the current Overleaf manuscript Methods comments, edit `../Overleaf/NP_main.tex`, not `../Overleaf/NP_experiments.tex`. `NP_experiments.tex` may contain older or side-copy text and should not be treated as the active main manuscript unless the user explicitly asks for that file.
 
 ## 2026-08-27 Supplementary Figure Style Todo
 
